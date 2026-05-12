@@ -142,7 +142,7 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
 <body>
 <div class="sb-overlay" id="sb-overlay" onclick="closeSb()"></div>
 <div class="load-ov" id="load-ov"><div class="load-box"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px;font-weight:600" id="load-msg">Carregando...</div></div></div>
- 
+
 <!-- LOGIN -->
 <div id="sc-login" class="screen fx on">
   <div class="login-bg">
@@ -164,7 +164,7 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
     </div>
   </div>
 </div>
- 
+
 <!-- APP EMPRESA -->
 <div id="sc-emp" class="screen">
   <div class="app">
@@ -275,7 +275,7 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
     </div>
   </div>
 </div>
- 
+
 <!-- APP ADMIN -->
 <div id="sc-adm" class="screen">
   <div class="app">
@@ -328,28 +328,28 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
     </div>
   </div>
 </div>
- 
+
 <!-- MODAIS -->
 <div class="ov" id="modal-co"><div class="modal"><div class="mh"><div class="mt" id="mco-ttl">Nova Empresa</div><button class="mx" onclick="closeMod('modal-co')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Código do Fornecedor <span class="req">*</span></label><input class="fc" id="m-code" placeholder="Ex: 1001" style="font-size:19px;font-weight:700;letter-spacing:.08em" inputmode="numeric"><span class="fh">Código único para login. Não pode ser alterado após criação.</span></div><div class="fg"><label class="fl">Nome da Empresa <span class="req">*</span></label><input class="fc" id="m-name" placeholder="Razão social ou nome fantasia"></div><div class="fg"><label class="fl">CNPJ</label><input class="fc" id="m-cnpj" placeholder="00.000.000/0000-00"></div><div class="fg"><label class="fl">Status</label><select class="fc" id="m-active"><option value="1">✅ Ativa</option><option value="0">❌ Inativa</option></select></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-co')">Cancelar</button><button class="btn btn-adm" onclick="saveCo()">💾 Salvar</button></div></div></div>
 <div class="ov" id="modal-svc"><div class="modal"><div class="mh"><div class="mt" id="msvc-ttl">Novo Serviço</div><button class="mx" onclick="closeMod('modal-svc')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Código <span class="req">*</span></label><input class="fc" id="ms-code" placeholder="Ex: 4" inputmode="numeric"></div><div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="ms-name" placeholder="Ex: Vazamento"></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-svc')">Cancelar</button><button class="btn btn-adm" onclick="saveSvc()">💾 Salvar</button></div></div></div>
 <div class="ov" id="modal-epi"><div class="modal"><div class="mh"><div class="mt" id="mepi-ttl">Novo EPI</div><button class="mx" onclick="closeMod('modal-epi')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Ícone (emoji) <span class="req">*</span></label><input class="fc" id="me-icon" placeholder="Ex: 🦺" style="font-size:24px"></div><div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="me-name" placeholder="Ex: Capacete"></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-epi')">Cancelar</button><button class="btn btn-adm" onclick="saveEpiItem()">💾 Salvar</button></div></div></div>
 <div class="toasts" id="toasts"></div>
- 
+
 <script>
 'use strict';
 // ════════════════════════════════════════════════
 // COLE A URL DO APPS SCRIPT AQUI
 const API_URL = 'https://script.google.com/macros/s/AKfycbwDwQKG-B7ZTNjmUoRTbMEvkqvtj5v4x6yYqYa7J3gPCyKbSo7TaI5ifztxNOiVYDW_/exec';
 // ════════════════════════════════════════════════
- 
+
 let ADMIN_PASS = localStorage.getItem('adm_pass') || 'admin123';
 const C = { empresas:null, os:{}, exp:{}, servicos:null, epis:null, matriz:null };
 const S = { type:null, co:null };
 let editId=null, selEPI=new Set(), photos=[], editCo=null, editSvc=null, editEpiId=null;
 let sigCtx=null, sigDrawing=false, sigLX=0, sigLY=0;
- 
+
 const SATQ=['Como foi a abordagem do técnico?','Cordialidade e educação no atendimento','O técnico estava uniformizado?','O técnico utilizou os EPIs?','Pontualidade do técnico','O trabalho foi bem executado?','Local ficou limpo e organizado?','Resultado do resgate de imagem','O técnico apresentou o escopo antes de iniciar?','Cordialidade e respeito durante o atendimento','A solução atendeu suas expectativas?'];
- 
+
 const $  = id => document.getElementById(id);
 const fD = d  => { if(!d)return'—'; const[y,m,dd]=d.split('-'); return`${dd}/${m}/${y}`; };
 const fDT= iso=> { if(!iso)return'—'; return new Date(iso).toLocaleString('pt-BR'); };
@@ -358,12 +358,12 @@ const satSum=sat=>{ if(!sat||!sat.length)return'—'; const c={satisfeito:0,neut
 const myOS =()=>C.os [S.co?.code]||[];
 const myExp=()=>C.exp[S.co?.code]||[];
 const svcName=code=>(C.servicos||[]).find(s=>String(s.code)===String(code))?.name||String(code);
- 
+
 function showLoad(msg='Carregando...'){$('load-msg').textContent=msg;$('load-ov').classList.add('on');}
 function hideLoad(){$('load-ov').classList.remove('on');}
 function openSb(){document.querySelector('.sb')?.classList.add('open');$('sb-overlay').classList.add('on');}
 function closeSb(){document.querySelectorAll('.sb').forEach(s=>s.classList.remove('open'));$('sb-overlay').classList.remove('on');}
- 
+
 async function apiGet(action,params={}){
   const url=new URL(API_URL);
   url.searchParams.set('action',action);
@@ -373,9 +373,9 @@ async function apiGet(action,params={}){
   if(!json.ok) throw new Error(json.error||'Erro na API');
   return json.data;
 }
- 
+
 function swTab(t){$('pn-emp').style.display=t==='emp'?'block':'none';$('pn-adm').style.display=t==='adm'?'block':'none';$('t-emp').classList.toggle('on',t==='emp');$('t-adm').classList.toggle('on',t==='adm');}
- 
+
 async function prevCo(v){
   const box=$('co-prev');
   if(!v){box.innerHTML='Digite o código para identificar a empresa';return;}
@@ -384,7 +384,7 @@ async function prevCo(v){
   if(co) box.innerHTML=`<span>🏢</span><div><strong>${co.name}</strong><br><small style="color:var(--muted)">Cód.${co.code}${co.cnpj?' · '+co.cnpj:''}</small></div>`;
   else box.innerHTML=`<span style="color:var(--danger)">❌ Código não encontrado</span>`;
 }
- 
+
 async function loginEmp(){
   const code=$('l-code').value.trim();
   if(!code){toast('Digite o código do fornecedor','er');return;}
@@ -411,7 +411,7 @@ async function loginEmp(){
     toast(`Bem-vinda, ${co.name}!`,'ok');
   }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
- 
+
 function loginAdm(){
   const pass=$('l-ap').value;
   if($('l-ae').value!=='admin@consigaz.com.br'||pass!==ADMIN_PASS){toast('Credenciais inválidas','er');return;}
@@ -434,7 +434,7 @@ function changePass(){
   $('cfg-old').value='';$('cfg-new').value='';$('cfg-new2').value='';
   toast('Senha alterada! ✅','ok');
 }
- 
+
 function populateSvcSelect(){
   const sel=$('f-svc');if(!sel)return;
   sel.innerHTML='<option value="">Selecionar...</option>';
@@ -442,7 +442,7 @@ function populateSvcSelect(){
     sel.innerHTML+=`<option value="${s.code}">${String(s.code).padStart(2,'0')} — ${s.name}</option>`;
   });
 }
- 
+
 const PT={nos:'Nova OS',osl:'Minhas OS',exp:'Exportar ZIP'};
 function goPg(id){
   document.querySelectorAll('#sc-emp .page').forEach(p=>p.classList.remove('on'));
@@ -455,7 +455,7 @@ function goPg(id){
   if(id==='exp'){updExp();rndrHist();}
 }
 function updCt(){const e=$('os-ct');if(e)e.textContent=myOS().length;}
- 
+
 function rndrOS(){
   const stF=$('fi-st')?.value||'',dtF=$('fi-dt')?.value||'',srF=($('fi-sr')?.value||'').toLowerCase();
   let data=[...myOS()];
@@ -495,7 +495,7 @@ function editOS(id){
     onSvc();if(os.epis){selEPI=new Set(os.epis);buildEPI(os.svc);}
   },40);
 }
- 
+
 function step(n){
   for(let i=1;i<=5;i++){const c=$('s'+i);if(c)c.style.display=i===n?'block':'none';}
   document.querySelectorAll('.st').forEach(s=>{
@@ -567,7 +567,7 @@ function addPh(input){
   });
 }
 function rmPh(i,n){photos.splice(i,1);n.remove();}
- 
+
 // Assinatura — apenas do cliente
 function initSig(){
   const cv=$('sig-cli');if(!cv||sigCtx)return;
@@ -592,7 +592,7 @@ function getSigURL(){
   tctx.drawImage(cv,0,0,280,90);
   return tmp.toDataURL('image/jpeg',0.5);
 }
- 
+
 async function saveOS(){
   const num=$('f-num').value.trim(),date=$('f-date').value,client=$('f-client').value.trim(),svc=$('f-svc').value,tech=$('f-tech').value.trim();
   if(!num||!date||!client||!svc){toast('Preencha: Nº OS, Data, Cliente e Serviço','er');step(1);return;}
@@ -608,7 +608,8 @@ async function saveOS(){
     stName:'',stRG:'',stCPF:'',
     status:'finalizada',at:new Date().toISOString()
   };
-  // Remove assinatura e fotos do envio via GET (limite de URL)
+  // Salva OS sem assinatura primeiro
+  const sigUrl = getSigURL();
   const osData={...os,sigCli:null,photos:[]};
   showLoad(editId?'Atualizando OS...':'Salvando OS...');
   try{
@@ -620,12 +621,24 @@ async function saveOS(){
       if(!C.os[S.co.code])C.os[S.co.code]=[];
       C.os[S.co.code].push(os);
     }
+    // Salva assinatura no Drive separadamente
+    if(sigUrl){
+      showLoad('Salvando assinatura...');
+      try{
+        const r=await apiGet('saveAssinatura',{osId:id,data:encodeURIComponent(sigUrl)});
+        if(r&&r.url){
+          os.sigCli=r.url;
+          const idx2=myOS().findIndex(o=>o.id===id);
+          if(idx2>=0)C.os[S.co.code][idx2].sigCli=r.url;
+        }
+      }catch(e2){console.warn('Assinatura não salva:',e2);}
+    }
     editId=null;sigCtx=null;
     updCt();toast(`OS ${num} salva! ✅`,'ok');goPg('osl');
   }catch(e){toast('Erro ao salvar: '+e.message,'er');}
   hideLoad();
 }
- 
+
 // PDF
 function buildPDF(os){
   const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
@@ -668,7 +681,7 @@ function buildPDF(os){
   return doc;
 }
 function dlPDF(id){const os=myOS().find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado! ✅','ok');}catch(e){toast('Erro PDF: '+e.message,'er');}}
- 
+
 // ZIP
 function updExp(){
   const dv=$('exp-dt')?.value,box=$('exp-prev'),btn=$('btn-exp');
@@ -711,7 +724,7 @@ function rndrHist(){
   if(!list.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--muted)">Nenhuma exportação ainda</td></tr>';return;}
   tb.innerHTML=list.map(h=>`<tr><td>${h.date}</td><td class="mono">${h.filename}</td><td style="text-align:center"><strong>${h.count}</strong></td><td style="font-size:11px;color:var(--muted)">${fDT(h.at)}</td></tr>`).join('');
 }
- 
+
 // ADMIN
 const AT={ov:'Visão Geral',cos:'Empresas',aos:'Todas as OS',aex:'Exportações',svcs:'Tipos de Serviço',epis:'EPIs',mtz:'Matriz EPI×Serviço',cfg:'Sistema'};
 function goAdm(id){
