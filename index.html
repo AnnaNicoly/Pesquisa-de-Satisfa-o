@@ -1,1159 +1,269 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Field Services OS — Consigaz</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<style>
-:root{--brand:#FF5A1F;--brand-dk:#CC4210;--brand-lt:#FFF0EB;--navy:#0D1B2A;--navy3:#243B55;--slate:#4A5568;--muted:#718096;--border:#E2E8F0;--surface:#F7F9FC;--ok:#22C55E;--danger:#EF4444;--warn:#F59E0B;--purple:#7C3AED;--purple-lt:#EDE9FE;--r:10px}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;background:var(--surface);color:var(--navy)}
-button{cursor:pointer;font-family:inherit}input,select,textarea{font-family:inherit}
-.screen{display:none;height:100vh;overflow:hidden}.screen.on{display:block}.screen.fx{display:none}.screen.fx.on{display:flex}
-.login-bg{background:linear-gradient(135deg,#0D1B2A,#243B55);min-height:100vh;display:flex;align-items:center;justify-content:center;width:100%}
-.login-box{background:#fff;border-radius:14px;padding:38px;width:420px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.l-logo{display:flex;align-items:center;gap:11px;margin-bottom:26px}
-.l-ico{width:46px;height:46px;border-radius:11px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:700;flex-shrink:0}
-.tabs{display:flex;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:22px}
-.tab{flex:1;padding:9px;font-size:13px;font-weight:600;border:none;background:#fff;color:var(--muted);cursor:pointer}
-.tab.on{background:var(--brand);color:#fff}.tab.adm.on{background:var(--purple)}
-.co-prev{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;margin-top:7px;font-size:13px;min-height:42px;display:flex;align-items:center;gap:8px;color:var(--muted)}
-.cfg-banner{background:#FFF7ED;border:1.5px solid #FED7AA;border-radius:9px;padding:13px 16px;margin-bottom:18px;font-size:13px;display:none}
-.cfg-banner.on{display:block}
-.app{display:flex;height:100vh;overflow:hidden}
-.sb{width:230px;min-width:230px;background:var(--navy);display:flex;flex-direction:column;padding:22px 0}
-.sb.adm{background:#1E1B4B}
-.sb-logo{padding:0 18px 18px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
-.sb-ico{width:33px;height:33px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;font-weight:700;flex-shrink:0}
-.sb-ico.adm{background:var(--purple)}
-.sb-txt{color:#fff;font-size:13.5px;font-weight:600;line-height:1.3}
-.sb-txt small{display:block;font-size:10.5px;font-weight:400;color:rgba(255,255,255,.4);margin-top:1px}
-.sb-nav{flex:1;padding:13px 0}
-.sb-sec{padding:6px 18px 3px;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3)}
-.sb-btn{display:flex;align-items:center;gap:10px;padding:9px 18px;margin:2px 7px;border-radius:8px;color:rgba(255,255,255,.6);font-size:13.5px;font-weight:500;border:none;background:none;width:calc(100% - 14px);cursor:pointer;transition:all .15s;text-align:left}
-.sb-btn:hover{background:rgba(255,255,255,.08);color:#fff}
-.sb-btn.on{background:var(--brand);color:#fff}.sb-btn.on.adm{background:var(--purple)}
-.sb-ico2{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.sb-ct{margin-left:auto;background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px}
-.sb-user{padding:13px 18px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
-.sb-ava{width:31px;height:31px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
-.sb-ava.adm{background:var(--purple)}
-.sb-un{font-size:12.5px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
-.sb-ur{font-size:10.5px;color:rgba(255,255,255,.4)}
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 22px;height:57px;display:flex;align-items:center;gap:13px;flex-shrink:0}
-.tb-title{font-size:16.5px;font-weight:700;flex:1}
-.tb-co{font-size:11.5px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;white-space:nowrap;max-width:250px;overflow:hidden;text-overflow:ellipsis}
-.ico-btn{width:35px;height:35px;border:1.5px solid var(--border);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0}
-.page{flex:1;overflow-y:auto;padding:24px;display:none}.page.on{display:block}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.pt{font-size:21px;font-weight:700}.ps{font-size:12.5px;color:var(--muted);margin-top:2px}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 17px;border-radius:8px;font-size:13.5px;font-weight:600;border:none;cursor:pointer;transition:all .15s}
-.btn-p{background:var(--brand);color:#fff}.btn-p:hover{background:var(--brand-dk)}
-.btn-s{background:var(--surface);color:var(--navy);border:1.5px solid var(--border)}.btn-s:hover{border-color:var(--brand);color:var(--brand)}
-.btn-g{background:transparent;color:var(--muted)}.btn-g:hover{background:var(--surface);color:var(--navy)}
-.btn-adm{background:var(--purple);color:#fff}.btn-adm:hover{background:#6D28D9}
-.btn-sm{padding:5px 11px;font-size:12px}
-.card{background:#fff;border:1px solid var(--border);border-radius:var(--r)}
-.ch{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
-.ct2{font-size:14px;font-weight:700}.cb{padding:17px}
-.badge{display:inline-flex;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
-.b-aberta{background:#EBF8FF;color:#2B6CB0}.b-em_andamento{background:#FFFBEB;color:#B45309}
-.b-finalizada{background:#F0FFF4;color:#276749}.b-pendente{background:#FFF5F5;color:#9B2C2C}
-.b-cancelada{background:var(--surface);color:var(--muted)}.b-adm{background:var(--purple-lt);color:#5B21B6}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-thead th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap}
-tbody tr{border-bottom:1px solid var(--border)}tbody tr:last-child{border-bottom:none}tbody tr:hover{background:#FAFBFC}
-tbody td{padding:10px 12px;vertical-align:middle}
-.mono{font-family:monospace;font-size:12.5px;font-weight:600;color:var(--brand)}
-.mono-p{font-family:monospace;font-size:13px;font-weight:700;color:var(--purple)}
-.fg{display:flex;flex-direction:column;gap:5px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:15px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px}.full{grid-column:1/-1}
-.fl{font-size:12px;font-weight:600;color:var(--slate)}.req{color:var(--danger)}
-.fc{border:1.5px solid var(--border);border-radius:8px;padding:8px 11px;font-size:13.5px;outline:none;background:#fff;color:var(--navy);width:100%;transition:border-color .15s}
-.fc:focus{border-color:var(--brand)}.fc:disabled{background:var(--surface);color:var(--muted)}
-textarea.fc{resize:vertical;min-height:72px}.fh{font-size:11px;color:var(--muted)}
-.epi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
-.epi-card{border:2px solid var(--border);border-radius:9px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;background:#fff;position:relative;text-align:center;transition:all .15s}
-.epi-card:hover,.epi-card.sel{border-color:var(--brand);background:var(--brand-lt)}
-.epi-card.req-e{border-color:#FED7AA;background:#FFFAF5}
-.epi-card.sel::after{content:'✓';position:absolute;top:3px;right:6px;color:var(--brand);font-size:12px;font-weight:700}
-.epi-ico{font-size:24px}.epi-nm{font-size:9.5px;font-weight:600;color:var(--slate);line-height:1.3}
-.epi-r{position:absolute;top:2px;left:4px;font-size:8.5px;background:var(--warn);color:#fff;padding:1px 4px;border-radius:7px;font-weight:700}
-.stepper{display:flex;align-items:center;margin-bottom:20px}
-.st{display:flex;align-items:center}
-.st-d{width:26px;height:26px;border-radius:50%;border:2.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s}
-.st.done .st-d{background:var(--ok);border-color:var(--ok);color:#fff}.st.act .st-d{background:var(--brand);border-color:var(--brand);color:#fff}
-.st-lb{font-size:11px;font-weight:600;color:var(--muted);margin-left:6px;white-space:nowrap}
-.st.act .st-lb,.st.done .st-lb{color:var(--navy)}
-.st-ln{flex:1;height:2px;background:var(--border);margin:0 7px}.st-ln.done{background:var(--ok)}
-.sat-r{display:none}.sat-l{font-size:22px;cursor:pointer;opacity:.3;filter:grayscale(1);display:block;text-align:center;transition:all .15s}
-.sat-r:checked+.sat-l{opacity:1;filter:none;transform:scale(1.18)}
-.sig-area{border:2px dashed var(--border);border-radius:9px;background:#FAFBFC}
-.sig-area canvas{width:100%;height:140px;cursor:crosshair;display:block;border-radius:7px}
-.pzone{border:2px dashed var(--border);border-radius:9px;padding:22px;text-align:center;cursor:pointer;background:var(--surface);transition:all .15s}
-.pzone:hover{border-color:var(--brand);background:var(--brand-lt)}
-.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.pthumb{position:relative;border-radius:7px;overflow:hidden;aspect-ratio:1;background:var(--border)}
-.pthumb img{width:100%;height:100%;object-fit:cover}
-.rm{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:19px;height:19px;font-size:10px;cursor:pointer}
-.el{display:grid;grid-template-columns:380px 1fr;gap:18px}
-.os-chip{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:13px}
-.exp-empty{padding:34px;text-align:center;color:var(--muted);font-size:13px}
-.prog-w{background:var(--border);border-radius:20px;height:6px;overflow:hidden;margin:6px 0}
-.prog-f{height:100%;background:var(--brand);border-radius:20px;transition:width .3s}
-.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}
-.sc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:13px}
-.s-ico{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
-.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:13px}
-.cc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:15px;display:flex;align-items:flex-start;justify-content:space-between;gap:9px;transition:border-color .15s}
-.cc:hover{border-color:var(--purple)}.co-code{font-family:monospace;font-size:19px;font-weight:700;color:var(--purple)}
-.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center}
-.ov.on{display:flex}
-.modal{background:#fff;border-radius:14px;width:480px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.mh{padding:17px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.mt{font-size:15px;font-weight:700}.mx{background:none;border:none;font-size:21px;color:var(--muted);cursor:pointer}
-.mb{flex:1;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:14px}
-.mf{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:9px;flex-shrink:0}
-.toasts{position:fixed;bottom:21px;right:21px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
-.toast{background:var(--navy);color:#fff;padding:10px 15px;border-radius:9px;font-size:13.5px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);transform:translateX(110%);transition:transform .3s;pointer-events:all;display:flex;align-items:center;gap:8px}
-.toast.on{transform:translateX(0)}.toast.ok{background:#166534}.toast.er{background:#991B1B}.toast.inf{background:#1E40AF}
-.stitle{font-size:13.5px;font-weight:700;margin-bottom:11px;padding-bottom:7px;border-bottom:1.5px solid var(--border)}
-.sat-table{width:100%;border-collapse:collapse}
-.sat-table th{padding:7px 9px;font-size:10.5px;font-weight:700;text-transform:uppercase;color:var(--muted);text-align:center;border-bottom:2px solid var(--border)}
-.sat-table th:first-child{text-align:left}
-.sat-table td{padding:8px 9px;border-bottom:1px solid var(--border);font-size:12.5px}
-.sat-table tr:last-child td{border-bottom:none}
-.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.load-overlay{display:none;position:fixed;inset:0;background:rgba(13,27,42,.55);z-index:800;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.load-overlay.on{display:flex}
-.load-box{background:#fff;border-radius:12px;padding:28px 36px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-@media(max-width:800px){
-  .sb{width:52px;min-width:52px}.sb-txt,.sb-btn span:not(.sb-ico2),.sb-user .sb-un,.sb-user .sb-ur,.sb-sec{display:none}
-  .sb-btn{justify-content:center;padding:10px;margin:2px 4px}.epi-grid{grid-template-columns:repeat(3,1fr)}
-  .g2,.g3{grid-template-columns:1fr}.el{grid-template-columns:1fr}.sg{grid-template-columns:1fr 1fr}.page{padding:14px}
-}
-</style>
-</head>
-<body>
+// ═══════════════════════════════════════════════════════
+// Consigaz — Pesquisa de Satisfação
+// Google Apps Script v3
+// Suporte a GET e POST, CORS, Matriz EPI×Serviço
+// ═══════════════════════════════════════════════════════
 
-<!-- ══ LOADING OVERLAY ══ -->
-<div class="load-overlay" id="load-overlay">
-  <div class="load-box">
-    <div style="font-size:32px;margin-bottom:10px">⏳</div>
-    <div style="font-size:14px;font-weight:600;color:var(--navy)" id="load-msg">Carregando...</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:4px">Aguarde</div>
-  </div>
-</div>
+const SS = SpreadsheetApp.getActiveSpreadsheet();
 
-<!-- ══ LOGIN ══ -->
-<div id="sc-login" class="screen fx on">
-  <div class="login-bg">
-    <div class="login-box">
-      <div class="l-logo">
-        <div class="l-ico">🔥</div>
-        <div><div style="font-size:18px;font-weight:700">Field Services OS</div><div style="font-size:12.5px;color:var(--muted)">Consigaz — Gestão de Ordens</div></div>
-      </div>
+function doGet(e)  { return handle(e); }
+function doPost(e) { return handle(e); }
 
-      <!-- Banner de configuração -->
-      <div class="cfg-banner" id="cfg-banner">
-        ⚠️ <strong>URL da API não configurada.</strong><br>
-        Clique no botão Admin → <strong>Configurações</strong> para inserir a URL do Google Apps Script.
-      </div>
-
-      <div class="tabs">
-        <button class="tab on" id="t-emp" onclick="swTab('emp')">🏢 Empresa</button>
-        <button class="tab adm" id="t-adm" onclick="swTab('adm')">🛡 Administrador</button>
-      </div>
-
-      <!-- Login Empresa: apenas código -->
-      <div id="pn-emp">
-        <div class="fg" style="margin-bottom:19px">
-          <label class="fl">Código do Fornecedor</label>
-          <input class="fc" id="l-code" placeholder="Ex: 1001" oninput="prevCo(this.value)" style="font-size:20px;font-weight:700;letter-spacing:.1em">
-          <div class="co-prev" id="co-prev">Digite o código para identificar a empresa</div>
-        </div>
-        <button class="btn btn-p" style="width:100%;padding:11px;font-size:14px" onclick="loginEmp()">Entrar</button>
-      </div>
-
-      <!-- Login Admin -->
-      <div id="pn-adm" style="display:none">
-        <div class="fg" style="margin-bottom:13px">
-          <label class="fl">E-mail</label>
-          <input class="fc" id="l-ae" type="email" value="admin@consigaz.com.br">
-        </div>
-        <div class="fg" style="margin-bottom:19px">
-          <label class="fl">Senha</label>
-          <input class="fc" id="l-ap" type="password" value="admin123">
-        </div>
-        <button class="btn btn-adm" style="width:100%;padding:11px;font-size:14px" onclick="loginAdm()">Entrar como Administrador</button>
-        <p style="font-size:11px;color:var(--muted);margin-top:9px;text-align:center">admin@consigaz.com.br / admin123</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ APP EMPRESA ══ -->
-<div id="sc-emp" class="screen">
-  <div class="app">
-    <aside class="sb" id="sb-emp">
-      <div class="sb-logo">
-        <div class="sb-ico">🔥</div>
-        <div class="sb-txt">Field Services<small id="sb-coname">—</small></div>
-      </div>
-      <nav class="sb-nav">
-        <div class="sb-sec">Operação</div>
-        <button class="sb-btn on" data-p="nos" onclick="goPg('nos')"><span class="sb-ico2">➕</span><span>Nova OS</span></button>
-        <button class="sb-btn" data-p="osl" onclick="goPg('osl')"><span class="sb-ico2">📋</span><span>Minhas OS</span><span class="sb-ct" id="os-ct">0</span></button>
-        <div class="sb-sec">Relatórios</div>
-        <button class="sb-btn" data-p="exp" onclick="goPg('exp')"><span class="sb-ico2">📦</span><span>Exportar ZIP</span></button>
-      </nav>
-      <div class="sb-user">
-        <div class="sb-ava" id="sb-ava">?</div>
-        <div style="min-width:0"><div class="sb-un" id="sb-un">—</div><div class="sb-ur" id="sb-ur">—</div></div>
-      </div>
-    </aside>
-    <div class="main">
-      <div class="topbar">
-        <div class="tb-title" id="emp-ttl">Nova OS</div>
-        <div class="tb-co" id="emp-tco">—</div>
-        <button class="ico-btn" onclick="logout()" title="Sair">🚪</button>
-      </div>
-
-      <!-- NOVA OS -->
-      <div class="page on" id="pg-nos">
-        <div class="ph"><div><div class="pt" id="nos-ttl">Nova Ordem de Serviço</div><div class="ps">Preencha todos os campos obrigatórios</div></div></div>
-        <div class="stepper">
-          <div class="st act" data-s="1"><div class="st-d">1</div><span class="st-lb">Dados</span></div>
-          <div class="st-ln" id="sl1"></div>
-          <div class="st" data-s="2"><div class="st-d">2</div><span class="st-lb">EPIs</span></div>
-          <div class="st-ln" id="sl2"></div>
-          <div class="st" data-s="3"><div class="st-d">3</div><span class="st-lb">Satisfação</span></div>
-          <div class="st-ln" id="sl3"></div>
-          <div class="st" data-s="4"><div class="st-d">4</div><span class="st-lb">Fotos</span></div>
-          <div class="st-ln" id="sl4"></div>
-          <div class="st" data-s="5"><div class="st-d">5</div><span class="st-lb">Assinaturas</span></div>
-        </div>
-        <div class="card" id="s1">
-          <div class="ch"><div class="ct2">📋 Dados da OS</div></div>
-          <div class="cb">
-            <div class="g2" style="margin-bottom:14px">
-              <div class="fg"><label class="fl">Nº OS <span class="req">*</span></label><input class="fc" id="f-num" placeholder="OS-2026-0001"></div>
-              <div class="fg"><label class="fl">Data de Execução <span class="req">*</span></label><input class="fc" type="date" id="f-date"></div>
-              <div class="fg"><label class="fl">Cliente <span class="req">*</span></label><input class="fc" id="f-client" placeholder="Nome do cliente / condomínio"></div>
-              <div class="fg"><label class="fl">Endereço</label><input class="fc" id="f-addr" placeholder="Rua, nº, Cidade/UF"></div>
-              <div class="fg">
-                <label class="fl">Tipo de Serviço <span class="req">*</span></label>
-                <select class="fc" id="f-svc" onchange="onSvc()">
-                  <option value="">Selecionar...</option>
-                  <option value="4">04 — Vazamento</option><option value="5">05 — Regulagens</option>
-                  <option value="6">06 — Ligação de fogão</option><option value="10">10 — Instalação de Rede de Distribuição</option>
-                  <option value="12">12 — Laudo técnico / ART</option><option value="15">15 — Corte de gás</option>
-                  <option value="16">16 — Religação de gás</option><option value="24">24 — Teste de estanqueidade na Central</option>
-                  <option value="29">29 — Instalação de Central</option><option value="34">34 — Manutenção Preventiva</option>
-                  <option value="38">38 — Testes NR 13 - Periódica</option><option value="44">44 — Adequação / Modificação de Rede</option>
-                  <option value="45">45 — Adequação / Modificação de Central</option><option value="50">50 — Instalação de Medidor e Regulador</option>
-                  <option value="61">61 — Manutenção Avançada</option><option value="84">84 — Teste de Estanqueidade Rede</option>
-                  <option value="86">86 — Visita técnica</option>
-                </select>
-                <span class="fh">EPIs obrigatórios carregam automaticamente</span>
-              </div>
-              <div class="fg">
-                <label class="fl">Nome Completo do Técnico Responsável <span class="req">*</span></label>
-                <input class="fc" id="f-tech" placeholder="Nome completo do técnico responsável">
-              </div>
-              <div class="fg"><label class="fl">Horário Início</label><input class="fc" type="time" id="f-start"></div>
-              <div class="fg"><label class="fl">Horário Término</label><input class="fc" type="time" id="f-end"></div>
-              <div class="fg full"><label class="fl">Equipe Executora</label><input class="fc" id="f-team" placeholder="Demais membros da equipe"></div>
-              <div class="fg full"><label class="fl">Observações</label><textarea class="fc" id="f-obs"></textarea></div>
-            </div>
-            <div style="display:flex;justify-content:flex-end"><button class="btn btn-p" onclick="step(2)">Próximo: EPIs →</button></div>
-          </div>
-        </div>
-        <div class="card" id="s2" style="display:none">
-          <div class="ch"><div class="ct2">🦺 EPIs</div><span style="font-size:11.5px;color:var(--muted)">Serviço: <strong id="epi-lbl">—</strong></span></div>
-          <div class="cb">
-            <div style="background:var(--brand-lt);border:1.5px solid #FED7AA;border-radius:8px;padding:8px 12px;margin-bottom:12px;font-size:12.5px">🔖 <strong>OBRIG.</strong> = obrigatório para este serviço</div>
-            <div class="epi-grid" id="epi-grid"></div>
-            <div class="fg" style="margin-top:12px"><label class="fl">Obs. EPIs</label><textarea class="fc" id="f-epi-obs"></textarea></div>
-            <div style="display:flex;justify-content:space-between;margin-top:14px">
-              <button class="btn btn-s" onclick="step(1)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(3)">Próximo: Satisfação →</button>
-            </div>
-          </div>
-        </div>
-        <div class="card" id="s3" style="display:none">
-          <div class="ch"><div class="ct2">😊 Pesquisa de Satisfação</div></div>
-          <div class="cb">
-            <table class="sat-table">
-              <thead><tr><th>Quesito</th><th>😊<br><span style="font-size:9px">Satisfeito</span></th><th>😐<br><span style="font-size:9px">Neutro</span></th><th>😞<br><span style="font-size:9px">Insatisfeito</span></th></tr></thead>
-              <tbody id="sat-body"></tbody>
-            </table>
-            <div class="fg" style="margin-top:12px"><label class="fl">Obs. do cliente</label><textarea class="fc" id="f-sat-obs"></textarea></div>
-            <div style="display:flex;justify-content:space-between;margin-top:14px">
-              <button class="btn btn-s" onclick="step(2)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(4)">Próximo: Fotos →</button>
-            </div>
-          </div>
-        </div>
-        <div class="card" id="s4" style="display:none">
-          <div class="ch"><div class="ct2">📸 Evidências Fotográficas</div></div>
-          <div class="cb">
-            <div class="pzone" onclick="document.getElementById('ph-in').click()">
-              <div style="font-size:32px;margin-bottom:7px">📷</div>
-              <p><strong>Clique para selecionar fotos</strong></p>
-              <p style="font-size:11.5px;color:var(--muted);margin-top:3px">JPG, PNG — máx. 10 fotos</p>
-            </div>
-            <input type="file" id="ph-in" accept="image/*" multiple style="display:none" onchange="addPh(this)">
-            <div class="pgrid" id="pgrid"></div>
-            <div style="display:flex;justify-content:space-between;margin-top:14px">
-              <button class="btn btn-s" onclick="step(3)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(5)">Próximo: Assinaturas →</button>
-            </div>
-          </div>
-        </div>
-        <div class="card" id="s5" style="display:none">
-          <div class="ch"><div class="ct2">✍️ Assinaturas</div></div>
-          <div class="cb">
-            <div class="g2" style="gap:22px">
-              <div>
-                <div class="stitle">Avaliador (Cliente)</div>
-                <div class="sig-area"><canvas id="sig-cli"></canvas><div style="font-size:10.5px;color:var(--muted);text-align:center;padding:4px 0">Assine acima</div><div style="display:flex;justify-content:flex-end;padding:3px 9px 7px"><button class="btn btn-g btn-sm" onclick="clrSig('cli')">🗑 Limpar</button></div></div>
-                <div class="g2" style="gap:8px;margin-top:9px">
-                  <div class="fg full"><label class="fl">Nome completo</label><input class="fc" id="sc-name"></div>
-                  <div class="fg"><label class="fl">RG</label><input class="fc" id="sc-rg"></div>
-                  <div class="fg"><label class="fl">CPF</label><input class="fc" id="sc-cpf" placeholder="000.000.000-00"></div>
-                </div>
-              </div>
-              <div>
-                <div class="stitle">Técnico Responsável</div>
-                <div class="sig-area"><canvas id="sig-tec"></canvas><div style="font-size:10.5px;color:var(--muted);text-align:center;padding:4px 0">Assine acima</div><div style="display:flex;justify-content:flex-end;padding:3px 9px 7px"><button class="btn btn-g btn-sm" onclick="clrSig('tec')">🗑 Limpar</button></div></div>
-                <div class="g2" style="gap:8px;margin-top:9px">
-                  <div class="fg full"><label class="fl">Nome completo</label><input class="fc" id="st-name"></div>
-                  <div class="fg"><label class="fl">RG</label><input class="fc" id="st-rg"></div>
-                  <div class="fg"><label class="fl">CPF</label><input class="fc" id="st-cpf" placeholder="000.000.000-00"></div>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:20px">
-              <button class="btn btn-s" onclick="step(4)">← Voltar</button>
-              <button class="btn btn-p" style="font-size:14px;padding:10px 24px" onclick="saveOS()">✅ Finalizar e Salvar OS</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- MINHAS OS -->
-      <div class="page" id="pg-osl">
-        <div class="ph"><div><div class="pt">Minhas OS</div><div class="ps" id="os-sub">—</div></div><button class="btn btn-p" onclick="goPg('nos')">➕ Nova OS</button></div>
-        <div style="display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap">
-          <select class="fc" id="fi-st" onchange="rndrOS()" style="width:160px"><option value="">Todos os status</option><option value="aberta">Aberta</option><option value="em_andamento">Em Andamento</option><option value="finalizada">Finalizada</option><option value="pendente">Pendente</option></select>
-          <input type="date" class="fc" id="fi-dt" onchange="rndrOS()" style="width:155px">
-          <input type="text" class="fc" id="fi-sr" placeholder="Buscar..." oninput="rndrOS()" style="width:190px">
-        </div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>OS</th><th>Cliente</th><th>Serviço</th><th>Técnico</th><th>Data</th><th>Status</th><th>Sat.</th><th>Ações</th></tr></thead>
-          <tbody id="os-body"></tbody>
-        </table></div></div>
-      </div>
-
-      <!-- EXPORTAR ZIP -->
-      <div class="page" id="pg-exp">
-        <div class="ph"><div><div class="pt">Exportar ZIP</div><div class="ps">Upload no ObraSoft</div></div></div>
-        <div class="el">
-          <div class="card">
-            <div class="ch"><div class="ct2">📦 Gerar ZIP</div></div>
-            <div class="cb">
-              <div class="fg" style="margin-bottom:12px">
-                <label class="fl">Data <span class="req">*</span></label>
-                <input class="fc" type="date" id="exp-dt" onchange="updExp()">
-                <span class="fh">Somente OS com status Finalizada são incluídas</span>
-              </div>
-              <div id="exp-prev"><div class="exp-empty">Selecione uma data</div></div>
-              <div id="exp-prog" style="display:none;margin-bottom:9px">
-                <div style="font-size:12.5px;color:var(--muted);margin-bottom:4px" id="exp-lbl">Gerando...</div>
-                <div class="prog-w"><div class="prog-f" id="exp-bar" style="width:0%"></div></div>
-              </div>
-              <button class="btn btn-p" id="btn-exp" style="width:100%;padding:10px" onclick="genZip()" disabled>📦 Gerar e Baixar ZIP</button>
-            </div>
-          </div>
-          <div class="card">
-            <div class="ch"><div class="ct2">📜 Meu Histórico</div></div>
-            <div class="tw"><table>
-              <thead><tr><th>Data</th><th>Arquivo</th><th>OS</th><th>Gerado em</th></tr></thead>
-              <tbody id="exp-hist"></tbody>
-            </table></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ APP ADMIN ══ -->
-<div id="sc-adm" class="screen">
-  <div class="app">
-    <aside class="sb adm">
-      <div class="sb-logo"><div class="sb-ico adm">🛡</div><div class="sb-txt">Administrador<small>Consigaz OS</small></div></div>
-      <nav class="sb-nav">
-        <div class="sb-sec">Painel</div>
-        <button class="sb-btn on adm" data-pa="ov" onclick="goAdm('ov')"><span class="sb-ico2">📊</span><span>Visão Geral</span></button>
-        <button class="sb-btn" data-pa="cos" onclick="goAdm('cos')"><span class="sb-ico2">🏢</span><span>Empresas</span></button>
-        <button class="sb-btn" data-pa="aos" onclick="goAdm('aos')"><span class="sb-ico2">📋</span><span>Todas as OS</span></button>
-        <button class="sb-btn" data-pa="aex" onclick="goAdm('aex')"><span class="sb-ico2">📦</span><span>Exportações</span></button>
-        <div class="sb-sec">Sistema</div>
-        <button class="sb-btn" data-pa="cfg" onclick="goAdm('cfg')"><span class="sb-ico2">⚙️</span><span>Configurações</span></button>
-      </nav>
-      <div class="sb-user"><div class="sb-ava adm">AD</div><div><div class="sb-un">Administrador</div><div class="sb-ur">Consigaz</div></div></div>
-    </aside>
-    <div class="main">
-      <div class="topbar">
-        <div class="tb-title" id="adm-ttl">Visão Geral</div>
-        <span class="badge b-adm" style="padding:4px 12px;font-size:11.5px">🛡 Painel Admin</span>
-        <button class="ico-btn" onclick="logout()" title="Sair">🚪</button>
-      </div>
-      <div class="page on" id="pg-ov">
-        <div class="ph"><div><div class="pt">Visão Geral</div><div class="ps">Todas as empresas</div></div></div>
-        <div class="sg" id="adm-stats"></div>
-        <div class="card"><div class="ch"><div class="ct2">Últimas OS — Todas as Empresas</div></div><div class="tw"><table>
-          <thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Serviço</th><th>Técnico</th><th>Data</th><th>Status</th></tr></thead>
-          <tbody id="adm-rec"></tbody>
-        </table></div></div>
-      </div>
-      <div class="page" id="pg-cos">
-        <div class="ph"><div><div class="pt">Empresas Cadastradas</div><div class="ps" id="co-sub">—</div></div><button class="btn btn-adm" onclick="openCo()">➕ Nova Empresa</button></div>
-        <div class="cg" id="co-grid"></div>
-      </div>
-      <div class="page" id="pg-aos">
-        <div class="ph"><div><div class="pt">Todas as OS</div><div class="ps" id="aos-sub">—</div></div></div>
-        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-          <select class="fc" id="af-co" onchange="rndrAOS()" style="width:200px"><option value="">Todas as empresas</option></select>
-          <select class="fc" id="af-st" onchange="rndrAOS()" style="width:155px"><option value="">Todos os status</option><option value="finalizada">Finalizada</option><option value="em_andamento">Em Andamento</option><option value="pendente">Pendente</option><option value="aberta">Aberta</option></select>
-          <input type="date" class="fc" id="af-dt" onchange="rndrAOS()" style="width:155px">
-        </div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Serviço</th><th>Técnico</th><th>Data</th><th>Status</th><th></th></tr></thead>
-          <tbody id="aos-body"></tbody>
-        </table></div></div>
-      </div>
-      <div class="page" id="pg-aex">
-        <div class="ph"><div><div class="pt">Exportações</div><div class="ps">Histórico global</div></div></div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>Data</th><th>Empresa</th><th>Arquivo ZIP</th><th>OS</th><th>Gerado em</th></tr></thead>
-          <tbody id="aex-body"></tbody>
-        </table></div></div>
-      </div>
-      <!-- CONFIGURAÇÕES -->
-      <div class="page" id="pg-cfg">
-        <div class="ph"><div><div class="pt">Configurações</div><div class="ps">Integração com Google Sheets</div></div></div>
-        <div class="card" style="max-width:600px">
-          <div class="ch"><div class="ct2">⚙️ URL da API (Google Apps Script)</div></div>
-          <div class="cb">
-            <div class="fg" style="margin-bottom:16px">
-              <label class="fl">URL do Web App</label>
-              <input class="fc" id="cfg-url" placeholder="https://script.google.com/macros/s/XXXXXXXX/exec" style="font-size:12.5px">
-              <span class="fh">Cole aqui a URL gerada após publicar o Apps Script como Web App</span>
-            </div>
-            <div style="background:#F0FFF4;border:1.5px solid #9AE6B4;border-radius:8px;padding:12px 15px;font-size:12.5px;margin-bottom:16px">
-              <strong>Como obter a URL:</strong><br>
-              1. No Apps Script, clique em <strong>Implantar → Nova implantação</strong><br>
-              2. Tipo: <strong>App da Web</strong><br>
-              3. Executar como: <strong>Eu mesmo</strong><br>
-              4. Quem tem acesso: <strong>Qualquer pessoa</strong><br>
-              5. Clique em <strong>Implantar</strong> e copie a URL gerada
-            </div>
-            <div style="display:flex;gap:9px">
-              <button class="btn btn-adm" onclick="saveCfg()">💾 Salvar URL</button>
-              <button class="btn btn-s" onclick="testCfg()">🔌 Testar Conexão</button>
-            </div>
-            <div id="cfg-status" style="margin-top:12px;font-size:13px"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL EMPRESA -->
-<div class="ov" id="modal-co">
-  <div class="modal">
-    <div class="mh"><div class="mt" id="mco-ttl">Nova Empresa</div><button class="mx" onclick="closeCo()">✕</button></div>
-    <div class="mb">
-      <div class="fg">
-        <label class="fl">Código do Fornecedor <span class="req">*</span></label>
-        <input class="fc" id="m-code" placeholder="Ex: 1001" style="font-size:20px;font-weight:700;letter-spacing:.08em">
-        <span class="fh">Código único para login. Não pode ser alterado após criação.</span>
-      </div>
-      <div class="fg"><label class="fl">Nome da Empresa <span class="req">*</span></label><input class="fc" id="m-name" placeholder="Razão social ou nome fantasia"></div>
-      <div class="fg"><label class="fl">CNPJ</label><input class="fc" id="m-cnpj" placeholder="00.000.000/0000-00"></div>
-      <div class="fg"><label class="fl">Status</label><select class="fc" id="m-active"><option value="1">✅ Ativa</option><option value="0">❌ Inativa</option></select></div>
-    </div>
-    <div class="mf"><button class="btn btn-s" onclick="closeCo()">Cancelar</button><button class="btn btn-adm" onclick="saveCo()">💾 Salvar Empresa</button></div>
-  </div>
-</div>
-
-<div class="toasts" id="toasts"></div>
-
-<script>
-'use strict';
-
-// ═══════════════════════════════════════════════════════════
-// CONFIGURAÇÃO — cole sua URL aqui após configurar o Apps Script
-// ═══════════════════════════════════════════════════════════
-let API_URL = localStorage.getItem('consigaz_api_url') || '';
-
-// Cache local (evita chamadas desnecessárias)
-const CACHE = { empresas: null, os: {}, exp: {} };
-
-// Sessão atual
-const S = { type: null, co: null };
-let editId = null, selEPI = new Set(), photos = [], editCo = null;
-const sigCtx = {};
-
-// ══ CONSTANTES ══
-const EPIS = [
-  {k:'cinto',   ic:'🪢', n:'Cinto Paraquedista'},
-  {k:'capacete',ic:'⛑',  n:'Capacete'},
-  {k:'botinas', ic:'🥾', n:'Botinas'},
-  {k:'oculos',  ic:'🥽', n:'Óculos Prot.'},
-  {k:'luvas',   ic:'🧤', n:'Luvas'},
-  {k:'avental', ic:'🧥', n:'Avental de Raspa'},
-  {k:'msolda',  ic:'🛡', n:'Máscara Solda'},
-  {k:'mpo',     ic:'😷', n:'Máscara Pó'},
-  {k:'pfacial', ic:'🔵', n:'Prot. Facial'},
-  {k:'pauri',   ic:'👂', n:'Prot. Auricular'},
-  {k:'uniforme',ic:'👷', n:'Uniforme'},
-  {k:'colete',  ic:'🦺', n:'Colete Visib.'},
-];
-const SATQ = [
-  'Como foi a abordagem do técnico? Ficou claro o trabalho?',
-  'Avalie a cordialidade e educação no atendimento',
-  'O técnico estava uniformizado?',
-  'O técnico utilizou os EPIs durante a execução?',
-  'Como foi a pontualidade do técnico?',
-  'O trabalho foi bem executado?',
-  'Após a execução, o local ficou limpo e organizado?',
-  'Avalie o resultado do resgate de imagem (limpeza e pintura)',
-  'O técnico apresentou o escopo do serviço antes de iniciar?',
-  'O técnico foi cordial e respeitoso durante todo o atendimento?',
-  'A solução apresentada atendeu suas expectativas?',
-];
-const SVC = {
-  4:'Vazamento',5:'Regulagens',6:'Ligação de fogão',10:'Instalação de Rede',
-  12:'Laudo técnico/ART',15:'Corte de gás',16:'Religação de gás',
-  24:'Teste estanqueidade Central',29:'Instalação de Central',
-  34:'Manutenção Preventiva',38:'Testes NR13 Periódica',
-  44:'Adequação Rede',45:'Adequação Central',50:'Inst. Medidor/Regulador',
-  61:'Manutenção Avançada',84:'Teste Estanqueidade Rede',86:'Visita técnica'
-};
-const EPIM = {
-  4: [0,1,1,1,1,0,0,0,0,1,1,1], 5: [0,0,1,1,1,0,0,0,0,1,1,1],
-  6: [0,1,1,1,1,0,0,0,0,1,1,1], 10:[1,1,1,1,1,1,1,1,1,1,1,1],
-  12:[0,1,1,1,0,0,0,0,0,1,1,1], 15:[0,1,1,1,1,0,0,0,0,1,1,1],
-  16:[0,1,1,1,1,0,0,0,0,1,1,1], 24:[0,1,1,1,1,0,0,0,1,1,1,1],
-  29:[1,1,1,1,1,1,1,0,0,1,1,1], 34:[0,1,1,1,1,0,0,0,0,1,1,1],
-  38:[0,1,1,1,1,0,0,0,0,1,1,1], 44:[1,1,1,1,1,1,1,0,1,1,1,1],
-  45:[1,1,1,1,1,1,1,0,1,1,1,1], 50:[0,1,1,1,1,0,0,0,0,1,1,1],
-  61:[0,1,1,1,1,1,1,0,1,1,1,1], 84:[0,1,1,1,1,0,0,0,1,1,1,1],
-  86:[0,1,1,1,1,0,0,0,0,1,1,1]
-};
-
-// ══ HELPERS ══
-const $ = id => document.getElementById(id);
-const fD  = d   => { if(!d) return '—'; const[y,m,dd]=d.split('-'); return `${dd}/${m}/${y}`; };
-const fDT = iso => { if(!iso) return '—'; return new Date(iso).toLocaleString('pt-BR'); };
-const bdg = s   => { const L={aberta:'Aberta',em_andamento:'Em And.',finalizada:'Finalizada',pendente:'Pendente',cancelada:'Cancelada'}; return `<span class="badge b-${s}">${L[s]||s}</span>`; };
-const satSum = sat => {
-  if(!sat||!sat.length) return '—';
-  const c={satisfeito:0,neutro:0,insatisfeito:0};
-  sat.forEach(v=>{ if(c[v]!==undefined) c[v]++; });
-  if(c.insatisfeito>0) return '😞'; if(c.neutro>c.satisfeito) return '😐'; if(c.satisfeito>0) return '😊'; return '—';
-};
-const myOS  = () => CACHE.os [S.co?.code] || [];
-const myExp = () => CACHE.exp[S.co?.code] || [];
-
-// ══ LOADING ══
-function showLoad(msg='Carregando...') { $('load-msg').textContent=msg; $('load-overlay').classList.add('on'); }
-function hideLoad() { $('load-overlay').classList.remove('on'); }
-
-// ══ API ══
-async function api(params) {
-  if(!API_URL) throw new Error('URL da API não configurada. Acesse Admin → Configurações.');
-  const url = API_URL + '?' + new URLSearchParams(params).toString();
-  const res = await fetch(url);
-  const json = await res.json();
-  if(!json.ok) throw new Error(json.error || 'Erro na API');
-  return json.data;
-}
-
-// ══ CONFIGURAÇÕES ══
-function saveCfg() {
-  const url = $('cfg-url').value.trim();
-  if(!url) { toast('Cole a URL do Apps Script','er'); return; }
-  localStorage.setItem('consigaz_api_url', url);
-  API_URL = url;
-  toast('URL salva! ✅','ok');
-  $('cfg-status').innerHTML='<span style="color:var(--ok)">✅ URL salva com sucesso.</span>';
-  $('cfg-banner').classList.remove('on');
-}
-async function testCfg() {
-  const url = $('cfg-url').value.trim();
-  if(!url) { toast('Cole a URL primeiro','er'); return; }
-  $('cfg-status').innerHTML='<span style="color:var(--muted)">⏳ Testando conexão...</span>';
+function handle(e) {
+  const out = ContentService.createTextOutput();
+  out.setMimeType(ContentService.MimeType.JSON);
   try {
-    const old = API_URL; API_URL = url;
-    await api({action:'getEmpresas'});
-    API_URL = url;
-    $('cfg-status').innerHTML='<span style="color:var(--ok)">✅ Conexão OK! Google Sheets respondeu.</span>';
-    toast('Conexão OK! ✅','ok');
-  } catch(e) {
-    $('cfg-status').innerHTML=`<span style="color:var(--danger)">❌ Erro: ${e.message}</span>`;
-    toast('Falha na conexão','er');
+    // Parâmetros via GET ou POST (body JSON)
+    let p = e.parameter || {};
+    if (e.postData && e.postData.contents) {
+      try { Object.assign(p, JSON.parse(e.postData.contents)); } catch(_) {}
+    }
+    const action = p.action;
+    let result;
+
+    if      (action==='getEmpresas')       result = getEmpresas();
+    else if (action==='saveEmpresa')       result = saveEmpresa(parse(p.data));
+    else if (action==='updateEmpresa')     result = updateEmpresa(parse(p.data));
+    else if (action==='deleteEmpresa')     result = deleteEmpresa(p.code);
+    else if (action==='getOS')             result = getOS(p.coCode||null);
+    else if (action==='saveOS')            result = saveOS(parse(p.data));
+    else if (action==='updateOS')          result = updateOS(parse(p.data));
+    else if (action==='deleteOS')          result = deleteOS(p.id);
+    else if (action==='getExportacoes')    result = getExportacoes(p.coCode||null);
+    else if (action==='saveExportacao')    result = saveExportacao(parse(p.data));
+    else if (action==='getServicos')       result = getServicos();
+    else if (action==='saveServico')       result = saveServico(parse(p.data));
+    else if (action==='updateServico')     result = updateServico(parse(p.data));
+    else if (action==='deleteServico')     result = deleteServico(p.code);
+    else if (action==='getEpis')           result = getEpis();
+    else if (action==='saveEpi')           result = saveEpi(parse(p.data));
+    else if (action==='updateEpi')         result = updateEpi(parse(p.data));
+    else if (action==='deleteEpi')         result = deleteEpi(p.id);
+    else if (action==='getMatriz')         result = getMatriz();
+    else if (action==='saveMatriz')        result = saveMatriz(parse(p.data));
+    else throw new Error('Ação desconhecida: '+action);
+
+    out.setContent(JSON.stringify({ok:true, data:result}));
+  } catch(err) {
+    out.setContent(JSON.stringify({ok:false, error:err.toString()}));
   }
+  return out;
 }
 
-// ══ LOGIN ══
-function swTab(t) {
-  $('pn-emp').style.display=t==='emp'?'block':'none';
-  $('pn-adm').style.display=t==='adm'?'block':'none';
-  $('t-emp').classList.toggle('on',t==='emp');
-  $('t-adm').classList.toggle('on',t==='adm');
+function parse(d) { return typeof d==='string' ? JSON.parse(d) : d; }
+
+function sheet(name) {
+  let s = SS.getSheetByName(name);
+  if (!s) s = SS.insertSheet(name);
+  return s;
 }
 
-// Preview do nome da empresa enquanto digita
-async function prevCo(v) {
-  const box=$('co-prev');
-  if(!v) { box.innerHTML='Digite o código para identificar a empresa'; return; }
-  // Busca no cache primeiro
-  if(CACHE.empresas) {
-    const co=CACHE.empresas.find(c=>c.code===v.trim());
-    if(co) { box.innerHTML=`<span>🏢</span><div><strong>${co.name}</strong><br><small style="color:var(--muted)">Cód.${co.code}${co.cnpj?' · '+co.cnpj:''}</small></div>`; return; }
-    box.innerHTML='<span style="color:var(--danger)">❌ Código não encontrado</span>'; return;
+// ═══ EMPRESAS ═══
+function getEmpresas() {
+  const rows = sheet('empresas').getDataRange().getValues();
+  if (rows.length<=1) return [];
+  return rows.slice(1).map(r=>({
+    code:String(r[0]), name:r[1], cnpj:r[2],
+    active: r[3]===true||r[3]==='TRUE'||r[3]===1,
+    createdAt:r[4]
+  })).filter(e=>e.code);
+}
+function saveEmpresa(d) {
+  if (getEmpresas().find(e=>e.code===d.code)) throw new Error('Código já existe: '+d.code);
+  sheet('empresas').appendRow([d.code, d.name, d.cnpj||'', true, new Date().toISOString()]);
+  return {success:true};
+}
+function updateEmpresa(d) {
+  const s=sheet('empresas'), rows=s.getDataRange().getValues();
+  for (let i=1;i<rows.length;i++) {
+    if (String(rows[i][0])===String(d.code)) {
+      s.getRange(i+1,2).setValue(d.name);
+      s.getRange(i+1,3).setValue(d.cnpj||'');
+      s.getRange(i+1,4).setValue(d.active!==false);
+      return {success:true};
+    }
   }
-  // Carrega do Sheets se não tem cache
-  if(!API_URL) { box.innerHTML='<span style="color:var(--muted)">Configure a URL da API para buscar empresas</span>'; return; }
-  try {
-    if(!CACHE.empresas) {
-      const data = await api({action:'getEmpresas'});
-      CACHE.empresas = data;
-    }
-    const co=CACHE.empresas.find(c=>c.code===v.trim());
-    if(co) box.innerHTML=`<span>🏢</span><div><strong>${co.name}</strong><br><small style="color:var(--muted)">Cód.${co.code}${co.cnpj?' · '+co.cnpj:''}</small></div>`;
-    else box.innerHTML='<span style="color:var(--danger)">❌ Código não encontrado</span>';
-  } catch(e) { box.innerHTML='<span style="color:var(--danger)">❌ Erro ao buscar empresa</span>'; }
+  throw new Error('Empresa não encontrada');
 }
-
-async function loginEmp() {
-  const code=$('l-code').value.trim();
-  if(!code) { toast('Digite o código do fornecedor','er'); return; }
-  if(!API_URL) { toast('URL da API não configurada. Fale com o administrador.','er'); return; }
-  showLoad('Verificando código...');
-  try {
-    if(!CACHE.empresas) CACHE.empresas = await api({action:'getEmpresas'});
-    const co=CACHE.empresas.find(c=>c.code===code);
-    if(!co) { toast('Código não encontrado','er'); hideLoad(); return; }
-    if(!co.active) { toast('Empresa inativa. Contate o administrador.','er'); hideLoad(); return; }
-    S.type='emp'; S.co=co;
-    $('sb-coname').textContent=co.name.length>22?co.name.slice(0,20)+'…':co.name;
-    $('sb-ava').textContent=co.name[0].toUpperCase();
-    $('sb-un').textContent=co.name;
-    $('sb-ur').textContent='Cód. '+co.code;
-    $('emp-tco').textContent='🏢 '+co.name+' · Cód.'+co.code;
-    // Carrega OS da empresa
-    showLoad('Carregando ordens de serviço...');
-    CACHE.os[co.code] = await api({action:'getOS', coCode:co.code});
-    CACHE.exp[co.code] = await api({action:'getExportacoes', coCode:co.code});
-    hideLoad();
-    $('sc-login').style.display='none';
-    $('sc-emp').style.display='block';
-    goPg('nos'); updCt();
-    toast(`Bem-vinda, ${co.name}! ✅`,'ok');
-  } catch(e) { toast('Erro: '+e.message,'er'); hideLoad(); }
-}
-
-function loginAdm() {
-  if($('l-ae').value!=='admin@consigaz.com.br'||$('l-ap').value!=='admin123') { toast('Credenciais inválidas','er'); return; }
-  S.type='adm'; S.co=null;
-  if($('cfg-url')) $('cfg-url').value=API_URL||'';
-  $('sc-login').style.display='none';
-  $('sc-adm').style.display='block';
-  goAdm('ov'); toast('Bem-vinda, Administrador! 🛡','ok');
-}
-
-function logout() {
-  S.type=null; S.co=null;
-  CACHE.empresas=null; // força reload na próxima vez
-  $('sc-emp').style.display='none'; $('sc-adm').style.display='none';
-  $('sc-login').style.display='flex';
-  $('l-code').value=''; $('co-prev').innerHTML='Digite o código para identificar a empresa';
-  swTab('emp');
-}
-
-// ══ NAV EMPRESA ══
-const PT={nos:'Nova OS',osl:'Minhas OS',exp:'Exportar ZIP'};
-function goPg(id) {
-  document.querySelectorAll('#sc-emp .page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('#sc-emp .sb-btn').forEach(b=>b.classList.remove('on'));
-  const pg=$('pg-'+id); if(pg) pg.classList.add('on');
-  document.querySelectorAll(`#sc-emp .sb-btn[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
-  $('emp-ttl').textContent=PT[id]||id;
-  if(id==='nos'){resetF();step(1);}
-  if(id==='osl') rndrOS();
-  if(id==='exp'){updExp();rndrHist();}
-}
-function updCt(){const e=$('os-ct');if(e)e.textContent=myOS().length;}
-
-// ══ LISTA OS ══
-function rndrOS() {
-  const stF=$('fi-st')?.value||'', dtF=$('fi-dt')?.value||'', srF=($('fi-sr')?.value||'').toLowerCase();
-  let data=[...myOS()];
-  if(stF) data=data.filter(o=>o.status===stF);
-  if(dtF) data=data.filter(o=>o.date===dtF);
-  if(srF) data=data.filter(o=>o.num.toLowerCase().includes(srF)||o.client.toLowerCase().includes(srF));
-  const sub=$('os-sub'); if(sub) sub.textContent=`${data.length} OS`;
-  const tb=$('os-body'); if(!tb) return;
-  if(!data.length){tb.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">📋</div>Nenhuma OS.<button class="btn btn-p btn-sm" onclick="goPg('nos')" style="margin-left:8px">Criar agora</button></td></tr>`;return;}
-  tb.innerHTML=data.sort((a,b)=>b.at.localeCompare(a.at)).map(o=>`<tr>
-    <td class="mono">${o.num}</td>
-    <td><strong>${o.client}</strong><br><span style="font-size:11px;color:var(--muted)">${o.addr||''}</span></td>
-    <td style="font-size:12.5px">${SVC[o.svc]||o.svc}</td>
-    <td style="font-size:12.5px">${o.tech||'—'}</td>
-    <td style="font-size:12px;white-space:nowrap">${fD(o.date)}</td>
-    <td>${bdg(o.status)}</td>
-    <td style="font-size:18px;text-align:center">${satSum(o.sat)}</td>
-    <td style="white-space:nowrap">
-      <button class="btn btn-s btn-sm" onclick="editOS('${o.id}')">✏️</button>
-      <button class="btn btn-g btn-sm" onclick="dlPDF('${o.id}','${S.co.code}')">📄</button>
-      <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delOS('${o.id}')">🗑</button>
-    </td>
-  </tr>`).join('');
-}
-
-async function delOS(id) {
-  if(!confirm('Excluir esta OS?')) return;
-  showLoad('Excluindo...');
-  try {
-    await api({action:'deleteOS', id});
-    CACHE.os[S.co.code]=myOS().filter(o=>o.id!==id);
-    rndrOS(); updCt(); toast('OS excluída');
-  } catch(e){toast('Erro: '+e.message,'er');}
-  hideLoad();
-}
-
-function editOS(id) {
-  const os=myOS().find(o=>o.id===id); if(!os) return;
-  editId=id; goPg('nos');
-  setTimeout(()=>{
-    $('f-num').value=os.num; $('f-date').value=os.date; $('f-client').value=os.client;
-    $('f-addr').value=os.addr||''; $('f-svc').value=os.svc; $('f-tech').value=os.tech;
-    $('f-start').value=os.start||''; $('f-end').value=os.end||'';
-    $('f-team').value=os.team||''; $('f-obs').value=os.obs||'';
-    $('nos-ttl').textContent='Editar OS: '+os.num;
-    onSvc(); if(os.epis){selEPI=new Set(os.epis);buildEPI(os.svc);}
-  },40);
-}
-
-// ══ STEPPER ══
-function step(n){
-  for(let i=1;i<=5;i++){const c=$('s'+i);if(c)c.style.display=i===n?'block':'none';}
-  document.querySelectorAll('.st').forEach(s=>{
-    const sn=parseInt(s.dataset.s);s.classList.remove('act','done');
-    const d=s.querySelector('.st-d');
-    if(sn<n){s.classList.add('done');d.textContent='✓';}
-    else if(sn===n){s.classList.add('act');d.textContent=sn;}
-    else d.textContent=sn;
-  });
-  for(let i=1;i<=4;i++){const l=$('sl'+i);if(l)l.className='st-ln'+(i<n?' done':'');}
-  if(n===5){setTimeout(()=>{iSig('cli');iSig('tec');const t=$('f-tech'),stn=$('st-name');if(t&&stn&&!stn.value)stn.value=t.value;},80);}
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function resetF(){
-  editId=null;selEPI=new Set();photos=[];
-  $('nos-ttl').textContent='Nova Ordem de Serviço';
-  const today=new Date().toISOString().split('T')[0], yr=new Date().getFullYear(), nxt=String(myOS().length+1).padStart(4,'0');
-  setTimeout(()=>{
-    ['f-num','f-date','f-client','f-addr','f-svc','f-tech','f-start','f-end','f-team','f-obs',
-     'f-epi-obs','f-sat-obs','sc-name','sc-rg','sc-cpf','st-name','st-rg','st-cpf'].forEach(id=>{const el=$(id);if(el)el.value='';});
-    $('f-num').value=`OS-${yr}-${nxt}`; $('f-date').value=today;
-    buildSat();
-    const pg=$('pgrid');if(pg)pg.innerHTML='';
-    const eg=$('epi-grid');if(eg)eg.innerHTML='';
-    Object.keys(sigCtx).forEach(k=>delete sigCtx[k]);
-  },30);
-}
-function onSvc(){
-  const sel=$('f-svc'),code=parseInt(sel.value),lbl=$('epi-lbl');
-  if(lbl)lbl.textContent=sel.options[sel.selectedIndex]?.text||'—';
-  buildEPI(code);
-}
-function buildEPI(sc){
-  const g=$('epi-grid');if(!g)return;
-  const row=EPIM[sc]||Array(12).fill(0);
-  EPIS.forEach((e,i)=>{if(row[i])selEPI.add(e.k);});
-  g.innerHTML=EPIS.map((e,i)=>{
-    const req=!!row[i],sel=selEPI.has(e.k);
-    return`<div class="epi-card ${req?'req-e':''} ${sel?'sel':''}" data-k="${e.k}" onclick="togE('${e.k}')">
-      ${req?'<span class="epi-r">OBRIG.</span>':''}
-      <span class="epi-ico">${e.ic}</span><span class="epi-nm">${e.n}</span>
-    </div>`;
-  }).join('');
-}
-function togE(k){const c=document.querySelector(`.epi-card[data-k="${k}"]`);if(!c)return;if(selEPI.has(k)){selEPI.delete(k);c.classList.remove('sel');}else{selEPI.add(k);c.classList.add('sel');}}
-function buildSat(){
-  const tb=$('sat-body');if(!tb)return;
-  tb.innerHTML=SATQ.map((q,i)=>`<tr>
-    <td>${q}</td>
-    <td style="text-align:center"><input type="radio" class="sat-r" name="q${i}" id="q${i}s" value="satisfeito"><label class="sat-l" for="q${i}s">😊</label></td>
-    <td style="text-align:center"><input type="radio" class="sat-r" name="q${i}" id="q${i}n" value="neutro"><label class="sat-l" for="q${i}n">😐</label></td>
-    <td style="text-align:center"><input type="radio" class="sat-r" name="q${i}" id="q${i}i" value="insatisfeito"><label class="sat-l" for="q${i}i">😞</label></td>
-  </tr>`).join('');
-}
-const getSat=()=>SATQ.map((_,i)=>{const c=document.querySelector(`input[name="q${i}"]:checked`);return c?c.value:'';});
-function addPh(input){
-  const g=$('pgrid');if(!g)return;
-  Array.from(input.files).slice(0,10-photos.length).forEach(f=>{
-    const r=new FileReader();r.onload=e=>{photos.push(e.target.result);const d=document.createElement('div');d.className='pthumb';const idx=photos.length-1;d.innerHTML=`<img src="${e.target.result}"><button class="rm" onclick="rmPh(${idx},this.parentNode)">✕</button>`;g.appendChild(d);};r.readAsDataURL(f);
-  });
-}
-function rmPh(i,n){photos.splice(i,1);n.remove();}
-function iSig(id){
-  const cv=$('sig-'+id);if(!cv||sigCtx[id])return;
-  cv.width=cv.offsetWidth||380;cv.height=138;
-  const ctx=cv.getContext('2d');ctx.strokeStyle='#0D1B2A';ctx.lineWidth=2.2;ctx.lineCap='round';ctx.lineJoin='round';sigCtx[id]=ctx;
-  let dr=false,lx=0,ly=0;
-  const pos=(e,c)=>{const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return[s.clientX-r.left,s.clientY-r.top];};
-  cv.onmousedown=e=>{dr=true;[lx,ly]=pos(e,cv);};
-  cv.onmousemove=e=>{if(!dr)return;const[x,y]=pos(e,cv);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();[lx,ly]=[x,y];};
-  cv.onmouseup=cv.onmouseleave=()=>dr=false;
-  cv.addEventListener('touchstart',e=>{e.preventDefault();dr=true;[lx,ly]=pos(e,cv);},{passive:false});
-  cv.addEventListener('touchmove',e=>{e.preventDefault();if(!dr)return;const[x,y]=pos(e,cv);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke();[lx,ly]=[x,y];},{passive:false});
-  cv.addEventListener('touchend',()=>dr=false);
-}
-function clrSig(id){delete sigCtx[id];const cv=$('sig-'+id);if(cv)cv.getContext('2d').clearRect(0,0,cv.width,cv.height);}
-function gSigURL(id){const cv=$('sig-'+id);if(!cv)return null;const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;return Array.from(d).some((v,i)=>i%4===3&&v>0)?cv.toDataURL('image/png'):null;}
-
-// ══ SALVAR OS ══
-async function saveOS(){
-  const num=$('f-num').value.trim(),date=$('f-date').value,client=$('f-client').value.trim(),svc=$('f-svc').value,tech=$('f-tech').value.trim();
-  if(!num||!date||!client||!svc){toast('Preencha: Nº OS, Data, Cliente e Tipo de Serviço','er');step(1);return;}
-  if(!tech){toast('Informe o nome completo do técnico','er');step(1);return;}
-  const id=editId||('os-'+Date.now());
-  const os={
-    id,coCode:S.co.code,coName:S.co.name,num,date,client,addr:$('f-addr').value,
-    svc:parseInt(svc),tech,start:$('f-start').value,end:$('f-end').value,
-    team:$('f-team').value,obs:$('f-obs').value,epiObs:$('f-epi-obs').value,
-    epis:[...selEPI],sat:getSat(),satObs:$('f-sat-obs').value,photos:[...photos],
-    sigCli:gSigURL('cli'),sigTec:gSigURL('tec'),
-    scName:$('sc-name').value,scRG:$('sc-rg').value,scCPF:$('sc-cpf').value,
-    stName:$('st-name').value,stRG:$('st-rg').value,stCPF:$('st-cpf').value,
-    status:'finalizada',at:new Date().toISOString()
-  };
-  showLoad(editId?'Atualizando OS...':'Salvando OS...');
-  try {
-    if(editId){
-      await api({action:'updateOS',data:JSON.stringify(os)});
-      const i=myOS().findIndex(o=>o.id===editId);
-      if(i>=0) CACHE.os[S.co.code][i]=os;
-    } else {
-      await api({action:'saveOS',data:JSON.stringify(os)});
-      if(!CACHE.os[S.co.code]) CACHE.os[S.co.code]=[];
-      CACHE.os[S.co.code].push(os);
-    }
-    editId=null;Object.keys(sigCtx).forEach(k=>delete sigCtx[k]);
-    updCt();toast(`OS ${num} salva! ✅`,'ok');goPg('osl');
-  } catch(e){toast('Erro ao salvar: '+e.message,'er');}
-  hideLoad();
-}
-
-// ══ PDF ══
-function buildPDF(os){
-  const{jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
-  const W=210,m=14;let y=14;
-  doc.setFillColor(255,90,31);doc.rect(0,0,W,22,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(13);doc.setFont('helvetica','bold');
-  doc.text('FIELD SERVICES OS - CONSIGAZ',m,10);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');
-  doc.text('REGISTRO DE SATISFACAO DO CLIENTE',m,17);
-  doc.text(`OS: ${os.num}`,W-m,10,{align:'right'});
-  doc.text(`Data: ${fD(os.date)}`,W-m,17,{align:'right'});
-  y=30;
-  doc.setFillColor(237,233,254);doc.rect(m,y,W-2*m,7,'F');
-  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(91,33,182);
-  doc.text(`EMPRESA: ${os.coName||'—'}  |  COD. FORNECEDOR: ${os.coCode||'—'}`,m+2,y+4.5);
-  y+=10;
-  doc.setFillColor(247,249,252);doc.rect(m,y,W-2*m,26,'F');
-  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(113,128,150);
-  doc.text('CLIENTE',m+2,y+5);doc.text('TECNICO RESPONSAVEL',m+95,y+5);
-  doc.text('SERVICO',m+2,y+15);doc.text('ENDERECO',m+95,y+15);
-  doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);doc.setFontSize(10);
-  doc.text(os.client||'—',m+2,y+10);doc.text(os.tech||'—',m+95,y+10);
-  doc.text((SVC[os.svc]||String(os.svc)).substring(0,38),m+2,y+20);
-  doc.text((os.addr||'—').substring(0,42),m+95,y+20);
-  y+=30;
-  if(os.start||os.end||os.team){doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(113,128,150);doc.text('HORARIO',m,y+4);doc.text('EQUIPE',m+50,y+4);doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);doc.setFontSize(9);doc.text(`${os.start||'--'} -> ${os.end||'--'}`,m,y+10);doc.text((os.team||'—').substring(0,60),m+50,y+10);y+=15;}
-  y+=2;
-  doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('EPIs UTILIZADOS NA EXECUCAO',m+2,y+4.2);y+=8;
-  const cW=44,pR=4;
-  EPIS.forEach((e,i)=>{
-    const col=i%pR,row2=Math.floor(i/pR),x=m+col*cW,yy=y+row2*7;
-    const used=os.epis&&os.epis.includes(e.k);
-    doc.setFillColor(used?34:210,used?197:210,used?94:210);doc.roundedRect(x,yy-1,cW-2,6,1,1,'F');
-    doc.setTextColor(used?0:100,used?80:100,used?0:100);doc.setFont('helvetica',used?'bold':'normal');doc.setFontSize(7.5);
-    doc.text((used?'[X] ':' [ ] ')+e.n.substring(0,19),x+2,yy+3.2);
-  });
-  y+=Math.ceil(EPIS.length/pR)*7+4;
-  if(os.epiObs){doc.setFontSize(8);doc.setTextColor(113,128,150);doc.setFont('helvetica','italic');doc.text('Obs.EPIs: '+os.epiObs.substring(0,90),m,y);y+=6;}
-  if(y>215){doc.addPage();y=14;}
-  doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('PESQUISA DE SATISFACAO DO CLIENTE',m+2,y+4.2);y+=8;
-  const SL={satisfeito:'SATISFEITO',neutro:'NEUTRO',insatisfeito:'INSATISFEITO'};
-  const SC={satisfeito:[34,197,94],neutro:[245,158,11],insatisfeito:[239,68,68],'':[180,180,180]};
-  SATQ.forEach((q,i)=>{
-    if(y>270){doc.addPage();y=14;}
-    const ans=os.sat?.[i]||'';const col2=SC[ans]||[180,180,180];
-    doc.setTextColor(13,27,42);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(`${i+1}. ${q.substring(0,78)}`,m,y+3);
-    doc.setFillColor(col2[0],col2[1],col2[2]);doc.roundedRect(W-m-32,y-1,32,6,1,1,'F');
-    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.text(SL[ans]||'NAO RESP.',W-m-16,y+3.2,{align:'center'});
-    doc.setDrawColor(230,232,236);doc.line(m,y+6,W-m,y+6);y+=8;
-  });
-  if(os.satObs){doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(113,128,150);doc.text('Obs.: '+os.satObs.substring(0,88),m,y);y+=7;}
-  if(os.photos&&os.photos.length){if(y>195){doc.addPage();y=14;}doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('EVIDENCIAS FOTOGRAFICAS',m+2,y+4.2);y+=10;const iW=54,iH=40,gap=5;let col3=0;os.photos.forEach(u=>{if(y+iH>280){doc.addPage();y=14;col3=0;}try{doc.addImage(u,'JPEG',m+col3*(iW+gap),y,iW,iH);}catch(e){}col3++;if(col3===3){col3=0;y+=iH+gap;}});if(col3>0)y+=iH+gap;}
-  if(os.obs){if(y>260){doc.addPage();y=14;}doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(113,128,150);doc.text('OBSERVACOES:',m,y);y+=5;doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);const ls=doc.splitTextToSize(os.obs,W-2*m);doc.text(ls,m,y);y+=ls.length*5+4;}
-  if(y>228){doc.addPage();y=14;}
-  y+=4;doc.setFillColor(13,27,42);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('ASSINATURAS',m+2,y+4.2);y+=10;
-  const sW=(W-2*m-10)/2;
-  const dSig=(url,x,lbl)=>{if(url){try{doc.addImage(url,'PNG',x,y,sW,24);}catch(e){}}else{doc.setDrawColor(200,200,200);doc.rect(x,y,sW,24);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(180,180,180);doc.text(lbl,x+sW/2,y+13,{align:'center'});}};
-  dSig(os.sigCli,m,'Assinatura do avaliador');dSig(os.sigTec,m+sW+10,'Assinatura do tecnico');
-  y+=26;doc.setTextColor(13,27,42);doc.setFontSize(8);doc.setFont('helvetica','normal');
-  doc.text(`Nome: ${os.scName||'_____________________'}`,m,y);doc.text(`Nome: ${os.stName||'_____________________'}`,m+sW+10,y);y+=5;
-  doc.text(`RG: ${os.scRG||'__________'}  CPF: ${os.scCPF||'_______________'}`,m,y);doc.text(`RG: ${os.stRG||'__________'}  CPF: ${os.stCPF||'_______________'}`,m+sW+10,y);y+=10;
-  doc.setFillColor(247,249,252);doc.rect(0,284,W,13,'F');doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(113,128,150);
-  doc.text(`Gerado em: ${fDT(new Date().toISOString())} | ID: ${os.id}`,m,291);doc.text('Field Services — Prestadora Consigaz',W-m,291,{align:'right'});
-  return doc;
-}
-function dlPDF(id,code){
-  const os=(CACHE.os[code]||[]).find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}
-  toast('Gerando PDF...','inf');
-  try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado! ✅','ok');}catch(e){toast('Erro PDF: '+e.message,'er');}
-}
-
-// ══ EXPORTAR ZIP ══
-function updExp(){
-  const dv=$('exp-dt')?.value,box=$('exp-prev'),btn=$('btn-exp');
-  if(!dv){if(box)box.innerHTML='<div class="exp-empty">Selecione uma data</div>';if(btn)btn.disabled=true;return;}
-  const os=myOS().filter(o=>o.date===dv&&o.status==='finalizada');
-  if(!os.length){const[y,mm,d]=dv.split('-');if(box)box.innerHTML=`<div class="exp-empty">📭 Nenhuma OS finalizada em ${d}/${mm}/${y}</div>`;if(btn)btn.disabled=true;return;}
-  const[y,mm,d]=dv.split('-');const fn=`${d}${mm}${y}`;
-  let html=`<div style="margin-bottom:8px;font-size:12px;color:var(--muted)"><strong style="color:var(--brand);font-size:13px">📁 ${fn}.zip</strong><br><span style="margin-left:8px">└── 📂 ${fn}/</span></div>`;
-  os.forEach(o=>{html+=`<div class="os-chip"><strong class="mono">${o.num}.pdf</strong><span style="flex:1;font-size:12px;color:var(--muted)">${o.client.substring(0,22)}</span>${bdg(o.status)}</div>`;});
-  html+=`<div style="font-size:12px;color:var(--muted);margin-top:6px"><strong>${os.length}</strong> OS em ${d}/${mm}/${y}</div>`;
-  if(box)box.innerHTML=html;if(btn)btn.disabled=false;
-}
-async function genZip(){
-  const dv=$('exp-dt')?.value;if(!dv){toast('Selecione uma data','er');return;}
-  const osList=myOS().filter(o=>o.date===dv&&o.status==='finalizada');
-  if(!osList.length){toast('Nenhuma OS finalizada nesta data','er');return;}
-  const[y,mm,d]=dv.split('-');const fn=`${d}${mm}${y}`;
-  const pw=$('exp-prog'),pb=$('exp-bar'),pl=$('exp-lbl'),btn=$('btn-exp');
-  pw.style.display='block';btn.disabled=true;btn.textContent='⏳ Gerando...';
-  try{
-    const zip=new JSZip();const folder=zip.folder(fn);
-    for(let i=0;i<osList.length;i++){
-      const os=osList[i];pb.style.width=Math.round((i/osList.length)*80)+'%';pl.textContent=`PDF ${i+1}/${osList.length}: ${os.num}...`;
-      await new Promise(r=>setTimeout(r,10));folder.file(`${os.num}.pdf`,buildPDF(os).output('arraybuffer'));
-    }
-    pl.textContent='Compactando...';pb.style.width='90%';await new Promise(r=>setTimeout(r,20));
-    const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{pb.style.width=(90+meta.percent*0.1).toFixed(0)+'%';});
-    pb.style.width='100%';pl.textContent='Pronto!';
-    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`${fn}.zip`;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);
-    // Salva exportação no Sheets
-    const expData={coCode:S.co.code,coName:S.co.name,date:`${d}/${mm}/${y}`,filename:`${fn}.zip`,count:osList.length,at:new Date().toISOString()};
-    await api({action:'saveExportacao',data:JSON.stringify(expData)});
-    if(!CACHE.exp[S.co.code]) CACHE.exp[S.co.code]=[];
-    CACHE.exp[S.co.code].unshift(expData);
-    rndrHist();toast(`${fn}.zip com ${osList.length} PDF(s) baixado! ✅`,'ok');
-  }catch(e){toast('Erro: '+e.message,'er');console.error(e);}
-  finally{setTimeout(()=>{pw.style.display='none';pb.style.width='0%';btn.disabled=false;btn.textContent='📦 Gerar e Baixar ZIP';},1600);}
-}
-function rndrHist(){
-  const tb=$('exp-hist');if(!tb)return;
-  const list=myExp();
-  if(!list.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Nenhuma exportação ainda</td></tr>';return;}
-  tb.innerHTML=list.map(h=>`<tr>
-    <td>${h.date}</td><td class="mono">${h.filename}</td>
-    <td style="text-align:center"><strong>${h.count}</strong></td>
-    <td style="font-size:11.5px;color:var(--muted)">${fDT(h.at)}</td>
-  </tr>`).join('');
-}
-
-// ══ ADMIN NAV ══
-const AT={ov:'Visão Geral',cos:'Empresas',aos:'Todas as OS',aex:'Exportações',cfg:'Configurações'};
-function goAdm(id){
-  document.querySelectorAll('#sc-adm .page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('#sc-adm .sb-btn').forEach(b=>b.classList.remove('on'));
-  const pg=$('pg-'+id);if(pg)pg.classList.add('on');
-  document.querySelectorAll(`#sc-adm .sb-btn[data-pa="${id}"]`).forEach(b=>b.classList.add('on'));
-  $('adm-ttl').textContent=AT[id]||id;
-  if(id==='ov') rndrOV();
-  if(id==='cos') rndrCos();
-  if(id==='aos') rndrAOS();
-  if(id==='aex') rndrAEX();
-  if(id==='cfg'){const u=$('cfg-url');if(u)u.value=API_URL||'';}
-}
-
-async function rndrOV(){
-  showLoad('Carregando dados...');
-  try{
-    if(!CACHE.empresas) CACHE.empresas=await api({action:'getEmpresas'});
-    const allOS=await api({action:'getOS'});
-    const stats=$('adm-stats');
-    if(stats)stats.innerHTML=`
-      <div class="sc"><div class="s-ico" style="background:var(--purple-lt)">🏢</div><div><div style="font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase">Empresas ativas</div><div style="font-size:24px;font-weight:700">${CACHE.empresas.filter(c=>c.active).length}</div></div></div>
-      <div class="sc"><div class="s-ico" style="background:#F0FFF4">📋</div><div><div style="font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase">Total de OS</div><div style="font-size:24px;font-weight:700">${allOS.length}</div></div></div>
-      <div class="sc"><div class="s-ico" style="background:var(--brand-lt)">✅</div><div><div style="font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase">OS Finalizadas</div><div style="font-size:24px;font-weight:700">${allOS.filter(o=>o.status==='finalizada').length}</div></div></div>`;
-    const tb=$('adm-rec');if(!tb){hideLoad();return;}
-    const rec=[...allOS].sort((a,b)=>b.at.localeCompare(a.at)).slice(0,10);
-    if(!rec.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:26px;color:var(--muted)">Nenhuma OS ainda</td></tr>';hideLoad();return;}
-    tb.innerHTML=rec.map(o=>`<tr>
-      <td class="mono">${o.num}</td>
-      <td><span class="mono-p">${o.coCode}</span> <span style="font-size:11.5px">${(o.coName||'').substring(0,15)}</span></td>
-      <td>${o.client}</td><td style="font-size:12px">${SVC[o.svc]||o.svc}</td>
-      <td style="font-size:12.5px">${o.tech||'—'}</td>
-      <td style="font-size:12px;white-space:nowrap">${fD(o.date)}</td>
-      <td>${bdg(o.status)}</td>
-    </tr>`).join('');
-  }catch(e){toast('Erro ao carregar: '+e.message,'er');}
-  hideLoad();
-}
-
-async function rndrCos(){
-  showLoad('Carregando empresas...');
-  try{
-    CACHE.empresas=await api({action:'getEmpresas'});
-    const g=$('co-grid'),sub=$('co-sub');if(!g){hideLoad();return;}
-    if(sub)sub.textContent=`${CACHE.empresas.length} empresa${CACHE.empresas.length!==1?'s':''}`;
-    if(!CACHE.empresas.length){g.innerHTML='<div style="padding:32px;text-align:center;color:var(--muted)">Nenhuma empresa. Clique em "Nova Empresa".</div>';hideLoad();return;}
-    g.innerHTML=CACHE.empresas.map(co=>`<div class="cc">
-      <div>
-        <div class="co-code">${co.code}</div>
-        <div style="font-size:13.5px;font-weight:600;margin-top:2px">${co.name}</div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px">${co.cnpj||''}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
-        <span class="badge ${co.active?'b-finalizada':'b-cancelada'}">${co.active?'✅ Ativa':'❌ Inativa'}</span>
-        <button class="btn btn-s btn-sm" onclick="openCo('${co.code}')">✏️ Editar</button>
-        <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delCo('${co.code}')">🗑 Excluir</button>
-      </div>
-    </div>`).join('');
-  }catch(e){toast('Erro: '+e.message,'er');}
-  hideLoad();
-}
-
-function openCo(code=null){
-  editCo=code;$('mco-ttl').textContent=code?'Editar Empresa':'Nova Empresa';
-  if(code){
-    const co=CACHE.empresas?.find(c=>c.code===code);
-    if(co){$('m-code').value=co.code;$('m-code').disabled=true;$('m-name').value=co.name;$('m-cnpj').value=co.cnpj||'';$('m-active').value=co.active?'1':'0';}
-  }else{
-    ['m-code','m-name','m-cnpj'].forEach(id=>{const el=$(id);if(el)el.value='';});
-    $('m-code').disabled=false;$('m-active').value='1';
+function deleteEmpresa(code) {
+  const s=sheet('empresas'), rows=s.getDataRange().getValues();
+  for (let i=rows.length-1;i>=1;i--) {
+    if (String(rows[i][0])===String(code)) { s.deleteRow(i+1); return {success:true}; }
   }
-  $('modal-co').classList.add('on');
+  throw new Error('Empresa não encontrada');
 }
-function closeCo(){$('modal-co').classList.remove('on');}
-async function saveCo(){
-  const code=$('m-code').value.trim(),name=$('m-name').value.trim();
-  if(!code||!name){toast('Preencha Código e Nome','er');return;}
-  showLoad(editCo?'Atualizando empresa...':'Cadastrando empresa...');
-  closeCo();
-  try{
-    const data={code,name,cnpj:$('m-cnpj').value,active:$('m-active').value==='1'};
-    if(editCo){
-      await api({action:'updateEmpresa',data:JSON.stringify(data)});
-    }else{
-      await api({action:'saveEmpresa',data:JSON.stringify(data)});
+
+// ═══ OS ═══
+function getOS(coCode) {
+  const rows = sheet('os').getDataRange().getValues();
+  if (rows.length<=1) return [];
+  let r = rows.slice(1).map(r=>({
+    id:r[0], coCode:String(r[1]), coName:r[2], num:r[3], date:r[4],
+    client:r[5], addr:r[6], svc:r[7], tech:r[8], start:r[9], end:r[10],
+    team:r[11], obs:r[12], epiObs:r[13],
+    epis: r[14]?String(r[14]).split(','):[],
+    sat:  r[15]?String(r[15]).split(','):[],
+    satObs:r[16], scName:r[17], scRG:r[18], scCPF:r[19],
+    stName:r[20], stRG:r[21], stCPF:r[22], status:r[23], at:r[24]
+  })).filter(o=>o.id);
+  if (coCode) r=r.filter(o=>o.coCode===coCode);
+  return r;
+}
+function saveOS(d) {
+  // Fotos ficam em aba separada por ID para não estourar limite de célula
+  const fotos = d.photos||[];
+  d.photos = []; // não salva base64 na aba os
+  sheet('os').appendRow([
+    d.id, d.coCode, d.coName, d.num, d.date, d.client, d.addr||'', d.svc, d.tech,
+    d.start||'', d.end||'', d.team||'', d.obs||'', d.epiObs||'',
+    (d.epis||[]).join(','), (d.sat||[]).join(','), d.satObs||'',
+    d.scName||'', d.scRG||'', d.scCPF||'',
+    d.stName||'', d.stRG||'', d.stCPF||'',
+    d.status||'finalizada', d.at||new Date().toISOString()
+  ]);
+  // Salva assinaturas e fotos em aba separada
+  if (fotos.length||d.sigCli||d.sigTec) {
+    saveMidia(d.id, fotos, d.sigCli||'', d.sigTec||'');
+  }
+  return {success:true};
+}
+function saveMidia(id, fotos, sigCli, sigTec) {
+  const s = sheet('midia');
+  const row = s.getLastRow()+1;
+  s.getRange(row,1).setValue(id);
+  s.getRange(row,2).setValue(sigCli);
+  s.getRange(row,3).setValue(sigTec);
+  s.getRange(row,4).setValue(JSON.stringify(fotos));
+}
+function getMidia(id) {
+  const s = sheet('midia');
+  if (s.getLastRow()<=0) return null;
+  const rows = s.getDataRange().getValues();
+  const r = rows.find(r=>String(r[0])===String(id));
+  if (!r) return null;
+  return { sigCli:r[1], sigTec:r[2], photos: r[3]?JSON.parse(r[3]):[] };
+}
+function updateOS(d) {
+  const s=sheet('os'), rows=s.getDataRange().getValues();
+  for (let i=1;i<rows.length;i++) {
+    if (String(rows[i][0])===String(d.id)) {
+      const r=i+1;
+      s.getRange(r,4).setValue(d.num);
+      s.getRange(r,5).setValue(d.date);
+      s.getRange(r,6).setValue(d.client);
+      s.getRange(r,7).setValue(d.addr||'');
+      s.getRange(r,8).setValue(d.svc);
+      s.getRange(r,9).setValue(d.tech);
+      s.getRange(r,10).setValue(d.start||'');
+      s.getRange(r,11).setValue(d.end||'');
+      s.getRange(r,12).setValue(d.team||'');
+      s.getRange(r,13).setValue(d.obs||'');
+      s.getRange(r,14).setValue(d.epiObs||'');
+      s.getRange(r,15).setValue((d.epis||[]).join(','));
+      s.getRange(r,16).setValue((d.sat||[]).join(','));
+      s.getRange(r,17).setValue(d.satObs||'');
+      s.getRange(r,18).setValue(d.scName||'');
+      s.getRange(r,19).setValue(d.scRG||'');
+      s.getRange(r,20).setValue(d.scCPF||'');
+      s.getRange(r,21).setValue(d.stName||'');
+      s.getRange(r,22).setValue(d.stRG||'');
+      s.getRange(r,23).setValue(d.stCPF||'');
+      s.getRange(r,24).setValue(d.status||'finalizada');
+      return {success:true};
     }
-    CACHE.empresas=null; // força reload
-    await rndrCos();
-    toast(`Empresa ${name} salva! ✅`,'ok');
-  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
+  }
+  throw new Error('OS não encontrada');
 }
-async function delCo(code){
-  if(!confirm(`Excluir empresa ${code}?\nAs OS criadas por ela serão mantidas no histórico.`))return;
-  showLoad('Excluindo empresa...');
-  try{
-    await api({action:'deleteEmpresa',code});
-    CACHE.empresas=null;
-    await rndrCos();
-    toast('Empresa excluída. Histórico de OS mantido.','ok');
-  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
+function deleteOS(id) {
+  const s=sheet('os'), rows=s.getDataRange().getValues();
+  for (let i=rows.length-1;i>=1;i--) {
+    if (String(rows[i][0])===String(id)) { s.deleteRow(i+1); return {success:true}; }
+  }
+  throw new Error('OS não encontrada');
 }
 
-async function rndrAOS(){
-  showLoad('Carregando OS...');
-  try{
-    if(!CACHE.empresas)CACHE.empresas=await api({action:'getEmpresas'});
-    const allOS=await api({action:'getOS'});
-    const sel=$('af-co');
-    if(sel&&sel.options.length<=1)CACHE.empresas.forEach(co=>{const o=document.createElement('option');o.value=co.code;o.textContent=`${co.code} — ${co.name}`;sel.appendChild(o);});
-    const coF=$('af-co')?.value||'',stF=$('af-st')?.value||'',dtF=$('af-dt')?.value||'';
-    let data=allOS;
-    if(coF)data=data.filter(o=>o.coCode===coF);
-    if(stF)data=data.filter(o=>o.status===stF);
-    if(dtF)data=data.filter(o=>o.date===dtF);
-    const sub=$('aos-sub');if(sub)sub.textContent=`${data.length} OS`;
-    const tb=$('aos-body');if(!tb){hideLoad();return;}
-    if(!data.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:26px;color:var(--muted)">Nenhuma OS</td></tr>';hideLoad();return;}
-    tb.innerHTML=data.sort((a,b)=>b.at.localeCompare(a.at)).map(o=>`<tr>
-      <td class="mono">${o.num}</td>
-      <td><span class="mono-p">${o.coCode}</span><br><small style="color:var(--muted)">${(o.coName||'').substring(0,16)}</small></td>
-      <td>${o.client}</td><td style="font-size:12px">${SVC[o.svc]||o.svc}</td>
-      <td style="font-size:12.5px">${o.tech||'—'}</td>
-      <td style="font-size:12px;white-space:nowrap">${fD(o.date)}</td>
-      <td>${bdg(o.status)}</td>
-      <td><button class="btn btn-g btn-sm" onclick="dlPDF('${o.id}','${o.coCode}');CACHE.os['${o.coCode}']=[...(CACHE.os['${o.coCode}']||[])];if(!CACHE.os['${o.coCode}'].find(x=>x.id==='${o.id}'))CACHE.os['${o.coCode}'].push(${JSON.stringify(o).replace(/'/g,"\\'")||'{}'})">📄</button></td>
-    </tr>`).join('');
-    // Pré-carrega no cache para PDF funcionar
-    data.forEach(o=>{if(!CACHE.os[o.coCode])CACHE.os[o.coCode]=[];if(!CACHE.os[o.coCode].find(x=>x.id===o.id))CACHE.os[o.coCode].push(o);});
-  }catch(e){toast('Erro: '+e.message,'er');}
-  hideLoad();
+// ═══ EXPORTAÇÕES ═══
+function getExportacoes(coCode) {
+  const rows = sheet('exportacoes').getDataRange().getValues();
+  if (rows.length<=1) return [];
+  let r = rows.slice(1).map(r=>({
+    coCode:String(r[0]), coName:r[1], date:r[2], filename:r[3], count:r[4], at:r[5]
+  })).filter(e=>e.coCode);
+  if (coCode) r=r.filter(e=>e.coCode===coCode);
+  return r.reverse();
+}
+function saveExportacao(d) {
+  sheet('exportacoes').appendRow([d.coCode, d.coName, d.date, d.filename, d.count, d.at||new Date().toISOString()]);
+  return {success:true};
 }
 
-async function rndrAEX(){
-  showLoad('Carregando exportações...');
-  try{
-    const all=await api({action:'getExportacoes'});
-    const tb=$('aex-body');if(!tb){hideLoad();return;}
-    if(!all.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">Nenhuma exportação</td></tr>';hideLoad();return;}
-    tb.innerHTML=all.map(h=>`<tr>
-      <td>${h.date}</td>
-      <td><span class="mono-p">${h.coCode}</span> <span style="font-size:12px">${(h.coName||'').substring(0,18)}</span></td>
-      <td class="mono">${h.filename}</td>
-      <td style="text-align:center"><strong>${h.count}</strong></td>
-      <td style="font-size:11.5px;color:var(--muted)">${fDT(h.at)}</td>
-    </tr>`).join('');
-  }catch(e){toast('Erro: '+e.message,'er');}
-  hideLoad();
+// ═══ SERVIÇOS ═══
+function getServicos() {
+  const rows = sheet('servicos').getDataRange().getValues();
+  if (rows.length<=1) return [];
+  return rows.slice(1).map(r=>({code:String(r[0]), name:r[1]})).filter(s=>s.code);
+}
+function saveServico(d) {
+  if (getServicos().find(s=>s.code===d.code)) throw new Error('Código já existe');
+  sheet('servicos').appendRow([d.code, d.name]);
+  return {success:true};
+}
+function updateServico(d) {
+  const s=sheet('servicos'), rows=s.getDataRange().getValues();
+  for (let i=1;i<rows.length;i++) {
+    if (String(rows[i][0])===String(d.code)) { s.getRange(i+1,2).setValue(d.name); return {success:true}; }
+  }
+  throw new Error('Serviço não encontrado');
+}
+function deleteServico(code) {
+  const s=sheet('servicos'), rows=s.getDataRange().getValues();
+  for (let i=rows.length-1;i>=1;i--) {
+    if (String(rows[i][0])===String(code)) { s.deleteRow(i+1); return {success:true}; }
+  }
+  throw new Error('Serviço não encontrado');
 }
 
-// ══ TOAST ══
-function toast(msg,type=''){
-  const c=$('toasts'),t=document.createElement('div');
-  t.className='toast '+type;
-  t.innerHTML=(type==='ok'?'✅ ':type==='er'?'❌ ':type==='inf'?'ℹ️ ':'🔔 ')+msg;
-  c.appendChild(t);setTimeout(()=>t.classList.add('on'),10);
-  setTimeout(()=>{t.classList.remove('on');setTimeout(()=>t.remove(),400);},3500);
+// ═══ EPIs ═══
+function getEpis() {
+  const rows = sheet('epis').getDataRange().getValues();
+  if (rows.length<=1) return [];
+  return rows.slice(1).map(r=>({id:String(r[0]), name:r[1], icon:r[2]})).filter(e=>e.id);
+}
+function saveEpi(d) {
+  const id = d.id||('epi-'+Date.now());
+  sheet('epis').appendRow([id, d.name, d.icon||'🦺']);
+  return {success:true, id};
+}
+function updateEpi(d) {
+  const s=sheet('epis'), rows=s.getDataRange().getValues();
+  for (let i=1;i<rows.length;i++) {
+    if (String(rows[i][0])===String(d.id)) {
+      s.getRange(i+1,2).setValue(d.name);
+      s.getRange(i+1,3).setValue(d.icon||'🦺');
+      return {success:true};
+    }
+  }
+  throw new Error('EPI não encontrado');
+}
+function deleteEpi(id) {
+  const s=sheet('epis'), rows=s.getDataRange().getValues();
+  for (let i=rows.length-1;i>=1;i--) {
+    if (String(rows[i][0])===String(id)) { s.deleteRow(i+1); return {success:true}; }
+  }
+  throw new Error('EPI não encontrado');
 }
 
-// ══ INIT ══
-document.addEventListener('DOMContentLoaded',()=>{
-  const ed=$('exp-dt');if(ed)ed.value=new Date().toISOString().split('T')[0];
-  if(!API_URL) $('cfg-banner').classList.add('on');
-});
-</script>
-</body>
-</html>
+// ═══ MATRIZ EPI × SERVIÇO ═══
+// Salva como JSON em uma única célula na aba 'matriz'
+function getMatriz() {
+  const s = sheet('matriz');
+  if (s.getLastRow()===0) return {};
+  const val = s.getRange(1,1).getValue();
+  if (!val) return {};
+  try { return JSON.parse(val); } catch(_) { return {}; }
+}
+function saveMatriz(d) {
+  const s = sheet('matriz');
+  s.getRange(1,1).setValue(JSON.stringify(d));
+  return {success:true};
+}
