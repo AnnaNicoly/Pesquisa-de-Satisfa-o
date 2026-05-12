@@ -573,24 +573,32 @@ function initSig(){
   const cv=$('sig-cli');if(!cv||sigCtx)return;
   cv.width=cv.offsetWidth||340;cv.height=128;
   const ctx=cv.getContext('2d');ctx.strokeStyle='#0D1B2A';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';sigCtx=ctx;
-  const pos=(e,c)=>{const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return[s.clientX-r.left,s.clientY-r.top];};
-  cv.onmousedown=e=>{sigDrawing=true;[sigLX,sigLY]=pos(e,cv);};
-  cv.onmousemove=e=>{if(!sigDrawing)return;const[x,y]=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(x,y);sigCtx.stroke();[sigLX,sigLY]=[x,y];};
-  cv.onmouseup=cv.onmouseleave=()=>sigDrawing=false;
-  cv.addEventListener('touchstart',e=>{e.preventDefault();sigDrawing=true;[sigLX,sigLY]=pos(e,cv);},{passive:false});
-  cv.addEventListener('touchmove',e=>{e.preventDefault();if(!sigDrawing)return;const[x,y]=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(x,y);sigCtx.stroke();[sigLX,sigLY]=[x,y];},{passive:false});
-  cv.addEventListener('touchend',()=>sigDrawing=false);
+  sigPoints=[];let curSeg=[];
+  const pos=(e,c)=>{const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return{x:Math.round(s.clientX-r.left),y:Math.round(s.clientY-r.top)};};
+  cv.onmousedown=e=>{sigDrawing=true;const p=pos(e,cv);sigLX=p.x;sigLY=p.y;curSeg=[p];};
+  cv.onmousemove=e=>{if(!sigDrawing)return;const p=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();sigLX=p.x;sigLY=p.y;curSeg.push(p);};
+  cv.onmouseup=cv.onmouseleave=()=>{if(sigDrawing&&curSeg.length){sigPoints.push(curSeg);curSeg=[];}sigDrawing=false;};
+  cv.addEventListener('touchstart',e=>{e.preventDefault();sigDrawing=true;const p=pos(e,cv);sigLX=p.x;sigLY=p.y;curSeg=[p];},{passive:false});
+  cv.addEventListener('touchmove',e=>{e.preventDefault();if(!sigDrawing)return;const p=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();sigLX=p.x;sigLY=p.y;curSeg.push(p);},{passive:false});
+  cv.addEventListener('touchend',()=>{if(curSeg.length){sigPoints.push(curSeg);curSeg=[];}sigDrawing=false;});
 }
-function clrSig(){sigCtx=null;const cv=$('sig-cli');if(cv){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);sigCtx=null;}setTimeout(initSig,50);}
+function clrSig(){sigCtx=null;sigPoints=[];const cv=$('sig-cli');if(cv){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);sigCtx=null;}setTimeout(initSig,50);}
+// Armazena os pontos do traço da assinatura
+let sigPoints = [];
+
 function getSigURL(){
+  // Retorna SVG baseado nos pontos do traço
+  if(!sigPoints||sigPoints.length===0)return null;
   const cv=$('sig-cli');if(!cv)return null;
-  const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;
-  if(!Array.from(d).some((v,i)=>i%4===3&&v>0))return null;
-  // Comprime para JPEG pequeno
-  const tmp=document.createElement('canvas');tmp.width=280;tmp.height=90;
-  const tctx=tmp.getContext('2d');tctx.fillStyle='#fff';tctx.fillRect(0,0,280,90);
-  tctx.drawImage(cv,0,0,280,90);
-  return tmp.toDataURL('image/jpeg',0.5);
+  const W=cv.width||340,H=cv.height||128;
+  let paths='';
+  sigPoints.forEach(seg=>{
+    if(seg.length<2)return;
+    let d=`M${seg[0].x},${seg[0].y}`;
+    for(let i=1;i<seg.length;i++) d+=` L${seg[i].x},${seg[i].y}`;
+    paths+=`<path d="${d}" stroke="#0D1B2A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">${paths}</svg>`;
 }
 
 async function saveOS(){
@@ -640,12 +648,11 @@ async function saveOS(){
 }
 
 // PDF
-function buildPDF(os){
+async function buildPDF(os){
   const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
   const W=210,m=14;let y=14;
   doc.setFillColor(255,90,31);doc.rect(0,0,W,22,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(13);doc.setFont('helvetica','bold');doc.text('PESQUISA DE SATISFAÇÃO — CONSIGAZ',m,10);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('Field Services',m,17);
+  doc.setTextColor(255,255,255);doc.setFontSize(13);doc.setFont('helvetica','bold');doc.text('PESQUISA DE SATISFAÇÃO — CONSIGAZ',m,13);
   doc.text(`OS: ${os.num}`,W-m,10,{align:'right'});doc.text(`Data: ${fD(os.date)}`,W-m,17,{align:'right'});
   y=30;
   doc.setFillColor(237,233,254);doc.rect(m,y,W-2*m,7,'F');doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(91,33,182);
@@ -657,9 +664,31 @@ function buildPDF(os){
   doc.text(svcName(os.svc).substring(0,38),m+2,y+20);doc.text((os.addr||'—').substring(0,42),m+95,y+20);y+=30;
   if(os.start||os.end||os.team){doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(113,128,150);doc.text('HORARIO',m,y+4);doc.text('EQUIPE',m+50,y+4);doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);doc.setFontSize(9);doc.text(`${os.start||'--'} -> ${os.end||'--'}`,m,y+10);doc.text((os.team||'—').substring(0,60),m+50,y+10);y+=15;}
   y+=2;doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('EPIs UTILIZADOS',m+2,y+4.2);y+=8;
-  const epiList=C.epis||[],cW=44,pR=4;
-  epiList.forEach((e,i)=>{const col=i%pR,row2=Math.floor(i/pR),x=m+col*cW,yy=y+row2*7;const used=os.epis&&os.epis.includes(e.id);doc.setFillColor(used?34:210,used?197:210,used?94:210);doc.roundedRect(x,yy-1,cW-2,6,1,1,'F');doc.setTextColor(used?0:100,used?80:100,used?0:100);doc.setFont('helvetica',used?'bold':'normal');doc.setFontSize(7.5);doc.text((used?'[X] ':' [ ] ')+e.name.substring(0,19),x+2,yy+3.2);});
-  y+=Math.ceil(epiList.length/pR)*7+4;
+  // Apenas EPIs obrigatórios para este serviço
+  const epiList=C.epis||[], matriz=C.matriz||{};
+  const reqEpis=epiList.filter(e=>(matriz[String(os.svc)]||[]).includes(e.id));
+  const cW=44,pR=4;
+  if(reqEpis.length===0){doc.setFontSize(8);doc.setTextColor(113,128,150);doc.setFont('helvetica','italic');doc.text('Nenhum EPI obrigatório para este serviço',m,y+4);y+=10;}
+  else{
+    reqEpis.forEach((e,i)=>{
+      const col=i%pR,row2=Math.floor(i/pR),x=m+col*cW,yy=y+row2*7;
+      const used=os.epis&&os.epis.includes(e.id);
+      // Verde = usado, Vermelho = obrigatório mas não usado
+      doc.setFillColor(used?34:239,used?197:68,used?94:68);
+      doc.roundedRect(x,yy-1,cW-2,6,1,1,'F');
+      doc.setTextColor(255,255,255);
+      doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+      doc.text((used?'[X] ':'[!] ')+e.name.substring(0,19),x+2,yy+3.2);
+    });
+    y+=Math.ceil(reqEpis.length/pR)*7+4;
+    // Legenda
+    doc.setFontSize(7);doc.setFont('helvetica','normal');
+    doc.setFillColor(34,197,94);doc.roundedRect(m,y,8,4,1,1,'F');doc.setTextColor(255,255,255);doc.text('[X]',m+1,y+3);
+    doc.setTextColor(50,50,50);doc.text('= Utilizado',m+10,y+3);
+    doc.setFillColor(239,68,68);doc.roundedRect(m+45,y,8,4,1,1,'F');doc.setTextColor(255,255,255);doc.text('[!]',m+46,y+3);
+    doc.setTextColor(50,50,50);doc.text('= Obrigatório não utilizado',m+55,y+3);
+    y+=8;
+  }
   if(os.epiObs){doc.setFontSize(8);doc.setTextColor(113,128,150);doc.setFont('helvetica','italic');doc.text('Obs.EPIs: '+os.epiObs.substring(0,90),m,y);y+=6;}
   if(y>215){doc.addPage();y=14;}
   doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('PESQUISA DE SATISFACAO',m+2,y+4.2);y+=8;
@@ -671,8 +700,27 @@ function buildPDF(os){
   if(y>228){doc.addPage();y=14;}
   y+=4;doc.setFillColor(13,27,42);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('ASSINATURA DO CLIENTE',m+2,y+4.2);y+=10;
   const sW=W-2*m;
-  if(os.sigCli){try{doc.addImage(os.sigCli,'JPEG',m,y,sW,28);}catch(e){}}
-  else{doc.setDrawColor(200,200,200);doc.rect(m,y,sW,28);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(180,180,180);doc.text('Assinatura do avaliador',m+sW/2,y+15,{align:'center'});}
+  if(os.sigCli&&os.sigCli.startsWith('<svg')){
+    // Renderiza SVG no canvas e adiciona como imagem
+    try{
+      const svgBlob=new Blob([os.sigCli],{type:'image/svg+xml'});
+      const url=URL.createObjectURL(svgBlob);
+      await new Promise(resolve=>{
+        const img=new Image();img.onload=()=>{
+          const tmp=document.createElement('canvas');tmp.width=sW*4;tmp.height=28*4;
+          const tctx=tmp.getContext('2d');tctx.fillStyle='#fff';tctx.fillRect(0,0,tmp.width,tmp.height);
+          tctx.drawImage(img,0,0,tmp.width,tmp.height);
+          try{doc.addImage(tmp.toDataURL('image/png'),m,y,sW,28);}catch(e){}
+          URL.revokeObjectURL(url);resolve();
+        };img.onerror=()=>{URL.revokeObjectURL(url);resolve();};img.src=url;
+      });
+    }catch(e){doc.setDrawColor(200,200,200);doc.rect(m,y,sW,28);}
+  } else if(os.sigCli&&os.sigCli.startsWith('http')){
+    // URL do Drive - tenta carregar
+    try{doc.addImage(os.sigCli,'JPEG',m,y,sW,28);}catch(e){doc.setDrawColor(200,200,200);doc.rect(m,y,sW,28);}
+  } else {
+    doc.setDrawColor(200,200,200);doc.rect(m,y,sW,28);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(180,180,180);doc.text('Assinatura do avaliador',m+sW/2,y+15,{align:'center'});
+  }
   y+=30;doc.setTextColor(13,27,42);doc.setFontSize(8);doc.setFont('helvetica','normal');
   doc.text(`Nome: ${os.scName||'_____________________________'}`,m,y);y+=5;
   doc.text(`RG: ${os.scRG||'______________'}  CPF: ${os.scCPF||'___________________'}`,m,y);y+=10;
@@ -680,7 +728,7 @@ function buildPDF(os){
   doc.text(`Gerado em: ${fDT(new Date().toISOString())} | ID: ${os.id}`,m,291);doc.text('Pesquisa de Satisfação — Consigaz',W-m,291,{align:'right'});
   return doc;
 }
-function dlPDF(id){const os=myOS().find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado! ✅','ok');}catch(e){toast('Erro PDF: '+e.message,'er');}}
+async function dlPDF(id){const os=myOS().find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{(await buildPDF(os)).save(`${os.num}.pdf`);toast('PDF baixado! ✅','ok');}catch(e){toast('Erro PDF: '+e.message,'er');}}
 
 // ZIP
 function updExp(){
@@ -705,7 +753,7 @@ async function genZip(){
     const zip=new JSZip();const folder=zip.folder(fn);
     for(let i=0;i<osList.length;i++){
       const os=osList[i];pb.style.width=Math.round((i/osList.length)*80)+'%';pl.textContent=`PDF ${i+1}/${osList.length}: ${os.num}...`;
-      await new Promise(r=>setTimeout(r,10));folder.file(`${os.num}.pdf`,buildPDF(os).output('arraybuffer'));
+      await new Promise(r=>setTimeout(r,10));folder.file(`${os.num}.pdf`,(await buildPDF(os)).output('arraybuffer'));
     }
     pl.textContent='Compactando...';pb.style.width='90%';await new Promise(r=>setTimeout(r,20));
     const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{pb.style.width=(90+meta.percent*0.1).toFixed(0)+'%';});
@@ -819,7 +867,7 @@ async function rndrAOS(){
   }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function dlPDFAdm(id,code){const os=(C.os[code]||[]).find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado!','ok');}catch(e){toast('Erro: '+e.message,'er');}}
+async function dlPDFAdm(id,code){const os=(C.os[code]||[]).find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{(await buildPDF(os)).save(`${os.num}.pdf`);toast('PDF baixado!','ok');}catch(e){toast('Erro: '+e.message,'er');}}
 async function rndrAEX(){
   showLoad('Carregando...');
   try{
