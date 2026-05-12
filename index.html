@@ -7,23 +7,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-:root{
-  --brand:#FF5A1F;--brand-dk:#CC4210;--brand-lt:#FFF0EB;
-  --navy:#0D1B2A;--navy3:#243B55;--slate:#4A5568;--muted:#718096;
-  --border:#E2E8F0;--surface:#F7F9FC;--ok:#22C55E;--danger:#EF4444;
-  --warn:#F59E0B;--purple:#7C3AED;--purple-lt:#EDE9FE;--r:10px
-}
+:root{--brand:#FF5A1F;--brand-dk:#CC4210;--brand-lt:#FFF0EB;--navy:#0D1B2A;--navy3:#243B55;--slate:#4A5568;--muted:#718096;--border:#E2E8F0;--surface:#F7F9FC;--ok:#22C55E;--danger:#EF4444;--warn:#F59E0B;--purple:#7C3AED;--purple-lt:#EDE9FE;--r:10px}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:system-ui,-apple-system,sans-serif;background:var(--surface);color:var(--navy)}
-button{cursor:pointer;font-family:inherit}
-input,select,textarea{font-family:inherit}
-
-/* ── SCREENS ── */
-.screen{display:none;height:100vh;overflow:hidden}
-.screen.on{display:block}
-.screen.fx{display:none}.screen.fx.on{display:flex}
-
-/* ── LOGIN ── */
+button{cursor:pointer;font-family:inherit}input,select,textarea{font-family:inherit}
+.screen{display:none;height:100vh;overflow:hidden}.screen.on{display:block}.screen.fx{display:none}.screen.fx.on{display:flex}
 .login-bg{background:linear-gradient(135deg,#0D1B2A,#243B55);min-height:100vh;display:flex;align-items:center;justify-content:center;width:100%;padding:16px}
 .login-box{background:#fff;border-radius:14px;padding:32px 28px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
 .l-logo{display:flex;align-items:center;gap:11px;margin-bottom:24px}
@@ -32,92 +20,58 @@ input,select,textarea{font-family:inherit}
 .tab{flex:1;padding:9px;font-size:13px;font-weight:600;border:none;background:#fff;color:var(--muted);cursor:pointer}
 .tab.on{background:var(--brand);color:#fff}.tab.adm.on{background:var(--purple)}
 .co-prev{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;margin-top:7px;font-size:13px;min-height:42px;display:flex;align-items:center;gap:8px;color:var(--muted)}
-
-/* ── APP LAYOUT ── */
 .app{display:flex;height:100vh;overflow:hidden}
-
-/* ── SIDEBAR ── */
-.sb{width:220px;min-width:220px;background:var(--navy);display:flex;flex-direction:column;padding:20px 0;transition:width .2s}
+.sb{width:220px;min-width:220px;background:var(--navy);display:flex;flex-direction:column;padding:20px 0}
 .sb.adm{background:#1E1B4B}
-.sb.collapsed{width:56px;min-width:56px}
-.sb-logo{padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:9px;min-height:58px}
+.sb-logo{padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:9px}
 .sb-ico{width:32px;height:32px;border-radius:7px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:700;flex-shrink:0}
 .sb-ico.adm{background:var(--purple)}
-.sb-txt{color:#fff;font-size:13px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden}
-.sb-txt small{display:block;font-size:10px;font-weight:400;color:rgba(255,255,255,.4);margin-top:1px}
-.sb.collapsed .sb-txt{display:none}
+.sb-txt{color:#fff;font-size:13px;font-weight:600;line-height:1.3}.sb-txt small{display:block;font-size:10px;font-weight:400;color:rgba(255,255,255,.4);margin-top:1px}
 .sb-nav{flex:1;padding:11px 0;overflow-y:auto}
-.sb-sec{padding:6px 16px 3px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);white-space:nowrap;overflow:hidden}
-.sb.collapsed .sb-sec{display:none}
-.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 16px;margin:2px 6px;border-radius:8px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500;border:none;background:none;width:calc(100% - 12px);cursor:pointer;transition:all .15s;text-align:left;white-space:nowrap}
-.sb-btn:hover{background:rgba(255,255,255,.08);color:#fff}
-.sb-btn.on{background:var(--brand);color:#fff}.sb-btn.on.adm{background:var(--purple)}
-.sb-ico2{font-size:16px;width:20px;text-align:center;flex-shrink:0}
-.sb-lbl{overflow:hidden}
-.sb.collapsed .sb-lbl,.sb.collapsed .sb-ct{display:none}
+.sb-sec{padding:6px 16px 3px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.sb-btn{display:flex;align-items:center;gap:9px;padding:9px 16px;margin:2px 6px;border-radius:8px;color:rgba(255,255,255,.6);font-size:13px;font-weight:500;border:none;background:none;width:calc(100% - 12px);cursor:pointer;transition:all .15s;text-align:left}
+.sb-btn:hover{background:rgba(255,255,255,.08);color:#fff}.sb-btn.on{background:var(--brand);color:#fff}.sb-btn.on.adm{background:var(--purple)}
+.sb-ico2{font-size:15px;width:20px;text-align:center;flex-shrink:0}
 .sb-ct{margin-left:auto;background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px}
-.sb-user{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:9px;min-height:56px}
+.sb-user{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:9px}
 .sb-ava{width:30px;height:30px;border-radius:50%;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
 .sb-ava.adm{background:var(--purple)}
-.sb-un{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-ur{font-size:10px;color:rgba(255,255,255,.4)}
-.sb.collapsed .sb-un,.sb.collapsed .sb-ur{display:none}
-
-/* ── MAIN ── */
+.sb-un{font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sb-ur{font-size:10px;color:rgba(255,255,255,.4)}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 16px;height:54px;display:flex;align-items:center;gap:11px;flex-shrink:0}
-.tb-title{font-size:15px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tb-co{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis;display:none}
+.topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 18px;height:54px;display:flex;align-items:center;gap:11px;flex-shrink:0}
+.tb-title{font-size:15px;font-weight:700;flex:1}
+.tb-co{font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 8px;white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis}
 .ico-btn{width:34px;height:34px;border:1.5px solid var(--border);border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;flex-shrink:0}
 .menu-btn{width:34px;height:34px;border:none;background:none;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;cursor:pointer;flex-shrink:0}
-.menu-btn span{width:18px;height:2px;background:var(--navy);border-radius:2px;transition:all .2s}
-
-/* ── PAGE ── */
-.page{flex:1;overflow-y:auto;padding:18px;display:none}
-.page.on{display:block}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.menu-btn span{width:18px;height:2px;background:var(--navy);border-radius:2px}
+.page{flex:1;overflow-y:auto;padding:18px;display:none}.page.on{display:block}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:9px}
 .pt{font-size:19px;font-weight:700}.ps{font-size:12px;color:var(--muted);margin-top:2px}
-
-/* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 15px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn-p{background:var(--brand);color:#fff}.btn-p:hover{background:var(--brand-dk)}
 .btn-s{background:var(--surface);color:var(--navy);border:1.5px solid var(--border)}.btn-s:hover{border-color:var(--brand);color:var(--brand)}
 .btn-g{background:transparent;color:var(--muted)}.btn-g:hover{background:var(--surface);color:var(--navy)}
 .btn-adm{background:var(--purple);color:#fff}.btn-adm:hover{background:#6D28D9}
-.btn-d{background:var(--danger);color:#fff}
-.btn-sm{padding:5px 10px;font-size:11.5px}
-.btn-full{width:100%;justify-content:center;padding:11px}
-
-/* ── CARD ── */
-.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px}
+.btn-sm{padding:5px 10px;font-size:11.5px}.btn-full{width:100%;justify-content:center;padding:11px}
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);margin-bottom:13px}
 .ch{padding:12px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px}
 .ct2{font-size:13.5px;font-weight:700}.cb{padding:15px}
-
-/* ── BADGE ── */
 .badge{display:inline-flex;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600}
 .b-aberta{background:#EBF8FF;color:#2B6CB0}.b-em_andamento{background:#FFFBEB;color:#B45309}
 .b-finalizada{background:#F0FFF4;color:#276749}.b-pendente{background:#FFF5F5;color:#9B2C2C}
 .b-cancelada{background:var(--surface);color:var(--muted)}.b-adm{background:var(--purple-lt);color:#5B21B6}
-
-/* ── TABLE ── */
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead th{padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface);border-bottom:1px solid var(--border);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border)}tbody tr:last-child{border-bottom:none}tbody tr:hover{background:#FAFBFC}
 tbody td{padding:9px 10px;vertical-align:middle}
-.mono{font-family:monospace;font-size:12px;font-weight:600;color:var(--brand)}
-.mono-p{font-family:monospace;font-size:12px;font-weight:700;color:var(--purple)}
-
-/* ── FORM ── */
-.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.full{grid-column:1/-1}
+.mono{font-family:monospace;font-size:12px;font-weight:600;color:var(--brand)}.mono-p{font-family:monospace;font-size:12px;font-weight:700;color:var(--purple)}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
 .fl{font-size:12px;font-weight:600;color:var(--slate)}.req{color:var(--danger)}
 .fc{border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;outline:none;background:#fff;color:var(--navy);width:100%;transition:border-color .15s}
 .fc:focus{border-color:var(--brand)}.fc:disabled{background:var(--surface);color:var(--muted)}
 textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted)}
-
-/* ── EPI GRID ── */
 .epi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .epi-card{border:2px solid var(--border);border-radius:9px;padding:9px 5px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;background:#fff;position:relative;text-align:center;transition:all .15s}
 .epi-card:hover,.epi-card.sel{border-color:var(--brand);background:var(--brand-lt)}
@@ -125,133 +79,81 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
 .epi-card.sel::after{content:'✓';position:absolute;top:3px;right:5px;color:var(--brand);font-size:11px;font-weight:700}
 .epi-ico{font-size:22px}.epi-nm{font-size:9px;font-weight:600;color:var(--slate);line-height:1.3}
 .epi-r{position:absolute;top:2px;left:3px;font-size:8px;background:var(--warn);color:#fff;padding:1px 3px;border-radius:6px;font-weight:700}
-
-/* ── STEPPER ── */
 .stepper{display:flex;align-items:center;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
 .st{display:flex;align-items:center;flex-shrink:0}
 .st-d{width:24px;height:24px;border-radius:50%;border:2.5px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s}
-.st.done .st-d{background:var(--ok);border-color:var(--ok);color:#fff}
-.st.act .st-d{background:var(--brand);border-color:var(--brand);color:#fff}
-.st-lb{font-size:10px;font-weight:600;color:var(--muted);margin-left:5px;white-space:nowrap}
-.st.act .st-lb,.st.done .st-lb{color:var(--navy)}
-.st-ln{flex:1;min-width:16px;height:2px;background:var(--border);margin:0 5px}
-.st-ln.done{background:var(--ok)}
-
-/* ── SATISFAÇÃO ── */
-.sat-r{display:none}
-.sat-l{font-size:20px;cursor:pointer;opacity:.3;filter:grayscale(1);display:block;text-align:center;transition:all .15s}
-.sat-r:checked+.sat-l{opacity:1;filter:none;transform:scale(1.18)}
+.st.done .st-d{background:var(--ok);border-color:var(--ok);color:#fff}.st.act .st-d{background:var(--brand);border-color:var(--brand);color:#fff}
+.st-lb{font-size:10px;font-weight:600;color:var(--muted);margin-left:5px;white-space:nowrap}.st.act .st-lb,.st.done .st-lb{color:var(--navy)}
+.st-ln{flex:1;min-width:14px;height:2px;background:var(--border);margin:0 5px}.st-ln.done{background:var(--ok)}
+.sat-r{display:none}.sat-l{font-size:20px;cursor:pointer;opacity:.3;filter:grayscale(1);display:block;text-align:center;transition:all .15s}.sat-r:checked+.sat-l{opacity:1;filter:none;transform:scale(1.18)}
 .sat-table{width:100%;border-collapse:collapse}
 .sat-table th{padding:6px 8px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);text-align:center;border-bottom:2px solid var(--border)}
-.sat-table th:first-child{text-align:left}
-.sat-table td{padding:7px 8px;border-bottom:1px solid var(--border);font-size:12px}
-.sat-table tr:last-child td{border-bottom:none}
-
-/* ── ASSINATURA ── */
+.sat-table th:first-child{text-align:left}.sat-table td{padding:7px 8px;border-bottom:1px solid var(--border);font-size:12px}.sat-table tr:last-child td{border-bottom:none}
 .sig-area{border:2px dashed var(--border);border-radius:9px;background:#FAFBFC;touch-action:none}
 .sig-area canvas{width:100%;height:130px;cursor:crosshair;display:block;border-radius:7px;touch-action:none}
-
-/* ── FOTOS ── */
 .pzone{border:2px dashed var(--border);border-radius:9px;padding:20px;text-align:center;cursor:pointer;background:var(--surface);transition:all .15s}
 .pzone:hover{border-color:var(--brand);background:var(--brand-lt)}
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
 .pthumb{position:relative;border-radius:7px;overflow:hidden;aspect-ratio:1;background:var(--border)}
 .pthumb img{width:100%;height:100%;object-fit:cover}
 .rm{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer}
-
-/* ── EXPORT ── */
 .exp-empty{padding:28px;text-align:center;color:var(--muted);font-size:13px}
 .os-chip{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 11px;margin-bottom:6px;font-size:12.5px}
 .prog-w{background:var(--border);border-radius:20px;height:6px;overflow:hidden;margin:6px 0}
 .prog-f{height:100%;background:var(--brand);border-radius:20px;transition:width .3s}
-
-/* ── ADMIN ── */
 .sg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
 .sc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:center;gap:11px}
 .s-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:11px}
 .cc{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .cc:hover{border-color:var(--purple)}.co-code{font-family:monospace;font-size:18px;font-weight:700;color:var(--purple)}
-
-/* ── MATRIZ ── */
 .matriz-wrap{overflow-x:auto}
-.matriz-table{border-collapse:collapse;font-size:11.5px;min-width:600px}
-.matriz-table th{padding:6px 9px;background:var(--surface);border:1px solid var(--border);font-weight:700;font-size:10px;text-align:center;white-space:nowrap}
-.matriz-table th:first-child{text-align:left;min-width:140px}
-.matriz-table td{padding:5px 9px;border:1px solid var(--border);text-align:center}
+.matriz-table{border-collapse:collapse;font-size:11px;min-width:500px}
+.matriz-table th{padding:5px 8px;background:var(--surface);border:1px solid var(--border);font-weight:700;font-size:9.5px;text-align:center;white-space:nowrap}
+.matriz-table th:first-child{text-align:left;min-width:130px}
+.matriz-table td{padding:4px 8px;border:1px solid var(--border);text-align:center}
 .matriz-table tr:hover td{background:#FAFBFC}
-.m-cb{width:16px;height:16px;cursor:pointer;accent-color:var(--brand)}
-
-/* ── MODAL ── */
+.m-cb{width:15px;height:15px;cursor:pointer;accent-color:var(--brand)}
 .ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:16px}
 .ov.on{display:flex}
-.modal{background:#fff;border-radius:13px;width:100%;max-width:460px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.mh{padding:15px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.mt{font-size:15px;font-weight:700}.mx{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer}
-.mb{flex:1;overflow-y:auto;padding:18px}
-.mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
-
-/* ── LOADING ── */
+.modal{background:#fff;border-radius:13px;width:100%;max-width:440px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.mh{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.mt{font-size:14px;font-weight:700}.mx{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer}
+.mb{flex:1;overflow-y:auto;padding:18px}.mf{padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;flex-shrink:0}
 .load-ov{display:none;position:fixed;inset:0;background:rgba(13,27,42,.5);z-index:800;align-items:center;justify-content:center}
 .load-ov.on{display:flex}
 .load-box{background:#fff;border-radius:12px;padding:24px 32px;text-align:center}
-
-/* ── TOAST ── */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:399}
+.sb-overlay.on{display:block}
 .toasts{position:fixed;bottom:16px;right:16px;z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none;max-width:calc(100vw - 32px)}
 .toast{background:var(--navy);color:#fff;padding:9px 13px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);transform:translateX(110%);transition:transform .3s;display:flex;align-items:center;gap:7px}
-.toast.on{transform:translateX(0)}
-.toast.ok{background:#166534}.toast.er{background:#991B1B}.toast.inf{background:#1E40AF}
-
+.toast.on{transform:translateX(0)}.toast.ok{background:#166534}.toast.er{background:#991B1B}.toast.inf{background:#1E40AF}
 .stitle{font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:7px;border-bottom:1.5px solid var(--border)}
-.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.tag{display:inline-flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 10px;font-size:12px}
-.tag button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0}
-
-/* ── MOBILE OVERRIDES ── */
 @media(max-width:640px){
   .sb{position:fixed;left:-220px;top:0;bottom:0;z-index:400;transition:left .25s}
-  .sb.open{left:0}
-  .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:399}
-  .sb-overlay.on{display:block}
-  .main{width:100%}
-  .tb-co{display:none!important}
-  .epi-grid{grid-template-columns:repeat(3,1fr)}
-  .g2{grid-template-columns:1fr}
-  .sg{grid-template-columns:1fr 1fr}
-  .cg{grid-template-columns:1fr}
-  .page{padding:14px}
+  .sb.open{left:0}.main{width:100%}.tb-co{display:none!important}
+  .epi-grid{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr}
+  .sg{grid-template-columns:1fr 1fr}.cg{grid-template-columns:1fr}.page{padding:14px}
   .menu-btn{display:flex}
-  .sat-table td:first-child{font-size:11px;max-width:160px}
 }
-@media(min-width:641px){
-  .menu-btn{display:none}
-  .tb-co{display:block}
-}
+@media(min-width:641px){.menu-btn{display:none}}
 </style>
 </head>
 <body>
-
 <div class="sb-overlay" id="sb-overlay" onclick="closeSb()"></div>
 <div class="load-ov" id="load-ov"><div class="load-box"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px;font-weight:600" id="load-msg">Carregando...</div></div></div>
-
-<!-- ══ LOGIN ══ -->
+ 
+<!-- LOGIN -->
 <div id="sc-login" class="screen fx on">
   <div class="login-bg">
     <div class="login-box">
-      <div class="l-logo">
-        <div class="l-ico">📋</div>
-        <div><div style="font-size:17px;font-weight:700">Pesquisa de Satisfação</div><div style="font-size:12px;color:var(--muted)">Consigaz — Field Services</div></div>
-      </div>
+      <div class="l-logo"><div class="l-ico">📋</div><div><div style="font-size:17px;font-weight:700">Pesquisa de Satisfação</div><div style="font-size:12px;color:var(--muted)">Consigaz — Field Services</div></div></div>
       <div class="tabs">
         <button class="tab on" id="t-emp" onclick="swTab('emp')">🏢 Empresa</button>
         <button class="tab adm" id="t-adm" onclick="swTab('adm')">🛡 Administrador</button>
       </div>
       <div id="pn-emp">
-        <div class="fg">
-          <label class="fl">Código do Fornecedor</label>
-          <input class="fc" id="l-code" placeholder="Ex: 1001" oninput="prevCo(this.value)" style="font-size:20px;font-weight:700;letter-spacing:.1em" inputmode="numeric">
-          <div class="co-prev" id="co-prev">Digite o código para identificar a empresa</div>
-        </div>
+        <div class="fg"><label class="fl">Código do Fornecedor</label><input class="fc" id="l-code" placeholder="Ex: 1001" oninput="prevCo(this.value)" style="font-size:20px;font-weight:700;letter-spacing:.1em" inputmode="numeric"><div class="co-prev" id="co-prev">Digite o código para identificar a empresa</div></div>
         <button class="btn btn-p btn-full" onclick="loginEmp()">Entrar</button>
       </div>
       <div id="pn-adm" style="display:none">
@@ -262,26 +164,20 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
     </div>
   </div>
 </div>
-
-<!-- ══ APP EMPRESA ══ -->
+ 
+<!-- APP EMPRESA -->
 <div id="sc-emp" class="screen">
   <div class="app">
     <aside class="sb" id="sb-emp">
-      <div class="sb-logo">
-        <div class="sb-ico">📋</div>
-        <div class="sb-txt">Pesquisa de Satisfação<small id="sb-coname">—</small></div>
-      </div>
+      <div class="sb-logo"><div class="sb-ico">📋</div><div class="sb-txt">Pesquisa de Satisfação<small id="sb-coname">—</small></div></div>
       <nav class="sb-nav">
         <div class="sb-sec">Operação</div>
-        <button class="sb-btn on" data-p="nos" onclick="goPg('nos');closeSb()"><span class="sb-ico2">➕</span><span class="sb-lbl">Nova OS</span></button>
-        <button class="sb-btn" data-p="osl" onclick="goPg('osl');closeSb()"><span class="sb-ico2">📋</span><span class="sb-lbl">Minhas OS</span><span class="sb-ct" id="os-ct">0</span></button>
+        <button class="sb-btn on" data-p="nos" onclick="goPg('nos');closeSb()"><span class="sb-ico2">➕</span><span>Nova OS</span></button>
+        <button class="sb-btn" data-p="osl" onclick="goPg('osl');closeSb()"><span class="sb-ico2">📋</span><span>Minhas OS</span><span class="sb-ct" id="os-ct">0</span></button>
         <div class="sb-sec">Relatórios</div>
-        <button class="sb-btn" data-p="exp" onclick="goPg('exp');closeSb()"><span class="sb-ico2">📦</span><span class="sb-lbl">Exportar ZIP</span></button>
+        <button class="sb-btn" data-p="exp" onclick="goPg('exp');closeSb()"><span class="sb-ico2">📦</span><span>Exportar ZIP</span></button>
       </nav>
-      <div class="sb-user">
-        <div class="sb-ava" id="sb-ava">?</div>
-        <div style="min-width:0"><div class="sb-un" id="sb-un">—</div><div class="sb-ur" id="sb-ur">—</div></div>
-      </div>
+      <div class="sb-user"><div class="sb-ava" id="sb-ava">?</div><div style="min-width:0"><div class="sb-un" id="sb-un">—</div><div class="sb-ur" id="sb-ur">—</div></div></div>
     </aside>
     <div class="main">
       <div class="topbar">
@@ -293,120 +189,69 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
       <!-- NOVA OS -->
       <div class="page on" id="pg-nos">
         <div class="ph"><div><div class="pt" id="nos-ttl">Nova Ordem de Serviço</div><div class="ps">Preencha todos os campos obrigatórios</div></div></div>
-        <div class="stepper" id="stepper">
-          <div class="st act" data-s="1"><div class="st-d">1</div><span class="st-lb">Dados</span></div>
-          <div class="st-ln" id="sl1"></div>
-          <div class="st" data-s="2"><div class="st-d">2</div><span class="st-lb">EPIs</span></div>
-          <div class="st-ln" id="sl2"></div>
-          <div class="st" data-s="3"><div class="st-d">3</div><span class="st-lb">Satisfação</span></div>
-          <div class="st-ln" id="sl3"></div>
-          <div class="st" data-s="4"><div class="st-d">4</div><span class="st-lb">Fotos</span></div>
-          <div class="st-ln" id="sl4"></div>
-          <div class="st" data-s="5"><div class="st-d">5</div><span class="st-lb">Assinaturas</span></div>
+        <div class="stepper">
+          <div class="st act" data-s="1"><div class="st-d">1</div><span class="st-lb">Dados</span></div><div class="st-ln" id="sl1"></div>
+          <div class="st" data-s="2"><div class="st-d">2</div><span class="st-lb">EPIs</span></div><div class="st-ln" id="sl2"></div>
+          <div class="st" data-s="3"><div class="st-d">3</div><span class="st-lb">Satisfação</span></div><div class="st-ln" id="sl3"></div>
+          <div class="st" data-s="4"><div class="st-d">4</div><span class="st-lb">Fotos</span></div><div class="st-ln" id="sl4"></div>
+          <div class="st" data-s="5"><div class="st-d">5</div><span class="st-lb">Assinatura</span></div>
         </div>
-        <div class="card" id="s1">
-          <div class="ch"><div class="ct2">📋 Dados da OS</div></div>
-          <div class="cb">
-            <div class="g2">
-              <div class="fg"><label class="fl">Nº OS <span class="req">*</span></label><input class="fc" id="f-num" placeholder="OS-2026-0001"></div>
-              <div class="fg"><label class="fl">Data <span class="req">*</span></label><input class="fc" type="date" id="f-date"></div>
-              <div class="fg full"><label class="fl">Cliente <span class="req">*</span></label><input class="fc" id="f-client" placeholder="Nome do cliente / condomínio"></div>
-              <div class="fg full"><label class="fl">Endereço</label><input class="fc" id="f-addr" placeholder="Rua, nº, Cidade/UF"></div>
-              <div class="fg full">
-                <label class="fl">Tipo de Serviço <span class="req">*</span></label>
-                <select class="fc" id="f-svc" onchange="onSvc()"><option value="">Selecionar...</option></select>
-                <span class="fh">EPIs obrigatórios carregam automaticamente</span>
-              </div>
-              <div class="fg full"><label class="fl">Nome Completo do Técnico Responsável <span class="req">*</span></label><input class="fc" id="f-tech" placeholder="Nome completo do técnico responsável"></div>
-              <div class="fg"><label class="fl">Horário Início</label><input class="fc" type="time" id="f-start"></div>
-              <div class="fg"><label class="fl">Horário Término</label><input class="fc" type="time" id="f-end"></div>
-              <div class="fg full"><label class="fl">Equipe Executora</label><input class="fc" id="f-team" placeholder="Demais membros da equipe"></div>
-              <div class="fg full"><label class="fl">Observações</label><textarea class="fc" id="f-obs"></textarea></div>
-            </div>
-            <div style="display:flex;justify-content:flex-end;margin-top:4px"><button class="btn btn-p" onclick="step(2)">Próximo: EPIs →</button></div>
+        <div class="card" id="s1"><div class="ch"><div class="ct2">📋 Dados da OS</div></div><div class="cb">
+          <div class="g2">
+            <div class="fg"><label class="fl">Nº OS <span class="req">*</span></label><input class="fc" id="f-num" placeholder="OS-2026-0001"></div>
+            <div class="fg"><label class="fl">Data <span class="req">*</span></label><input class="fc" type="date" id="f-date"></div>
+            <div class="fg full"><label class="fl">Cliente <span class="req">*</span></label><input class="fc" id="f-client" placeholder="Nome do cliente / condomínio"></div>
+            <div class="fg full"><label class="fl">Endereço</label><input class="fc" id="f-addr" placeholder="Rua, nº, Cidade/UF"></div>
+            <div class="fg full"><label class="fl">Tipo de Serviço <span class="req">*</span></label><select class="fc" id="f-svc" onchange="onSvc()"><option value="">Selecionar...</option></select><span class="fh">EPIs obrigatórios carregam automaticamente</span></div>
+            <div class="fg full"><label class="fl">Nome Completo do Técnico Responsável <span class="req">*</span></label><input class="fc" id="f-tech" placeholder="Nome completo do técnico responsável"></div>
+            <div class="fg"><label class="fl">Horário Início</label><input class="fc" type="time" id="f-start"></div>
+            <div class="fg"><label class="fl">Horário Término</label><input class="fc" type="time" id="f-end"></div>
+            <div class="fg full"><label class="fl">Equipe Executora</label><input class="fc" id="f-team" placeholder="Demais membros da equipe"></div>
+            <div class="fg full"><label class="fl">Observações</label><textarea class="fc" id="f-obs"></textarea></div>
           </div>
-        </div>
-        <div class="card" id="s2" style="display:none">
-          <div class="ch"><div class="ct2">🦺 EPIs</div><span style="font-size:11px;color:var(--muted)">Serviço: <strong id="epi-lbl">—</strong></span></div>
-          <div class="cb">
-            <div style="background:var(--brand-lt);border:1.5px solid #FED7AA;border-radius:8px;padding:7px 11px;margin-bottom:11px;font-size:12px">🔖 <strong>OBRIG.</strong> = obrigatório para este serviço</div>
-            <div class="epi-grid" id="epi-grid"></div>
-            <div class="fg" style="margin-top:11px"><label class="fl">Obs. EPIs</label><textarea class="fc" id="f-epi-obs"></textarea></div>
-            <div style="display:flex;justify-content:space-between;margin-top:12px">
-              <button class="btn btn-s" onclick="step(1)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(3)">Próximo: Satisfação →</button>
-            </div>
+          <div style="display:flex;justify-content:flex-end"><button class="btn btn-p" onclick="step(2)">Próximo: EPIs →</button></div>
+        </div></div>
+        <div class="card" id="s2" style="display:none"><div class="ch"><div class="ct2">🦺 EPIs</div><span style="font-size:11px;color:var(--muted)">Serviço: <strong id="epi-lbl">—</strong></span></div><div class="cb">
+          <div style="background:var(--brand-lt);border:1.5px solid #FED7AA;border-radius:8px;padding:7px 11px;margin-bottom:11px;font-size:12px">🔖 <strong>OBRIG.</strong> = obrigatório para este serviço</div>
+          <div class="epi-grid" id="epi-grid"></div>
+          <div class="fg" style="margin-top:11px"><label class="fl">Obs. EPIs</label><textarea class="fc" id="f-epi-obs"></textarea></div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px"><button class="btn btn-s" onclick="step(1)">← Voltar</button><button class="btn btn-p" onclick="step(3)">Próximo: Satisfação →</button></div>
+        </div></div>
+        <div class="card" id="s3" style="display:none"><div class="ch"><div class="ct2">😊 Pesquisa de Satisfação</div></div><div class="cb">
+          <div style="overflow-x:auto"><table class="sat-table">
+            <thead><tr><th>Quesito</th><th>😊<br><span style="font-size:8px">Satisfeito</span></th><th>😐<br><span style="font-size:8px">Neutro</span></th><th>😞<br><span style="font-size:8px">Insatisfeito</span></th></tr></thead>
+            <tbody id="sat-body"></tbody>
+          </table></div>
+          <div class="fg" style="margin-top:11px"><label class="fl">Obs. do cliente</label><textarea class="fc" id="f-sat-obs"></textarea></div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px"><button class="btn btn-s" onclick="step(2)">← Voltar</button><button class="btn btn-p" onclick="step(4)">Próximo: Fotos →</button></div>
+        </div></div>
+        <div class="card" id="s4" style="display:none"><div class="ch"><div class="ct2">📸 Fotos</div></div><div class="cb">
+          <div class="pzone" onclick="document.getElementById('ph-in').click()"><div style="font-size:28px;margin-bottom:6px">📷</div><p style="font-size:13px"><strong>Toque para selecionar fotos</strong></p><p style="font-size:11px;color:var(--muted);margin-top:3px">JPG, PNG — máx. 5 fotos</p></div>
+          <input type="file" id="ph-in" accept="image/*" multiple style="display:none" onchange="addPh(this)">
+          <div class="pgrid" id="pgrid"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:12px"><button class="btn btn-s" onclick="step(3)">← Voltar</button><button class="btn btn-p" onclick="step(5)">Próximo: Assinatura →</button></div>
+        </div></div>
+        <div class="card" id="s5" style="display:none"><div class="ch"><div class="ct2">✍️ Assinatura do Cliente</div></div><div class="cb">
+          <div class="stitle">Avaliador (Cliente)</div>
+          <div class="sig-area"><canvas id="sig-cli"></canvas><div style="font-size:10px;color:var(--muted);text-align:center;padding:3px 0">Assine acima</div><div style="display:flex;justify-content:flex-end;padding:3px 8px 6px"><button class="btn btn-g btn-sm" onclick="clrSig()">🗑 Limpar</button></div></div>
+          <div class="g2" style="margin-top:10px">
+            <div class="fg full"><label class="fl">Nome completo</label><input class="fc" id="sc-name"></div>
+            <div class="fg"><label class="fl">RG</label><input class="fc" id="sc-rg"></div>
+            <div class="fg"><label class="fl">CPF</label><input class="fc" id="sc-cpf" placeholder="000.000.000-00"></div>
           </div>
-        </div>
-        <div class="card" id="s3" style="display:none">
-          <div class="ch"><div class="ct2">😊 Pesquisa de Satisfação</div></div>
-          <div class="cb">
-            <div style="overflow-x:auto">
-              <table class="sat-table">
-                <thead><tr><th>Quesito</th><th>😊<br><span style="font-size:8px">Satisfeito</span></th><th>😐<br><span style="font-size:8px">Neutro</span></th><th>😞<br><span style="font-size:8px">Insatisfeito</span></th></tr></thead>
-                <tbody id="sat-body"></tbody>
-              </table>
-            </div>
-            <div class="fg" style="margin-top:11px"><label class="fl">Obs. do cliente</label><textarea class="fc" id="f-sat-obs"></textarea></div>
-            <div style="display:flex;justify-content:space-between;margin-top:12px">
-              <button class="btn btn-s" onclick="step(2)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(4)">Próximo: Fotos →</button>
-            </div>
+          <div style="display:flex;justify-content:space-between;margin-top:16px">
+            <button class="btn btn-s" onclick="step(4)">← Voltar</button>
+            <button class="btn btn-p" style="font-size:14px;padding:10px 20px" onclick="saveOS()">✅ Finalizar e Salvar OS</button>
           </div>
-        </div>
-        <div class="card" id="s4" style="display:none">
-          <div class="ch"><div class="ct2">📸 Fotos</div></div>
-          <div class="cb">
-            <div class="pzone" onclick="document.getElementById('ph-in').click()">
-              <div style="font-size:28px;margin-bottom:6px">📷</div>
-              <p style="font-size:13px"><strong>Toque para selecionar fotos</strong></p>
-              <p style="font-size:11px;color:var(--muted);margin-top:3px">JPG, PNG — máx. 10 fotos</p>
-            </div>
-            <input type="file" id="ph-in" accept="image/*" multiple style="display:none" onchange="addPh(this)">
-            <div class="pgrid" id="pgrid"></div>
-            <div style="display:flex;justify-content:space-between;margin-top:12px">
-              <button class="btn btn-s" onclick="step(3)">← Voltar</button>
-              <button class="btn btn-p" onclick="step(5)">Próximo: Assinaturas →</button>
-            </div>
-          </div>
-        </div>
-        <div class="card" id="s5" style="display:none">
-          <div class="ch"><div class="ct2">✍️ Assinaturas</div></div>
-          <div class="cb">
-            <div class="g2">
-              <div>
-                <div class="stitle">Avaliador (Cliente)</div>
-                <div class="sig-area"><canvas id="sig-cli"></canvas><div style="font-size:10px;color:var(--muted);text-align:center;padding:3px 0">Assine acima</div><div style="display:flex;justify-content:flex-end;padding:3px 8px 6px"><button class="btn btn-g btn-sm" onclick="clrSig('cli')">🗑 Limpar</button></div></div>
-                <div class="fg" style="margin-top:8px"><label class="fl">Nome completo</label><input class="fc" id="sc-name"></div>
-                <div class="g2">
-                  <div class="fg"><label class="fl">RG</label><input class="fc" id="sc-rg"></div>
-                  <div class="fg"><label class="fl">CPF</label><input class="fc" id="sc-cpf" placeholder="000.000.000-00"></div>
-                </div>
-              </div>
-              <div>
-                <div class="stitle">Técnico Responsável</div>
-                <div class="sig-area"><canvas id="sig-tec"></canvas><div style="font-size:10px;color:var(--muted);text-align:center;padding:3px 0">Assine acima</div><div style="display:flex;justify-content:flex-end;padding:3px 8px 6px"><button class="btn btn-g btn-sm" onclick="clrSig('tec')">🗑 Limpar</button></div></div>
-                <div class="fg" style="margin-top:8px"><label class="fl">Nome completo</label><input class="fc" id="st-name"></div>
-                <div class="g2">
-                  <div class="fg"><label class="fl">RG</label><input class="fc" id="st-rg"></div>
-                  <div class="fg"><label class="fl">CPF</label><input class="fc" id="st-cpf" placeholder="000.000.000-00"></div>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:16px">
-              <button class="btn btn-s" onclick="step(4)">← Voltar</button>
-              <button class="btn btn-p" style="font-size:14px;padding:10px 20px" onclick="saveOS()">✅ Finalizar e Salvar OS</button>
-            </div>
-          </div>
-        </div>
+        </div></div>
       </div>
       <!-- MINHAS OS -->
       <div class="page" id="pg-osl">
         <div class="ph"><div><div class="pt">Minhas OS</div><div class="ps" id="os-sub">—</div></div><button class="btn btn-p btn-sm" onclick="goPg('nos')">➕ Nova</button></div>
         <div style="display:flex;gap:7px;margin-bottom:13px;flex-wrap:wrap">
-          <select class="fc" id="fi-st" onchange="rndrOS()" style="width:150px;flex-shrink:0"><option value="">Todos os status</option><option value="aberta">Aberta</option><option value="em_andamento">Em Andamento</option><option value="finalizada">Finalizada</option><option value="pendente">Pendente</option></select>
-          <input type="date" class="fc" id="fi-dt" onchange="rndrOS()" style="width:145px;flex-shrink:0">
-          <input type="text" class="fc" id="fi-sr" placeholder="Buscar..." oninput="rndrOS()" style="flex:1;min-width:120px">
+          <select class="fc" id="fi-st" onchange="rndrOS()" style="width:150px"><option value="">Todos os status</option><option value="aberta">Aberta</option><option value="em_andamento">Em Andamento</option><option value="finalizada">Finalizada</option></select>
+          <input type="date" class="fc" id="fi-dt" onchange="rndrOS()" style="width:145px">
+          <input type="text" class="fc" id="fi-sr" placeholder="Buscar..." oninput="rndrOS()" style="flex:1;min-width:110px">
         </div>
         <div class="card"><div class="tw"><table>
           <thead><tr><th>OS</th><th>Cliente</th><th>Serviço</th><th>Data</th><th>Status</th><th></th></tr></thead>
@@ -416,50 +261,37 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
       <!-- EXPORTAR ZIP -->
       <div class="page" id="pg-exp">
         <div class="ph"><div><div class="pt">Exportar ZIP</div><div class="ps">Upload no ObraSoft</div></div></div>
-        <div class="card">
-          <div class="ch"><div class="ct2">📦 Gerar ZIP</div></div>
-          <div class="cb">
-            <div class="fg">
-              <label class="fl">Data <span class="req">*</span></label>
-              <input class="fc" type="date" id="exp-dt" onchange="updExp()">
-              <span class="fh">Somente OS com status Finalizada são incluídas</span>
-            </div>
-            <div id="exp-prev"><div class="exp-empty">Selecione uma data</div></div>
-            <div id="exp-prog" style="display:none;margin-bottom:9px">
-              <div style="font-size:12px;color:var(--muted);margin-bottom:4px" id="exp-lbl">Gerando...</div>
-              <div class="prog-w"><div class="prog-f" id="exp-bar" style="width:0%"></div></div>
-            </div>
-            <button class="btn btn-p btn-full" id="btn-exp" onclick="genZip()" disabled>📦 Gerar e Baixar ZIP</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="ch"><div class="ct2">📜 Meu Histórico</div></div>
-          <div class="tw"><table>
-            <thead><tr><th>Data</th><th>Arquivo</th><th>OS</th><th>Gerado em</th></tr></thead>
-            <tbody id="exp-hist"></tbody>
-          </table></div>
-        </div>
+        <div class="card"><div class="ch"><div class="ct2">📦 Gerar ZIP</div></div><div class="cb">
+          <div class="fg"><label class="fl">Data <span class="req">*</span></label><input class="fc" type="date" id="exp-dt" onchange="updExp()"><span class="fh">Somente OS com status Finalizada são incluídas</span></div>
+          <div id="exp-prev"><div class="exp-empty">Selecione uma data</div></div>
+          <div id="exp-prog" style="display:none;margin-bottom:9px"><div style="font-size:12px;color:var(--muted);margin-bottom:4px" id="exp-lbl">Gerando...</div><div class="prog-w"><div class="prog-f" id="exp-bar" style="width:0%"></div></div></div>
+          <button class="btn btn-p btn-full" id="btn-exp" onclick="genZip()" disabled>📦 Gerar e Baixar ZIP</button>
+        </div></div>
+        <div class="card"><div class="ch"><div class="ct2">📜 Meu Histórico</div></div><div class="tw"><table>
+          <thead><tr><th>Data</th><th>Arquivo</th><th>OS</th><th>Gerado em</th></tr></thead>
+          <tbody id="exp-hist"></tbody>
+        </table></div></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══ APP ADMIN ══ -->
+ 
+<!-- APP ADMIN -->
 <div id="sc-adm" class="screen">
   <div class="app">
     <aside class="sb adm" id="sb-adm">
       <div class="sb-logo"><div class="sb-ico adm">🛡</div><div class="sb-txt">Administrador<small>Consigaz</small></div></div>
       <nav class="sb-nav">
         <div class="sb-sec">Painel</div>
-        <button class="sb-btn on adm" data-pa="ov" onclick="goAdm('ov');closeSb()"><span class="sb-ico2">📊</span><span class="sb-lbl">Visão Geral</span></button>
-        <button class="sb-btn" data-pa="cos" onclick="goAdm('cos');closeSb()"><span class="sb-ico2">🏢</span><span class="sb-lbl">Empresas</span></button>
-        <button class="sb-btn" data-pa="aos" onclick="goAdm('aos');closeSb()"><span class="sb-ico2">📋</span><span class="sb-lbl">Todas as OS</span></button>
-        <button class="sb-btn" data-pa="aex" onclick="goAdm('aex');closeSb()"><span class="sb-ico2">📦</span><span class="sb-lbl">Exportações</span></button>
+        <button class="sb-btn on adm" data-pa="ov" onclick="goAdm('ov');closeSb()"><span class="sb-ico2">📊</span><span>Visão Geral</span></button>
+        <button class="sb-btn" data-pa="cos" onclick="goAdm('cos');closeSb()"><span class="sb-ico2">🏢</span><span>Empresas</span></button>
+        <button class="sb-btn" data-pa="aos" onclick="goAdm('aos');closeSb()"><span class="sb-ico2">📋</span><span>Todas as OS</span></button>
+        <button class="sb-btn" data-pa="aex" onclick="goAdm('aex');closeSb()"><span class="sb-ico2">📦</span><span>Exportações</span></button>
         <div class="sb-sec">Configurações</div>
-        <button class="sb-btn" data-pa="svcs" onclick="goAdm('svcs');closeSb()"><span class="sb-ico2">🔧</span><span class="sb-lbl">Tipos de Serviço</span></button>
-        <button class="sb-btn" data-pa="epis" onclick="goAdm('epis');closeSb()"><span class="sb-ico2">🦺</span><span class="sb-lbl">EPIs</span></button>
-        <button class="sb-btn" data-pa="mtz" onclick="goAdm('mtz');closeSb()"><span class="sb-ico2">📐</span><span class="sb-lbl">Matriz EPI×Serviço</span></button>
-        <button class="sb-btn" data-pa="cfg" onclick="goAdm('cfg');closeSb()"><span class="sb-ico2">⚙️</span><span class="sb-lbl">Sistema</span></button>
+        <button class="sb-btn" data-pa="svcs" onclick="goAdm('svcs');closeSb()"><span class="sb-ico2">🔧</span><span>Tipos de Serviço</span></button>
+        <button class="sb-btn" data-pa="epis" onclick="goAdm('epis');closeSb()"><span class="sb-ico2">🦺</span><span>EPIs</span></button>
+        <button class="sb-btn" data-pa="mtz" onclick="goAdm('mtz');closeSb()"><span class="sb-ico2">📐</span><span>Matriz EPI×Serviço</span></button>
+        <button class="sb-btn" data-pa="cfg" onclick="goAdm('cfg');closeSb()"><span class="sb-ico2">⚙️</span><span>Sistema</span></button>
       </nav>
       <div class="sb-user"><div class="sb-ava adm">AD</div><div><div class="sb-un">Administrador</div><div class="sb-ur">Consigaz</div></div></div>
     </aside>
@@ -470,21 +302,8 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
         <span class="badge b-adm" style="padding:4px 10px;font-size:11px;flex-shrink:0">🛡 Admin</span>
         <button class="ico-btn" onclick="logout()" title="Sair">🚪</button>
       </div>
-      <!-- OVERVIEW -->
-      <div class="page on" id="pg-ov">
-        <div class="ph"><div><div class="pt">Visão Geral</div><div class="ps">Todas as empresas</div></div></div>
-        <div class="sg" id="adm-stats"></div>
-        <div class="card"><div class="ch"><div class="ct2">Últimas OS</div></div><div class="tw"><table>
-          <thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Técnico</th><th>Data</th><th>Status</th></tr></thead>
-          <tbody id="adm-rec"></tbody>
-        </table></div></div>
-      </div>
-      <!-- EMPRESAS -->
-      <div class="page" id="pg-cos">
-        <div class="ph"><div><div class="pt">Empresas</div><div class="ps" id="co-sub">—</div></div><button class="btn btn-adm btn-sm" onclick="openCo()">➕ Nova Empresa</button></div>
-        <div class="cg" id="co-grid"></div>
-      </div>
-      <!-- TODAS OS -->
+      <div class="page on" id="pg-ov"><div class="ph"><div><div class="pt">Visão Geral</div></div></div><div class="sg" id="adm-stats"></div><div class="card"><div class="ch"><div class="ct2">Últimas OS</div></div><div class="tw"><table><thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Técnico</th><th>Data</th><th>Status</th></tr></thead><tbody id="adm-rec"></tbody></table></div></div></div>
+      <div class="page" id="pg-cos"><div class="ph"><div><div class="pt">Empresas</div><div class="ps" id="co-sub">—</div></div><button class="btn btn-adm btn-sm" onclick="openCo()">➕ Nova Empresa</button></div><div class="cg" id="co-grid"></div></div>
       <div class="page" id="pg-aos">
         <div class="ph"><div><div class="pt">Todas as OS</div><div class="ps" id="aos-sub">—</div></div></div>
         <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
@@ -492,278 +311,162 @@ textarea.fc{resize:vertical;min-height:68px}.fh{font-size:11px;color:var(--muted
           <select class="fc" id="af-st" onchange="rndrAOS()" style="width:140px"><option value="">Todos os status</option><option value="finalizada">Finalizada</option><option value="em_andamento">Em And.</option><option value="pendente">Pendente</option><option value="aberta">Aberta</option></select>
           <input type="date" class="fc" id="af-dt" onchange="rndrAOS()" style="width:145px">
         </div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Técnico</th><th>Data</th><th>Status</th><th></th></tr></thead>
-          <tbody id="aos-body"></tbody>
-        </table></div></div>
+        <div class="card"><div class="tw"><table><thead><tr><th>OS</th><th>Empresa</th><th>Cliente</th><th>Técnico</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="aos-body"></tbody></table></div></div>
       </div>
-      <!-- EXPORTAÇÕES -->
-      <div class="page" id="pg-aex">
-        <div class="ph"><div><div class="pt">Exportações</div><div class="ps">Histórico global</div></div></div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>Data</th><th>Empresa</th><th>Arquivo</th><th>OS</th><th>Gerado em</th></tr></thead>
-          <tbody id="aex-body"></tbody>
-        </table></div></div>
-      </div>
-      <!-- TIPOS DE SERVIÇO -->
-      <div class="page" id="pg-svcs">
-        <div class="ph"><div><div class="pt">Tipos de Serviço</div><div class="ps">Cadastre os serviços disponíveis</div></div><button class="btn btn-adm btn-sm" onclick="openSvc()">➕ Novo Serviço</button></div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>Código</th><th>Nome</th><th></th></tr></thead>
-          <tbody id="svc-body"></tbody>
-        </table></div></div>
-      </div>
-      <!-- EPIs -->
-      <div class="page" id="pg-epis">
-        <div class="ph"><div><div class="pt">EPIs</div><div class="ps">Equipamentos de Proteção Individual</div></div><button class="btn btn-adm btn-sm" onclick="openEpi()">➕ Novo EPI</button></div>
-        <div class="card"><div class="tw"><table>
-          <thead><tr><th>Ícone</th><th>Nome</th><th></th></tr></thead>
-          <tbody id="epi-body"></tbody>
-        </table></div></div>
-      </div>
-      <!-- MATRIZ -->
-      <div class="page" id="pg-mtz">
-        <div class="ph"><div><div class="pt">Matriz EPI × Serviço</div><div class="ps">Defina quais EPIs são obrigatórios por serviço</div></div><button class="btn btn-adm btn-sm" onclick="saveMatriz()">💾 Salvar Matriz</button></div>
-        <div class="card"><div class="cb">
-          <div class="matriz-wrap"><table class="matriz-table" id="mtz-table"></table></div>
+      <div class="page" id="pg-aex"><div class="ph"><div><div class="pt">Exportações</div></div></div><div class="card"><div class="tw"><table><thead><tr><th>Data</th><th>Empresa</th><th>Arquivo</th><th>OS</th><th>Gerado em</th></tr></thead><tbody id="aex-body"></tbody></table></div></div></div>
+      <div class="page" id="pg-svcs"><div class="ph"><div><div class="pt">Tipos de Serviço</div></div><button class="btn btn-adm btn-sm" onclick="openSvc()">➕ Novo</button></div><div class="card"><div class="tw"><table><thead><tr><th>Código</th><th>Nome</th><th></th></tr></thead><tbody id="svc-body"></tbody></table></div></div></div>
+      <div class="page" id="pg-epis"><div class="ph"><div><div class="pt">EPIs</div></div><button class="btn btn-adm btn-sm" onclick="openEpi()">➕ Novo</button></div><div class="card"><div class="tw"><table><thead><tr><th>Ícone</th><th>Nome</th><th></th></tr></thead><tbody id="epi-body"></tbody></table></div></div></div>
+      <div class="page" id="pg-mtz"><div class="ph"><div><div class="pt">Matriz EPI × Serviço</div><div class="ps">Marque quais EPIs são obrigatórios por serviço</div></div><button class="btn btn-adm btn-sm" onclick="saveMatrizAdm()">💾 Salvar Matriz</button></div><div class="card"><div class="cb"><div class="matriz-wrap"><table class="matriz-table" id="mtz-table"></table></div></div></div></div>
+      <div class="page" id="pg-cfg"><div class="ph"><div><div class="pt">Sistema</div></div></div>
+        <div class="card" style="max-width:480px"><div class="ch"><div class="ct2">🔐 Alterar Senha do Administrador</div></div><div class="cb">
+          <div class="fg"><label class="fl">Senha atual</label><input class="fc" id="cfg-old" type="password"></div>
+          <div class="fg"><label class="fl">Nova senha</label><input class="fc" id="cfg-new" type="password"></div>
+          <div class="fg"><label class="fl">Confirmar nova senha</label><input class="fc" id="cfg-new2" type="password"></div>
+          <button class="btn btn-adm" onclick="changePass()">🔐 Alterar Senha</button>
         </div></div>
       </div>
-      <!-- SISTEMA -->
-      <div class="page" id="pg-cfg">
-        <div class="ph"><div><div class="pt">Configurações do Sistema</div></div></div>
-        <div class="card" style="max-width:500px">
-          <div class="ch"><div class="ct2">🔐 Alterar Senha do Administrador</div></div>
-          <div class="cb">
-            <div class="fg"><label class="fl">Senha atual</label><input class="fc" id="cfg-old" type="password" placeholder="••••••••"></div>
-            <div class="fg"><label class="fl">Nova senha</label><input class="fc" id="cfg-new" type="password" placeholder="••••••••"></div>
-            <div class="fg"><label class="fl">Confirmar nova senha</label><input class="fc" id="cfg-new2" type="password" placeholder="••••••••"></div>
-            <button class="btn btn-adm" onclick="changePass()">🔐 Alterar Senha</button>
-          </div>
-        </div>
-        <div class="card" style="max-width:500px;margin-top:14px">
-          <div class="ch"><div class="ct2">🔌 Conexão Google Sheets</div></div>
-          <div class="cb">
-            <div style="background:#F0FFF4;border:1.5px solid #9AE6B4;border-radius:8px;padding:10px 13px;font-size:12.5px;display:flex;align-items:center;gap:8px">
-              <span style="font-size:20px">✅</span>
-              <div><strong>API configurada</strong><br><span style="font-size:11px;color:var(--muted)" id="cfg-url-display">—</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
-
+ 
 <!-- MODAIS -->
-<div class="ov" id="modal-co">
-  <div class="modal">
-    <div class="mh"><div class="mt" id="mco-ttl">Nova Empresa</div><button class="mx" onclick="closeMod('modal-co')">✕</button></div>
-    <div class="mb">
-      <div class="fg"><label class="fl">Código do Fornecedor <span class="req">*</span></label><input class="fc" id="m-code" placeholder="Ex: 1001" style="font-size:19px;font-weight:700;letter-spacing:.08em" inputmode="numeric"><span class="fh">Código único para login. Não pode ser alterado após criação.</span></div>
-      <div class="fg"><label class="fl">Nome da Empresa <span class="req">*</span></label><input class="fc" id="m-name" placeholder="Razão social ou nome fantasia"></div>
-      <div class="fg"><label class="fl">CNPJ</label><input class="fc" id="m-cnpj" placeholder="00.000.000/0000-00"></div>
-      <div class="fg"><label class="fl">Status</label><select class="fc" id="m-active"><option value="1">✅ Ativa</option><option value="0">❌ Inativa</option></select></div>
-    </div>
-    <div class="mf"><button class="btn btn-s" onclick="closeMod('modal-co')">Cancelar</button><button class="btn btn-adm" onclick="saveCo()">💾 Salvar</button></div>
-  </div>
-</div>
-<div class="ov" id="modal-svc">
-  <div class="modal">
-    <div class="mh"><div class="mt" id="msvc-ttl">Novo Serviço</div><button class="mx" onclick="closeMod('modal-svc')">✕</button></div>
-    <div class="mb">
-      <div class="fg"><label class="fl">Código <span class="req">*</span></label><input class="fc" id="ms-code" placeholder="Ex: 4" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="ms-name" placeholder="Ex: Vazamento"></div>
-    </div>
-    <div class="mf"><button class="btn btn-s" onclick="closeMod('modal-svc')">Cancelar</button><button class="btn btn-adm" onclick="saveSvc()">💾 Salvar</button></div>
-  </div>
-</div>
-<div class="ov" id="modal-epi">
-  <div class="modal">
-    <div class="mh"><div class="mt" id="mepi-ttl">Novo EPI</div><button class="mx" onclick="closeMod('modal-epi')">✕</button></div>
-    <div class="mb">
-      <div class="fg"><label class="fl">Ícone (emoji) <span class="req">*</span></label><input class="fc" id="me-icon" placeholder="Ex: 🦺" style="font-size:24px"></div>
-      <div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="me-name" placeholder="Ex: Capacete"></div>
-    </div>
-    <div class="mf"><button class="btn btn-s" onclick="closeMod('modal-epi')">Cancelar</button><button class="btn btn-adm" onclick="saveEpiItem()">💾 Salvar</button></div>
-  </div>
-</div>
-
+<div class="ov" id="modal-co"><div class="modal"><div class="mh"><div class="mt" id="mco-ttl">Nova Empresa</div><button class="mx" onclick="closeMod('modal-co')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Código do Fornecedor <span class="req">*</span></label><input class="fc" id="m-code" placeholder="Ex: 1001" style="font-size:19px;font-weight:700;letter-spacing:.08em" inputmode="numeric"><span class="fh">Código único para login. Não pode ser alterado após criação.</span></div><div class="fg"><label class="fl">Nome da Empresa <span class="req">*</span></label><input class="fc" id="m-name" placeholder="Razão social ou nome fantasia"></div><div class="fg"><label class="fl">CNPJ</label><input class="fc" id="m-cnpj" placeholder="00.000.000/0000-00"></div><div class="fg"><label class="fl">Status</label><select class="fc" id="m-active"><option value="1">✅ Ativa</option><option value="0">❌ Inativa</option></select></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-co')">Cancelar</button><button class="btn btn-adm" onclick="saveCo()">💾 Salvar</button></div></div></div>
+<div class="ov" id="modal-svc"><div class="modal"><div class="mh"><div class="mt" id="msvc-ttl">Novo Serviço</div><button class="mx" onclick="closeMod('modal-svc')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Código <span class="req">*</span></label><input class="fc" id="ms-code" placeholder="Ex: 4" inputmode="numeric"></div><div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="ms-name" placeholder="Ex: Vazamento"></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-svc')">Cancelar</button><button class="btn btn-adm" onclick="saveSvc()">💾 Salvar</button></div></div></div>
+<div class="ov" id="modal-epi"><div class="modal"><div class="mh"><div class="mt" id="mepi-ttl">Novo EPI</div><button class="mx" onclick="closeMod('modal-epi')">✕</button></div><div class="mb"><div class="fg"><label class="fl">Ícone (emoji) <span class="req">*</span></label><input class="fc" id="me-icon" placeholder="Ex: 🦺" style="font-size:24px"></div><div class="fg"><label class="fl">Nome <span class="req">*</span></label><input class="fc" id="me-name" placeholder="Ex: Capacete"></div></div><div class="mf"><button class="btn btn-s" onclick="closeMod('modal-epi')">Cancelar</button><button class="btn btn-adm" onclick="saveEpiItem()">💾 Salvar</button></div></div></div>
 <div class="toasts" id="toasts"></div>
-
+ 
 <script>
 'use strict';
-
-// ═══════════════════════════════════════════════════════
-// ⚠️ COLE AQUI A URL DO APPS SCRIPT
-// ═══════════════════════════════════════════════════════
+// ════════════════════════════════════════════════
+// COLE A URL DO APPS SCRIPT AQUI
 const API_URL = 'https://script.google.com/macros/s/AKfycbwDwQKG-B7ZTNjmUoRTbMEvkqvtj5v4x6yYqYa7J3gPCyKbSo7TaI5ifztxNOiVYDW_/exec';
-
-// Senha admin (pode ser alterada pelo painel)
+// ════════════════════════════════════════════════
+ 
 let ADMIN_PASS = localStorage.getItem('adm_pass') || 'admin123';
-
-// Cache local
 const C = { empresas:null, os:{}, exp:{}, servicos:null, epis:null, matriz:null };
 const S = { type:null, co:null };
 let editId=null, selEPI=new Set(), photos=[], editCo=null, editSvc=null, editEpiId=null;
-const sigCtx = {};
-
-// ══ HELPERS ══
+let sigCtx=null, sigDrawing=false, sigLX=0, sigLY=0;
+ 
+const SATQ=['Como foi a abordagem do técnico?','Cordialidade e educação no atendimento','O técnico estava uniformizado?','O técnico utilizou os EPIs?','Pontualidade do técnico','O trabalho foi bem executado?','Local ficou limpo e organizado?','Resultado do resgate de imagem','O técnico apresentou o escopo antes de iniciar?','Cordialidade e respeito durante o atendimento','A solução atendeu suas expectativas?'];
+ 
 const $  = id => document.getElementById(id);
-const fD = d  => { if(!d) return '—'; const[y,m,dd]=d.split('-'); return `${dd}/${m}/${y}`; };
-const fDT= iso=> { if(!iso) return '—'; return new Date(iso).toLocaleString('pt-BR'); };
-const bdg= s  => { const L={aberta:'Aberta',em_andamento:'Em And.',finalizada:'Finalizada',pendente:'Pendente',cancelada:'Cancelada'}; return `<span class="badge b-${s}">${L[s]||s}</span>`; };
-const satSum = sat => {
-  if(!sat||!sat.length) return '—';
-  const c={satisfeito:0,neutro:0,insatisfeito:0};
-  sat.forEach(v=>{ if(c[v]!==undefined) c[v]++; });
-  if(c.insatisfeito>0) return '😞'; if(c.neutro>c.satisfeito) return '😐'; if(c.satisfeito>0) return '😊'; return '—';
-};
-const myOS  = () => C.os [S.co?.code] || [];
-const myExp = () => C.exp[S.co?.code] || [];
-const svcName = code => (C.servicos||[]).find(s=>String(s.code)===String(code))?.name || String(code);
-
-// ══ API ══
-async function api(action, data=null) {
-  const body = { action };
-  if (data) body.data = JSON.stringify(data);
-  const res = await fetch(API_URL, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(body)
-  });
-  const json = await res.json();
-  if (!json.ok) throw new Error(json.error || 'Erro na API');
+const fD = d  => { if(!d)return'—'; const[y,m,dd]=d.split('-'); return`${dd}/${m}/${y}`; };
+const fDT= iso=> { if(!iso)return'—'; return new Date(iso).toLocaleString('pt-BR'); };
+const bdg= s  => { const L={aberta:'Aberta',em_andamento:'Em And.',finalizada:'Finalizada',pendente:'Pendente',cancelada:'Cancelada'}; return`<span class="badge b-${s}">${L[s]||s}</span>`; };
+const satSum=sat=>{ if(!sat||!sat.length)return'—'; const c={satisfeito:0,neutro:0,insatisfeito:0}; sat.forEach(v=>{if(c[v]!==undefined)c[v]++;}); if(c.insatisfeito>0)return'😞'; if(c.neutro>c.satisfeito)return'😐'; if(c.satisfeito>0)return'😊'; return'—'; };
+const myOS =()=>C.os [S.co?.code]||[];
+const myExp=()=>C.exp[S.co?.code]||[];
+const svcName=code=>(C.servicos||[]).find(s=>String(s.code)===String(code))?.name||String(code);
+ 
+function showLoad(msg='Carregando...'){$('load-msg').textContent=msg;$('load-ov').classList.add('on');}
+function hideLoad(){$('load-ov').classList.remove('on');}
+function openSb(){document.querySelector('.sb')?.classList.add('open');$('sb-overlay').classList.add('on');}
+function closeSb(){document.querySelectorAll('.sb').forEach(s=>s.classList.remove('open'));$('sb-overlay').classList.remove('on');}
+ 
+async function apiGet(action,params={}){
+  const url=new URL(API_URL);
+  url.searchParams.set('action',action);
+  Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+  const res=await fetch(url.toString());
+  const json=await res.json();
+  if(!json.ok) throw new Error(json.error||'Erro na API');
   return json.data;
 }
-async function apiGet(action, params={}) {
-  const url = new URL(API_URL);
-  url.searchParams.set('action', action);
-  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
-  const res = await fetch(url.toString());
-  const json = await res.json();
-  if (!json.ok) throw new Error(json.error || 'Erro na API');
-  return json.data;
-}
-
-// ══ LOADING ══
-function showLoad(msg='Carregando...') { $('load-msg').textContent=msg; $('load-ov').classList.add('on'); }
-function hideLoad() { $('load-ov').classList.remove('on'); }
-
-// ══ MOBILE SIDEBAR ══
-function openSb()  { document.querySelector('.sb')?.classList.add('open'); $('sb-overlay').classList.add('on'); }
-function closeSb() { document.querySelectorAll('.sb').forEach(s=>s.classList.remove('open')); $('sb-overlay').classList.remove('on'); }
-
-// ══ LOGIN ══
-function swTab(t) {
-  $('pn-emp').style.display=t==='emp'?'block':'none';
-  $('pn-adm').style.display=t==='adm'?'block':'none';
-  $('t-emp').classList.toggle('on',t==='emp');
-  $('t-adm').classList.toggle('on',t==='adm');
-}
-async function prevCo(v) {
+ 
+function swTab(t){$('pn-emp').style.display=t==='emp'?'block':'none';$('pn-adm').style.display=t==='adm'?'block':'none';$('t-emp').classList.toggle('on',t==='emp');$('t-adm').classList.toggle('on',t==='adm');}
+ 
+async function prevCo(v){
   const box=$('co-prev');
-  if(!v){ box.innerHTML='Digite o código para identificar a empresa'; return; }
-  if(!C.empresas) {
-    try { C.empresas = await apiGet('getEmpresas'); } catch(_) {}
-  }
-  const co = (C.empresas||[]).find(c=>c.code===v.trim());
+  if(!v){box.innerHTML='Digite o código para identificar a empresa';return;}
+  if(!C.empresas){try{C.empresas=await apiGet('getEmpresas');}catch(_){}}
+  const co=(C.empresas||[]).find(c=>c.code===v.trim());
   if(co) box.innerHTML=`<span>🏢</span><div><strong>${co.name}</strong><br><small style="color:var(--muted)">Cód.${co.code}${co.cnpj?' · '+co.cnpj:''}</small></div>`;
   else box.innerHTML=`<span style="color:var(--danger)">❌ Código não encontrado</span>`;
 }
-async function loginEmp() {
+ 
+async function loginEmp(){
   const code=$('l-code').value.trim();
-  if(!code){ toast('Digite o código do fornecedor','er'); return; }
+  if(!code){toast('Digite o código do fornecedor','er');return;}
   showLoad('Verificando...');
-  try {
-    if(!C.empresas) C.empresas = await apiGet('getEmpresas');
+  try{
+    if(!C.empresas) C.empresas=await apiGet('getEmpresas');
     const co=(C.empresas||[]).find(c=>c.code===code);
-    if(!co){ toast('Código não encontrado','er'); hideLoad(); return; }
-    if(!co.active){ toast('Empresa inativa','er'); hideLoad(); return; }
-    S.type='emp'; S.co=co;
+    if(!co){toast('Código não encontrado','er');hideLoad();return;}
+    if(!co.active){toast('Empresa inativa','er');hideLoad();return;}
+    S.type='emp';S.co=co;
     $('sb-coname').textContent=co.name.length>20?co.name.slice(0,18)+'…':co.name;
     $('sb-ava').textContent=co.name[0].toUpperCase();
-    $('sb-un').textContent=co.name;
-    $('sb-ur').textContent='Cód.'+co.code;
+    $('sb-un').textContent=co.name;$('sb-ur').textContent='Cód.'+co.code;
     $('emp-tco').textContent='🏢 '+co.name;
-    showLoad('Carregando OS...');
-    C.os[co.code]  = await apiGet('getOS',{coCode:co.code});
-    C.exp[co.code] = await apiGet('getExportacoes',{coCode:co.code});
-    if(!C.servicos) C.servicos = await apiGet('getServicos');
-    if(!C.epis)     C.epis     = await apiGet('getEpis');
-    if(!C.matriz)   C.matriz   = await apiGet('getMatriz');
+    showLoad('Carregando dados...');
+    C.os[co.code]=await apiGet('getOS',{coCode:co.code});
+    C.exp[co.code]=await apiGet('getExportacoes',{coCode:co.code});
+    if(!C.servicos) C.servicos=await apiGet('getServicos');
+    if(!C.epis)     C.epis    =await apiGet('getEpis');
+    if(!C.matriz)   C.matriz  =await apiGet('getMatriz');
     hideLoad();
-    $('sc-login').style.display='none';
-    $('sc-emp').style.display='block';
-    goPg('nos'); updCt();
-    populateSvcSelect();
+    $('sc-login').style.display='none';$('sc-emp').style.display='block';
+    goPg('nos');updCt();populateSvcSelect();
     toast(`Bem-vinda, ${co.name}!`,'ok');
-  } catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-function loginAdm() {
+ 
+function loginAdm(){
   const pass=$('l-ap').value;
-  if($('l-ae').value!=='admin@consigaz.com.br'||pass!==ADMIN_PASS){ toast('Credenciais inválidas','er'); return; }
-  S.type='adm'; S.co=null;
-  $('sc-login').style.display='none';
-  $('sc-adm').style.display='block';
-  const d=$('cfg-url-display'); if(d) d.textContent=API_URL;
-  goAdm('ov'); toast('Bem-vinda, Administrador! 🛡','ok');
+  if($('l-ae').value!=='admin@consigaz.com.br'||pass!==ADMIN_PASS){toast('Credenciais inválidas','er');return;}
+  S.type='adm';S.co=null;
+  $('sc-login').style.display='none';$('sc-adm').style.display='block';
+  goAdm('ov');toast('Bem-vinda, Administrador! 🛡','ok');
 }
-function logout() {
-  S.type=null; S.co=null; C.empresas=null;
+function logout(){
+  S.type=null;S.co=null;C.empresas=null;
   ['sc-emp','sc-adm'].forEach(id=>$(id).style.display='none');
-  $('sc-login').style.display='flex';
-  $('l-code').value=''; $('l-ap').value='';
-  $('co-prev').innerHTML='Digite o código para identificar a empresa';
-  swTab('emp');
+  $('sc-login').style.display='flex';$('l-code').value='';$('l-ap').value='';
+  $('co-prev').innerHTML='Digite o código para identificar a empresa';swTab('emp');
 }
-
-// ══ SENHA ADMIN ══
-function changePass() {
-  const old=$('cfg-old').value, nw=$('cfg-new').value, nw2=$('cfg-new2').value;
-  if(old!==ADMIN_PASS){ toast('Senha atual incorreta','er'); return; }
-  if(!nw||nw.length<4){ toast('Nova senha muito curta','er'); return; }
-  if(nw!==nw2){ toast('Senhas não conferem','er'); return; }
-  ADMIN_PASS=nw; localStorage.setItem('adm_pass',nw);
-  $('cfg-old').value=''; $('cfg-new').value=''; $('cfg-new2').value='';
-  toast('Senha alterada com sucesso! ✅','ok');
+function changePass(){
+  const old=$('cfg-old').value,nw=$('cfg-new').value,nw2=$('cfg-new2').value;
+  if(old!==ADMIN_PASS){toast('Senha atual incorreta','er');return;}
+  if(!nw||nw.length<4){toast('Nova senha muito curta','er');return;}
+  if(nw!==nw2){toast('Senhas não conferem','er');return;}
+  ADMIN_PASS=nw;localStorage.setItem('adm_pass',nw);
+  $('cfg-old').value='';$('cfg-new').value='';$('cfg-new2').value='';
+  toast('Senha alterada! ✅','ok');
 }
-
-// ══ SELECT SERVIÇOS ══
-function populateSvcSelect() {
-  const sel=$('f-svc'); if(!sel) return;
+ 
+function populateSvcSelect(){
+  const sel=$('f-svc');if(!sel)return;
   sel.innerHTML='<option value="">Selecionar...</option>';
   (C.servicos||[]).sort((a,b)=>Number(a.code)-Number(b.code)).forEach(s=>{
-    sel.innerHTML+=`<option value="${s.code}">${s.code.toString().padStart(2,'0')} — ${s.name}</option>`;
+    sel.innerHTML+=`<option value="${s.code}">${String(s.code).padStart(2,'0')} — ${s.name}</option>`;
   });
 }
-
-// ══ NAV EMPRESA ══
+ 
 const PT={nos:'Nova OS',osl:'Minhas OS',exp:'Exportar ZIP'};
-function goPg(id) {
+function goPg(id){
   document.querySelectorAll('#sc-emp .page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('#sc-emp .sb-btn').forEach(b=>b.classList.remove('on'));
-  const pg=$('pg-'+id); if(pg) pg.classList.add('on');
+  const pg=$('pg-'+id);if(pg)pg.classList.add('on');
   document.querySelectorAll(`#sc-emp .sb-btn[data-p="${id}"]`).forEach(b=>b.classList.add('on'));
   $('emp-ttl').textContent=PT[id]||id;
   if(id==='nos'){resetF();step(1);}
-  if(id==='osl') rndrOS();
+  if(id==='osl')rndrOS();
   if(id==='exp'){updExp();rndrHist();}
 }
-function updCt(){ const e=$('os-ct'); if(e) e.textContent=myOS().length; }
-
-// ══ OS LIST ══
-function rndrOS() {
-  const stF=$('fi-st')?.value||'', dtF=$('fi-dt')?.value||'', srF=($('fi-sr')?.value||'').toLowerCase();
+function updCt(){const e=$('os-ct');if(e)e.textContent=myOS().length;}
+ 
+function rndrOS(){
+  const stF=$('fi-st')?.value||'',dtF=$('fi-dt')?.value||'',srF=($('fi-sr')?.value||'').toLowerCase();
   let data=[...myOS()];
-  if(stF) data=data.filter(o=>o.status===stF);
-  if(dtF) data=data.filter(o=>o.date===dtF);
-  if(srF) data=data.filter(o=>(o.num+''+o.client).toLowerCase().includes(srF));
-  const sub=$('os-sub'); if(sub) sub.textContent=`${data.length} OS`;
-  const tb=$('os-body'); if(!tb) return;
-  if(!data.length){ tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Nenhuma OS. <button class="btn btn-p btn-sm" onclick="goPg('nos')" style="margin-left:7px">Criar</button></td></tr>`; return; }
+  if(stF)data=data.filter(o=>o.status===stF);
+  if(dtF)data=data.filter(o=>o.date===dtF);
+  if(srF)data=data.filter(o=>(o.num+''+o.client).toLowerCase().includes(srF));
+  const sub=$('os-sub');if(sub)sub.textContent=`${data.length} OS`;
+  const tb=$('os-body');if(!tb)return;
+  if(!data.length){tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--muted)">Nenhuma OS. <button class="btn btn-p btn-sm" onclick="goPg('nos')" style="margin-left:7px">Criar</button></td></tr>`;return;}
   tb.innerHTML=data.sort((a,b)=>b.at.localeCompare(a.at)).map(o=>`<tr>
-    <td class="mono">${o.num}</td>
-    <td><strong>${o.client}</strong></td>
+    <td class="mono">${o.num}</td><td><strong>${o.client}</strong></td>
     <td style="font-size:11.5px">${svcName(o.svc)}</td>
     <td style="font-size:11.5px;white-space:nowrap">${fD(o.date)}</td>
     <td>${bdg(o.status)}</td>
@@ -774,91 +477,69 @@ function rndrOS() {
     </td>
   </tr>`).join('');
 }
-async function delOS(id) {
-  if(!confirm('Excluir esta OS?')) return;
+async function delOS(id){
+  if(!confirm('Excluir esta OS?'))return;
   showLoad('Excluindo...');
-  try {
-    await apiGet('deleteOS',{id});
-    C.os[S.co.code]=myOS().filter(o=>o.id!==id);
-    rndrOS(); updCt(); toast('OS excluída');
-  } catch(e){ toast('Erro: '+e.message,'er'); }
+  try{await apiGet('deleteOS',{id});C.os[S.co.code]=myOS().filter(o=>o.id!==id);rndrOS();updCt();toast('OS excluída');}
+  catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function editOS(id) {
-  const os=myOS().find(o=>o.id===id); if(!os) return;
-  editId=id; goPg('nos');
+function editOS(id){
+  const os=myOS().find(o=>o.id===id);if(!os)return;
+  editId=id;goPg('nos');
   setTimeout(()=>{
-    $('f-num').value=os.num||''; $('f-date').value=os.date||'';
-    $('f-client').value=os.client||''; $('f-addr').value=os.addr||'';
-    $('f-svc').value=os.svc||''; $('f-tech').value=os.tech||'';
-    $('f-start').value=os.start||''; $('f-end').value=os.end||'';
-    $('f-team').value=os.team||''; $('f-obs').value=os.obs||'';
+    $('f-num').value=os.num||'';$('f-date').value=os.date||'';$('f-client').value=os.client||'';
+    $('f-addr').value=os.addr||'';$('f-svc').value=os.svc||'';$('f-tech').value=os.tech||'';
+    $('f-start').value=os.start||'';$('f-end').value=os.end||'';$('f-team').value=os.team||'';$('f-obs').value=os.obs||'';
     $('nos-ttl').textContent='Editar OS: '+os.num;
-    onSvc(); if(os.epis){ selEPI=new Set(os.epis); buildEPI(os.svc); }
+    onSvc();if(os.epis){selEPI=new Set(os.epis);buildEPI(os.svc);}
   },40);
 }
-
-// ══ STEPPER ══
-function step(n) {
-  for(let i=1;i<=5;i++){ const c=$('s'+i); if(c) c.style.display=i===n?'block':'none'; }
+ 
+function step(n){
+  for(let i=1;i<=5;i++){const c=$('s'+i);if(c)c.style.display=i===n?'block':'none';}
   document.querySelectorAll('.st').forEach(s=>{
-    const sn=parseInt(s.dataset.s); s.classList.remove('act','done');
+    const sn=parseInt(s.dataset.s);s.classList.remove('act','done');
     const d=s.querySelector('.st-d');
-    if(sn<n){ s.classList.add('done'); d.textContent='✓'; }
-    else if(sn===n){ s.classList.add('act'); d.textContent=sn; }
+    if(sn<n){s.classList.add('done');d.textContent='✓';}
+    else if(sn===n){s.classList.add('act');d.textContent=sn;}
     else d.textContent=sn;
   });
-  for(let i=1;i<=4;i++){ const l=$('sl'+i); if(l) l.className='st-ln'+(i<n?' done':''); }
-  if(n===5){ setTimeout(()=>{ iSig('cli'); iSig('tec'); const t=$('f-tech'),stn=$('st-name'); if(t&&stn&&!stn.value) stn.value=t.value; },80); }
+  for(let i=1;i<=4;i++){const l=$('sl'+i);if(l)l.className='st-ln'+(i<n?' done':'');}
+  if(n===5)setTimeout(initSig,80);
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function resetF() {
-  editId=null; selEPI=new Set(); photos=[];
+function resetF(){
+  editId=null;selEPI=new Set();photos=[];sigCtx=null;
   $('nos-ttl').textContent='Nova Ordem de Serviço';
-  const today=new Date().toISOString().split('T')[0], yr=new Date().getFullYear(), nxt=String(myOS().length+1).padStart(4,'0');
+  const today=new Date().toISOString().split('T')[0],yr=new Date().getFullYear(),nxt=String(myOS().length+1).padStart(4,'0');
   setTimeout(()=>{
-    ['f-num','f-date','f-client','f-addr','f-svc','f-tech','f-start','f-end','f-team','f-obs',
-     'f-epi-obs','f-sat-obs','sc-name','sc-rg','sc-cpf','st-name','st-rg','st-cpf'].forEach(id=>{ const el=$(id); if(el) el.value=''; });
-    $('f-num').value=`OS-${yr}-${nxt}`; $('f-date').value=today;
-    buildSat();
-    const pg=$('pgrid'); if(pg) pg.innerHTML='';
-    const eg=$('epi-grid'); if(eg) eg.innerHTML='';
-    Object.keys(sigCtx).forEach(k=>delete sigCtx[k]);
+    ['f-num','f-date','f-client','f-addr','f-svc','f-tech','f-start','f-end','f-team','f-obs','f-epi-obs','f-sat-obs','sc-name','sc-rg','sc-cpf'].forEach(id=>{const el=$(id);if(el)el.value='';});
+    $('f-num').value=`OS-${yr}-${nxt}`;$('f-date').value=today;
+    buildSat();const pg=$('pgrid');if(pg)pg.innerHTML='';const eg=$('epi-grid');if(eg)eg.innerHTML='';
   },30);
 }
-function onSvc() {
-  const sel=$('f-svc'), code=String(sel.value), lbl=$('epi-lbl');
-  if(lbl) lbl.textContent=sel.options[sel.selectedIndex]?.text||'—';
+function onSvc(){
+  const sel=$('f-svc'),code=String(sel.value),lbl=$('epi-lbl');
+  if(lbl)lbl.textContent=sel.options[sel.selectedIndex]?.text||'—';
   buildEPI(code);
 }
-function buildEPI(svcCode) {
-  const g=$('epi-grid'); if(!g) return;
-  const epis=C.epis||[], matriz=C.matriz||{};
+function buildEPI(svcCode){
+  const g=$('epi-grid');if(!g)return;
+  const epis=C.epis||[],matriz=C.matriz||{};
   const reqSet=new Set((matriz[String(svcCode)]||[]));
-  epis.forEach(e=>{ if(reqSet.has(e.id)) selEPI.add(e.id); });
+  epis.forEach(e=>{if(reqSet.has(e.id))selEPI.add(e.id);});
   g.innerHTML=epis.map(e=>{
-    const req=reqSet.has(e.id), sel=selEPI.has(e.id);
-    return `<div class="epi-card ${req?'req-e':''} ${sel?'sel':''}" data-k="${e.id}" onclick="togE('${e.id}')">
+    const req=reqSet.has(e.id),sel=selEPI.has(e.id);
+    return`<div class="epi-card ${req?'req-e':''} ${sel?'sel':''}" data-k="${e.id}" onclick="togE('${e.id}')">
       ${req?'<span class="epi-r">OBRIG.</span>':''}
-      <span class="epi-ico">${e.icon||'🦺'}</span>
-      <span class="epi-nm">${e.name}</span>
+      <span class="epi-ico">${e.icon||'🦺'}</span><span class="epi-nm">${e.name}</span>
     </div>`;
   }).join('');
 }
-function togE(k){ const c=document.querySelector(`.epi-card[data-k="${k}"]`); if(!c) return; if(selEPI.has(k)){selEPI.delete(k);c.classList.remove('sel');}else{selEPI.add(k);c.classList.add('sel');} }
-
-// ══ SATISFAÇÃO ══
-const SATQ=[
-  'Como foi a abordagem do técnico?','Cordialidade e educação no atendimento',
-  'O técnico estava uniformizado?','O técnico utilizou os EPIs?',
-  'Pontualidade do técnico','O trabalho foi bem executado?',
-  'Local ficou limpo e organizado?','Resultado do resgate de imagem',
-  'O técnico apresentou o escopo antes de iniciar?',
-  'Cordialidade e respeito durante o atendimento',
-  'A solução atendeu suas expectativas?',
-];
-function buildSat() {
-  const tb=$('sat-body'); if(!tb) return;
+function togE(k){const c=document.querySelector(`.epi-card[data-k="${k}"]`);if(!c)return;if(selEPI.has(k)){selEPI.delete(k);c.classList.remove('sel');}else{selEPI.add(k);c.classList.add('sel');}}
+function buildSat(){
+  const tb=$('sat-body');if(!tb)return;
   tb.innerHTML=SATQ.map((q,i)=>`<tr>
     <td>${q}</td>
     <td style="text-align:center"><input type="radio" class="sat-r" name="q${i}" id="q${i}s" value="satisfeito"><label class="sat-l" for="q${i}s">😊</label></td>
@@ -866,456 +547,370 @@ function buildSat() {
     <td style="text-align:center"><input type="radio" class="sat-r" name="q${i}" id="q${i}i" value="insatisfeito"><label class="sat-l" for="q${i}i">😞</label></td>
   </tr>`).join('');
 }
-const getSat=()=>SATQ.map((_,i)=>{ const c=document.querySelector(`input[name="q${i}"]:checked`); return c?c.value:''; });
-
-// ══ FOTOS ══
-function addPh(input){ const g=$('pgrid'); if(!g) return; Array.from(input.files).slice(0,10-photos.length).forEach(f=>{ const r=new FileReader(); r.onload=e=>{ photos.push(e.target.result); const d=document.createElement('div'); d.className='pthumb'; const idx=photos.length-1; d.innerHTML=`<img src="${e.target.result}"><button class="rm" onclick="rmPh(${idx},this.parentNode)">✕</button>`; g.appendChild(d); }; r.readAsDataURL(f); }); }
-function rmPh(i,n){ photos.splice(i,1); n.remove(); }
-
-// ══ ASSINATURAS ══
-function iSig(id) {
-  const cv=$('sig-'+id); if(!cv||sigCtx[id]) return;
-  cv.width=cv.offsetWidth||340; cv.height=128;
-  const ctx=cv.getContext('2d'); ctx.strokeStyle='#0D1B2A'; ctx.lineWidth=2; ctx.lineCap='round'; ctx.lineJoin='round'; sigCtx[id]=ctx;
-  let dr=false,lx=0,ly=0;
-  const pos=(e,c)=>{ const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e; return[s.clientX-r.left,s.clientY-r.top]; };
-  cv.onmousedown=e=>{ dr=true; [lx,ly]=pos(e,cv); };
-  cv.onmousemove=e=>{ if(!dr) return; const[x,y]=pos(e,cv); ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke(); [lx,ly]=[x,y]; };
-  cv.onmouseup=cv.onmouseleave=()=>dr=false;
-  cv.addEventListener('touchstart',e=>{ e.preventDefault(); dr=true; [lx,ly]=pos(e,cv); },{passive:false});
-  cv.addEventListener('touchmove',e=>{ e.preventDefault(); if(!dr)return; const[x,y]=pos(e,cv); ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(x,y);ctx.stroke(); [lx,ly]=[x,y]; },{passive:false});
-  cv.addEventListener('touchend',()=>dr=false);
+const getSat=()=>SATQ.map((_,i)=>{const c=document.querySelector(`input[name="q${i}"]:checked`);return c?c.value:'';});
+function addPh(input){
+  const g=$('pgrid');if(!g)return;
+  Array.from(input.files).slice(0,5-photos.length).forEach(f=>{
+    const r=new FileReader();r.onload=e=>{
+      // Redimensiona foto para máximo 400px
+      const img=new Image();img.onload=()=>{
+        const max=400,scale=Math.min(max/img.width,max/img.height,1);
+        const cv=document.createElement('canvas');cv.width=img.width*scale;cv.height=img.height*scale;
+        cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+        const data=cv.toDataURL('image/jpeg',0.6);
+        photos.push(data);
+        const d=document.createElement('div');d.className='pthumb';const idx=photos.length-1;
+        d.innerHTML=`<img src="${data}"><button class="rm" onclick="rmPh(${idx},this.parentNode)">✕</button>`;
+        g.appendChild(d);
+      };img.src=e.target.result;
+    };r.readAsDataURL(f);
+  });
 }
-function clrSig(id){ delete sigCtx[id]; const cv=$('sig-'+id); if(cv) cv.getContext('2d').clearRect(0,0,cv.width,cv.height); }
-function gSigURL(id){ const cv=$('sig-'+id); if(!cv) return null; const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data; return Array.from(d).some((v,i)=>i%4===3&&v>0)?cv.toDataURL('image/png'):null; }
-
-// ══ SALVAR OS ══
-async function saveOS() {
-  const num=$('f-num').value.trim(), date=$('f-date').value, client=$('f-client').value.trim(), svc=$('f-svc').value, tech=$('f-tech').value.trim();
-  if(!num||!date||!client||!svc){ toast('Preencha: Nº OS, Data, Cliente e Serviço','er'); step(1); return; }
-  if(!tech){ toast('Informe o nome completo do técnico','er'); step(1); return; }
+function rmPh(i,n){photos.splice(i,1);n.remove();}
+ 
+// Assinatura — apenas do cliente
+function initSig(){
+  const cv=$('sig-cli');if(!cv||sigCtx)return;
+  cv.width=cv.offsetWidth||340;cv.height=128;
+  const ctx=cv.getContext('2d');ctx.strokeStyle='#0D1B2A';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';sigCtx=ctx;
+  const pos=(e,c)=>{const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return[s.clientX-r.left,s.clientY-r.top];};
+  cv.onmousedown=e=>{sigDrawing=true;[sigLX,sigLY]=pos(e,cv);};
+  cv.onmousemove=e=>{if(!sigDrawing)return;const[x,y]=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(x,y);sigCtx.stroke();[sigLX,sigLY]=[x,y];};
+  cv.onmouseup=cv.onmouseleave=()=>sigDrawing=false;
+  cv.addEventListener('touchstart',e=>{e.preventDefault();sigDrawing=true;[sigLX,sigLY]=pos(e,cv);},{passive:false});
+  cv.addEventListener('touchmove',e=>{e.preventDefault();if(!sigDrawing)return;const[x,y]=pos(e,cv);sigCtx.beginPath();sigCtx.moveTo(sigLX,sigLY);sigCtx.lineTo(x,y);sigCtx.stroke();[sigLX,sigLY]=[x,y];},{passive:false});
+  cv.addEventListener('touchend',()=>sigDrawing=false);
+}
+function clrSig(){sigCtx=null;const cv=$('sig-cli');if(cv){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);sigCtx=null;}setTimeout(initSig,50);}
+function getSigURL(){
+  const cv=$('sig-cli');if(!cv)return null;
+  const d=cv.getContext('2d').getImageData(0,0,cv.width,cv.height).data;
+  if(!Array.from(d).some((v,i)=>i%4===3&&v>0))return null;
+  // Comprime para JPEG pequeno
+  const tmp=document.createElement('canvas');tmp.width=280;tmp.height=90;
+  const tctx=tmp.getContext('2d');tctx.fillStyle='#fff';tctx.fillRect(0,0,280,90);
+  tctx.drawImage(cv,0,0,280,90);
+  return tmp.toDataURL('image/jpeg',0.5);
+}
+ 
+async function saveOS(){
+  const num=$('f-num').value.trim(),date=$('f-date').value,client=$('f-client').value.trim(),svc=$('f-svc').value,tech=$('f-tech').value.trim();
+  if(!num||!date||!client||!svc){toast('Preencha: Nº OS, Data, Cliente e Serviço','er');step(1);return;}
+  if(!tech){toast('Informe o nome completo do técnico','er');step(1);return;}
   const id=editId||('os-'+Date.now());
   const os={
-    id, coCode:S.co.code, coName:S.co.name, num, date, client, addr:$('f-addr').value,
-    svc, tech, start:$('f-start').value, end:$('f-end').value,
-    team:$('f-team').value, obs:$('f-obs').value, epiObs:$('f-epi-obs').value,
-    epis:[...selEPI], sat:getSat(), satObs:$('f-sat-obs').value,
-    photos:[...photos], sigCli:gSigURL('cli'), sigTec:gSigURL('tec'),
-    scName:$('sc-name').value, scRG:$('sc-rg').value, scCPF:$('sc-cpf').value,
-    stName:$('st-name').value, stRG:$('st-rg').value, stCPF:$('st-cpf').value,
-    status:'finalizada', at:new Date().toISOString()
+    id,coCode:S.co.code,coName:S.co.name,num,date,client,addr:$('f-addr').value,
+    svc,tech,start:$('f-start').value,end:$('f-end').value,
+    team:$('f-team').value,obs:$('f-obs').value,epiObs:$('f-epi-obs').value,
+    epis:[...selEPI],sat:getSat(),satObs:$('f-sat-obs').value,
+    photos:[],sigCli:getSigURL(),sigTec:null,
+    scName:$('sc-name').value,scRG:$('sc-rg').value,scCPF:$('sc-cpf').value,
+    stName:'',stRG:'',stCPF:'',
+    status:'finalizada',at:new Date().toISOString()
   };
+  // Remove assinatura e fotos do envio via GET (limite de URL)
+  const osData={...os,sigCli:null,photos:[]};
   showLoad(editId?'Atualizando OS...':'Salvando OS...');
-  try {
+  try{
     if(editId){
-      await api('updateOS', os);
-      const i=myOS().findIndex(o=>o.id===editId); if(i>=0) C.os[S.co.code][i]=os;
-    } else {
-      await api('saveOS', os);
-      if(!C.os[S.co.code]) C.os[S.co.code]=[];
+      await apiGet('updateOS',{data:encodeURIComponent(JSON.stringify(osData))});
+      const i=myOS().findIndex(o=>o.id===editId);if(i>=0)C.os[S.co.code][i]=os;
+    }else{
+      await apiGet('saveOS',{data:encodeURIComponent(JSON.stringify(osData))});
+      if(!C.os[S.co.code])C.os[S.co.code]=[];
       C.os[S.co.code].push(os);
     }
-    editId=null; Object.keys(sigCtx).forEach(k=>delete sigCtx[k]);
-    updCt(); toast(`OS ${num} salva! ✅`,'ok'); goPg('osl');
-  } catch(e){ toast('Erro ao salvar: '+e.message,'er'); }
+    editId=null;sigCtx=null;
+    updCt();toast(`OS ${num} salva! ✅`,'ok');goPg('osl');
+  }catch(e){toast('Erro ao salvar: '+e.message,'er');}
   hideLoad();
 }
-
-// ══ PDF ══
-function buildPDF(os) {
-  const{jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
-  const W=210,m=14; let y=14;
-  doc.setFillColor(255,90,31); doc.rect(0,0,W,22,'F');
-  doc.setTextColor(255,255,255); doc.setFontSize(13); doc.setFont('helvetica','bold');
-  doc.text('PESQUISA DE SATISFAÇÃO — CONSIGAZ',m,10);
-  doc.setFontSize(9); doc.setFont('helvetica','normal');
-  doc.text('Field Services',m,17);
-  doc.text(`OS: ${os.num}`,W-m,10,{align:'right'});
-  doc.text(`Data: ${fD(os.date)}`,W-m,17,{align:'right'});
+ 
+// PDF
+function buildPDF(os){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const W=210,m=14;let y=14;
+  doc.setFillColor(255,90,31);doc.rect(0,0,W,22,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(13);doc.setFont('helvetica','bold');doc.text('PESQUISA DE SATISFAÇÃO — CONSIGAZ',m,10);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.text('Field Services',m,17);
+  doc.text(`OS: ${os.num}`,W-m,10,{align:'right'});doc.text(`Data: ${fD(os.date)}`,W-m,17,{align:'right'});
   y=30;
-  doc.setFillColor(237,233,254); doc.rect(m,y,W-2*m,7,'F');
-  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(91,33,182);
-  doc.text(`EMPRESA: ${os.coName||'—'}  |  COD: ${os.coCode||'—'}`,m+2,y+4.5); y+=10;
-  doc.setFillColor(247,249,252); doc.rect(m,y,W-2*m,26,'F');
-  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(113,128,150);
-  doc.text('CLIENTE',m+2,y+5); doc.text('TECNICO RESPONSAVEL',m+95,y+5);
-  doc.text('SERVICO',m+2,y+15); doc.text('ENDERECO',m+95,y+15);
-  doc.setFont('helvetica','normal'); doc.setTextColor(13,27,42); doc.setFontSize(10);
-  doc.text(os.client||'—',m+2,y+10); doc.text(os.tech||'—',m+95,y+10);
-  doc.text(svcName(os.svc).substring(0,38),m+2,y+20); doc.text((os.addr||'—').substring(0,42),m+95,y+20);
-  y+=30;
-  if(os.start||os.end||os.team){ doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(113,128,150); doc.text('HORARIO',m,y+4); doc.text('EQUIPE',m+50,y+4); doc.setFont('helvetica','normal'); doc.setTextColor(13,27,42); doc.setFontSize(9); doc.text(`${os.start||'--'} -> ${os.end||'--'}`,m,y+10); doc.text((os.team||'—').substring(0,60),m+50,y+10); y+=15; }
-  // EPIs
-  y+=2; doc.setFillColor(255,90,31); doc.rect(m,y,W-2*m,6,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255); doc.text('EPIs UTILIZADOS',m+2,y+4.2); y+=8;
-  const epiList=C.epis||[], cW=44, pR=4;
-  epiList.forEach((e,i)=>{
-    const col=i%pR, row2=Math.floor(i/pR), x=m+col*cW, yy=y+row2*7;
-    const used=os.epis&&os.epis.includes(e.id);
-    doc.setFillColor(used?34:210,used?197:210,used?94:210); doc.roundedRect(x,yy-1,cW-2,6,1,1,'F');
-    doc.setTextColor(used?0:100,used?80:100,used?0:100); doc.setFont('helvetica',used?'bold':'normal'); doc.setFontSize(7.5);
-    doc.text((used?'[X] ':' [ ] ')+e.name.substring(0,19),x+2,yy+3.2);
-  });
+  doc.setFillColor(237,233,254);doc.rect(m,y,W-2*m,7,'F');doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(91,33,182);
+  doc.text(`EMPRESA: ${os.coName||'—'}  |  COD: ${os.coCode||'—'}`,m+2,y+4.5);y+=10;
+  doc.setFillColor(247,249,252);doc.rect(m,y,W-2*m,26,'F');doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(113,128,150);
+  doc.text('CLIENTE',m+2,y+5);doc.text('TECNICO RESPONSAVEL',m+95,y+5);doc.text('SERVICO',m+2,y+15);doc.text('ENDERECO',m+95,y+15);
+  doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);doc.setFontSize(10);
+  doc.text(os.client||'—',m+2,y+10);doc.text(os.tech||'—',m+95,y+10);
+  doc.text(svcName(os.svc).substring(0,38),m+2,y+20);doc.text((os.addr||'—').substring(0,42),m+95,y+20);y+=30;
+  if(os.start||os.end||os.team){doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(113,128,150);doc.text('HORARIO',m,y+4);doc.text('EQUIPE',m+50,y+4);doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);doc.setFontSize(9);doc.text(`${os.start||'--'} -> ${os.end||'--'}`,m,y+10);doc.text((os.team||'—').substring(0,60),m+50,y+10);y+=15;}
+  y+=2;doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('EPIs UTILIZADOS',m+2,y+4.2);y+=8;
+  const epiList=C.epis||[],cW=44,pR=4;
+  epiList.forEach((e,i)=>{const col=i%pR,row2=Math.floor(i/pR),x=m+col*cW,yy=y+row2*7;const used=os.epis&&os.epis.includes(e.id);doc.setFillColor(used?34:210,used?197:210,used?94:210);doc.roundedRect(x,yy-1,cW-2,6,1,1,'F');doc.setTextColor(used?0:100,used?80:100,used?0:100);doc.setFont('helvetica',used?'bold':'normal');doc.setFontSize(7.5);doc.text((used?'[X] ':' [ ] ')+e.name.substring(0,19),x+2,yy+3.2);});
   y+=Math.ceil(epiList.length/pR)*7+4;
-  if(os.epiObs){ doc.setFontSize(8); doc.setTextColor(113,128,150); doc.setFont('helvetica','italic'); doc.text('Obs.EPIs: '+os.epiObs.substring(0,90),m,y); y+=6; }
-  // Satisfação
-  if(y>215){ doc.addPage(); y=14; }
-  doc.setFillColor(255,90,31); doc.rect(m,y,W-2*m,6,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255); doc.text('PESQUISA DE SATISFACAO',m+2,y+4.2); y+=8;
+  if(os.epiObs){doc.setFontSize(8);doc.setTextColor(113,128,150);doc.setFont('helvetica','italic');doc.text('Obs.EPIs: '+os.epiObs.substring(0,90),m,y);y+=6;}
+  if(y>215){doc.addPage();y=14;}
+  doc.setFillColor(255,90,31);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('PESQUISA DE SATISFACAO',m+2,y+4.2);y+=8;
   const SL={satisfeito:'SATISFEITO',neutro:'NEUTRO',insatisfeito:'INSATISFEITO'};
   const SC={satisfeito:[34,197,94],neutro:[245,158,11],insatisfeito:[239,68,68],'':[180,180,180]};
-  SATQ.forEach((q,i)=>{
-    if(y>270){ doc.addPage(); y=14; }
-    const ans=os.sat?.[i]||''; const col2=SC[ans]||[180,180,180];
-    doc.setTextColor(13,27,42); doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text(`${i+1}. ${q.substring(0,78)}`,m,y+3);
-    doc.setFillColor(col2[0],col2[1],col2[2]); doc.roundedRect(W-m-32,y-1,32,6,1,1,'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6.8); doc.text(SL[ans]||'NAO RESP.',W-m-16,y+3.2,{align:'center'});
-    doc.setDrawColor(230,232,236); doc.line(m,y+6,W-m,y+6); y+=8;
-  });
-  if(os.satObs){ doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(113,128,150); doc.text('Obs.: '+os.satObs.substring(0,88),m,y); y+=7; }
-  // Fotos
-  if(os.photos&&os.photos.length){ if(y>195){ doc.addPage(); y=14; } doc.setFillColor(255,90,31); doc.rect(m,y,W-2*m,6,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255); doc.text('EVIDENCIAS FOTOGRAFICAS',m+2,y+4.2); y+=10; const iW=54,iH=40,gap=5; let col3=0; os.photos.forEach(u=>{ if(y+iH>280){ doc.addPage(); y=14; col3=0; } try{ doc.addImage(u,'JPEG',m+col3*(iW+gap),y,iW,iH); }catch(e){} col3++; if(col3===3){ col3=0; y+=iH+gap; } }); if(col3>0) y+=iH+gap; }
-  if(os.obs){ if(y>260){ doc.addPage(); y=14; } doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(113,128,150); doc.text('OBSERVACOES:',m,y); y+=5; doc.setFont('helvetica','normal'); doc.setTextColor(13,27,42); const ls=doc.splitTextToSize(os.obs,W-2*m); doc.text(ls,m,y); y+=ls.length*5+4; }
-  // Assinaturas
-  if(y>228){ doc.addPage(); y=14; }
-  y+=4; doc.setFillColor(13,27,42); doc.rect(m,y,W-2*m,6,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(255,255,255); doc.text('ASSINATURAS',m+2,y+4.2); y+=10;
-  const sW=(W-2*m-10)/2;
-  const dSig=(url,x,lbl)=>{ if(url){ try{ doc.addImage(url,'PNG',x,y,sW,24); }catch(e){} }else{ doc.setDrawColor(200,200,200); doc.rect(x,y,sW,24); doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(180,180,180); doc.text(lbl,x+sW/2,y+13,{align:'center'}); } };
-  dSig(os.sigCli,m,'Assinatura do avaliador'); dSig(os.sigTec,m+sW+10,'Assinatura do tecnico');
-  y+=26; doc.setTextColor(13,27,42); doc.setFontSize(8); doc.setFont('helvetica','normal');
-  doc.text(`Nome: ${os.scName||'_____________________'}`,m,y); doc.text(`Nome: ${os.stName||'_____________________'}`,m+sW+10,y); y+=5;
-  doc.text(`RG: ${os.scRG||'__________'}  CPF: ${os.scCPF||'_______________'}`,m,y); doc.text(`RG: ${os.stRG||'__________'}  CPF: ${os.stCPF||'_______________'}`,m+sW+10,y); y+=10;
-  doc.setFillColor(247,249,252); doc.rect(0,284,W,13,'F'); doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(113,128,150);
-  doc.text(`Gerado em: ${fDT(new Date().toISOString())} | ID: ${os.id}`,m,291); doc.text('Pesquisa de Satisfação — Consigaz',W-m,291,{align:'right'});
+  SATQ.forEach((q,i)=>{if(y>270){doc.addPage();y=14;}const ans=os.sat?.[i]||'';const col2=SC[ans]||[180,180,180];doc.setTextColor(13,27,42);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(`${i+1}. ${q.substring(0,78)}`,m,y+3);doc.setFillColor(col2[0],col2[1],col2[2]);doc.roundedRect(W-m-32,y-1,32,6,1,1,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.8);doc.text(SL[ans]||'NAO RESP.',W-m-16,y+3.2,{align:'center'});doc.setDrawColor(230,232,236);doc.line(m,y+6,W-m,y+6);y+=8;});
+  if(os.satObs){doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(113,128,150);doc.text('Obs.: '+os.satObs.substring(0,88),m,y);y+=7;}
+  if(os.obs){if(y>260){doc.addPage();y=14;}doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(113,128,150);doc.text('OBSERVACOES:',m,y);y+=5;doc.setFont('helvetica','normal');doc.setTextColor(13,27,42);const ls=doc.splitTextToSize(os.obs,W-2*m);doc.text(ls,m,y);y+=ls.length*5+4;}
+  if(y>228){doc.addPage();y=14;}
+  y+=4;doc.setFillColor(13,27,42);doc.rect(m,y,W-2*m,6,'F');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(255,255,255);doc.text('ASSINATURA DO CLIENTE',m+2,y+4.2);y+=10;
+  const sW=W-2*m;
+  if(os.sigCli){try{doc.addImage(os.sigCli,'JPEG',m,y,sW,28);}catch(e){}}
+  else{doc.setDrawColor(200,200,200);doc.rect(m,y,sW,28);doc.setFont('helvetica','italic');doc.setFontSize(8);doc.setTextColor(180,180,180);doc.text('Assinatura do avaliador',m+sW/2,y+15,{align:'center'});}
+  y+=30;doc.setTextColor(13,27,42);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text(`Nome: ${os.scName||'_____________________________'}`,m,y);y+=5;
+  doc.text(`RG: ${os.scRG||'______________'}  CPF: ${os.scCPF||'___________________'}`,m,y);y+=10;
+  doc.setFillColor(247,249,252);doc.rect(0,284,W,13,'F');doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(113,128,150);
+  doc.text(`Gerado em: ${fDT(new Date().toISOString())} | ID: ${os.id}`,m,291);doc.text('Pesquisa de Satisfação — Consigaz',W-m,291,{align:'right'});
   return doc;
 }
-function dlPDF(id) {
-  const os=myOS().find(o=>o.id===id); if(!os){ toast('OS não encontrada','er'); return; }
-  toast('Gerando PDF...','inf');
-  try{ buildPDF(os).save(`${os.num}.pdf`); toast('PDF baixado! ✅','ok'); }
-  catch(e){ toast('Erro PDF: '+e.message,'er'); }
-}
-
-// ══ EXPORTAR ZIP ══
-function updExp() {
-  const dv=$('exp-dt')?.value, box=$('exp-prev'), btn=$('btn-exp');
-  if(!dv){ if(box) box.innerHTML='<div class="exp-empty">Selecione uma data</div>'; if(btn) btn.disabled=true; return; }
+function dlPDF(id){const os=myOS().find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado! ✅','ok');}catch(e){toast('Erro PDF: '+e.message,'er');}}
+ 
+// ZIP
+function updExp(){
+  const dv=$('exp-dt')?.value,box=$('exp-prev'),btn=$('btn-exp');
+  if(!dv){if(box)box.innerHTML='<div class="exp-empty">Selecione uma data</div>';if(btn)btn.disabled=true;return;}
   const os=myOS().filter(o=>o.date===dv&&o.status==='finalizada');
-  if(!os.length){ const[y,mm,d]=dv.split('-'); if(box) box.innerHTML=`<div class="exp-empty">📭 Nenhuma OS finalizada em ${d}/${mm}/${y}</div>`; if(btn) btn.disabled=true; return; }
-  const[y,mm,d]=dv.split('-'); const fn=`${d}${mm}${y}`;
-  let html=`<div style="margin-bottom:8px;font-size:12px;color:var(--muted)"><strong style="color:var(--brand);font-size:13px">📁 ${fn}.zip</strong></div>`;
-  os.forEach(o=>{ html+=`<div class="os-chip"><strong class="mono">${o.num}.pdf</strong><span style="flex:1;font-size:12px;color:var(--muted)">${o.client.substring(0,20)}</span>${bdg(o.status)}</div>`; });
-  html+=`<div style="font-size:12px;color:var(--muted);margin-top:5px"><strong>${os.length}</strong> OS em ${d}/${mm}/${y}</div>`;
-  if(box) box.innerHTML=html; if(btn) btn.disabled=false;
+  if(!os.length){const[y,mm,d]=dv.split('-');if(box)box.innerHTML=`<div class="exp-empty">📭 Nenhuma OS finalizada em ${d}/${mm}/${y}</div>`;if(btn)btn.disabled=true;return;}
+  const[y,mm,d]=dv.split('-');const fn=`${d}${mm}${y}`;
+  let html=`<div style="margin-bottom:8px;font-size:12px;color:var(--muted)"><strong style="color:var(--brand)">${fn}.zip</strong></div>`;
+  os.forEach(o=>{html+=`<div class="os-chip"><strong class="mono">${o.num}.pdf</strong><span style="flex:1;font-size:12px;color:var(--muted)">${o.client.substring(0,20)}</span>${bdg(o.status)}</div>`;});
+  html+=`<div style="font-size:12px;color:var(--muted);margin-top:5px"><strong>${os.length}</strong> OS</div>`;
+  if(box)box.innerHTML=html;if(btn)btn.disabled=false;
 }
-async function genZip() {
-  const dv=$('exp-dt')?.value; if(!dv){ toast('Selecione uma data','er'); return; }
+async function genZip(){
+  const dv=$('exp-dt')?.value;if(!dv)return;
   const osList=myOS().filter(o=>o.date===dv&&o.status==='finalizada');
-  if(!osList.length){ toast('Nenhuma OS finalizada nesta data','er'); return; }
-  const[y,mm,d]=dv.split('-'); const fn=`${d}${mm}${y}`;
+  if(!osList.length)return;
+  const[y,mm,d]=dv.split('-');const fn=`${d}${mm}${y}`;
   const pw=$('exp-prog'),pb=$('exp-bar'),pl=$('exp-lbl'),btn=$('btn-exp');
-  pw.style.display='block'; btn.disabled=true; btn.textContent='⏳ Gerando...';
+  pw.style.display='block';btn.disabled=true;btn.textContent='⏳ Gerando...';
   try{
-    const zip=new JSZip(); const folder=zip.folder(fn);
+    const zip=new JSZip();const folder=zip.folder(fn);
     for(let i=0;i<osList.length;i++){
-      const os=osList[i]; pb.style.width=Math.round((i/osList.length)*80)+'%'; pl.textContent=`PDF ${i+1}/${osList.length}: ${os.num}...`;
-      await new Promise(r=>setTimeout(r,10)); folder.file(`${os.num}.pdf`,buildPDF(os).output('arraybuffer'));
+      const os=osList[i];pb.style.width=Math.round((i/osList.length)*80)+'%';pl.textContent=`PDF ${i+1}/${osList.length}: ${os.num}...`;
+      await new Promise(r=>setTimeout(r,10));folder.file(`${os.num}.pdf`,buildPDF(os).output('arraybuffer'));
     }
-    pl.textContent='Compactando...'; pb.style.width='90%'; await new Promise(r=>setTimeout(r,20));
-    const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{ pb.style.width=(90+meta.percent*0.1).toFixed(0)+'%'; });
-    pb.style.width='100%'; pl.textContent='Pronto!';
-    const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${fn}.zip`; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(()=>URL.revokeObjectURL(url),1000);
+    pl.textContent='Compactando...';pb.style.width='90%';await new Promise(r=>setTimeout(r,20));
+    const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}},meta=>{pb.style.width=(90+meta.percent*0.1).toFixed(0)+'%';});
+    pb.style.width='100%';pl.textContent='Pronto!';
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`${fn}.zip`;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);
     const expData={coCode:S.co.code,coName:S.co.name,date:`${d}/${mm}/${y}`,filename:`${fn}.zip`,count:osList.length,at:new Date().toISOString()};
-    await api('saveExportacao',expData);
-    if(!C.exp[S.co.code]) C.exp[S.co.code]=[];
-    C.exp[S.co.code].unshift(expData);
-    rndrHist(); toast(`${fn}.zip baixado! ✅`,'ok');
-  }catch(e){ toast('Erro: '+e.message,'er'); console.error(e); }
-  finally{ setTimeout(()=>{ pw.style.display='none'; pb.style.width='0%'; btn.disabled=false; btn.textContent='📦 Gerar e Baixar ZIP'; },1600); }
+    await apiGet('saveExportacao',{data:encodeURIComponent(JSON.stringify(expData))});
+    if(!C.exp[S.co.code])C.exp[S.co.code]=[];C.exp[S.co.code].unshift(expData);
+    rndrHist();toast(`${fn}.zip baixado! ✅`,'ok');
+  }catch(e){toast('Erro: '+e.message,'er');}
+  finally{setTimeout(()=>{pw.style.display='none';pb.style.width='0%';btn.disabled=false;btn.textContent='📦 Gerar e Baixar ZIP';},1600);}
 }
-function rndrHist() {
-  const tb=$('exp-hist'); if(!tb) return;
+function rndrHist(){
+  const tb=$('exp-hist');if(!tb)return;
   const list=myExp();
-  if(!list.length){ tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--muted)">Nenhuma exportação ainda</td></tr>'; return; }
+  if(!list.length){tb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:18px;color:var(--muted)">Nenhuma exportação ainda</td></tr>';return;}
   tb.innerHTML=list.map(h=>`<tr><td>${h.date}</td><td class="mono">${h.filename}</td><td style="text-align:center"><strong>${h.count}</strong></td><td style="font-size:11px;color:var(--muted)">${fDT(h.at)}</td></tr>`).join('');
 }
-
-// ══ ADMIN NAV ══
+ 
+// ADMIN
 const AT={ov:'Visão Geral',cos:'Empresas',aos:'Todas as OS',aex:'Exportações',svcs:'Tipos de Serviço',epis:'EPIs',mtz:'Matriz EPI×Serviço',cfg:'Sistema'};
-function goAdm(id) {
+function goAdm(id){
   document.querySelectorAll('#sc-adm .page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('#sc-adm .sb-btn').forEach(b=>b.classList.remove('on'));
-  const pg=$('pg-'+id); if(pg) pg.classList.add('on');
+  const pg=$('pg-'+id);if(pg)pg.classList.add('on');
   document.querySelectorAll(`#sc-adm .sb-btn[data-pa="${id}"]`).forEach(b=>b.classList.add('on'));
   $('adm-ttl').textContent=AT[id]||id;
-  if(id==='ov')   rndrOV();
-  if(id==='cos')  rndrCos();
-  if(id==='aos')  rndrAOS();
-  if(id==='aex')  rndrAEX();
-  if(id==='svcs') rndrSvcs();
-  if(id==='epis') rndrEpis();
-  if(id==='mtz')  rndrMtz();
+  if(id==='ov')rndrOV();if(id==='cos')rndrCos();if(id==='aos')rndrAOS();
+  if(id==='aex')rndrAEX();if(id==='svcs')rndrSvcs();if(id==='epis')rndrEpis();if(id==='mtz')rndrMtz();
 }
-
-// ══ OVERVIEW ══
-async function rndrOV() {
+async function rndrOV(){
   showLoad('Carregando...');
   try{
-    if(!C.empresas) C.empresas=await apiGet('getEmpresas');
+    if(!C.empresas)C.empresas=await apiGet('getEmpresas');
     const allOS=await apiGet('getOS');
     const stats=$('adm-stats');
-    if(stats) stats.innerHTML=`
+    if(stats)stats.innerHTML=`
       <div class="sc"><div class="s-ico" style="background:var(--purple-lt)">🏢</div><div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">Empresas ativas</div><div style="font-size:22px;font-weight:700">${(C.empresas||[]).filter(c=>c.active).length}</div></div></div>
       <div class="sc"><div class="s-ico" style="background:#F0FFF4">📋</div><div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">Total OS</div><div style="font-size:22px;font-weight:700">${allOS.length}</div></div></div>
       <div class="sc"><div class="s-ico" style="background:var(--brand-lt)">✅</div><div><div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase">Finalizadas</div><div style="font-size:22px;font-weight:700">${allOS.filter(o=>o.status==='finalizada').length}</div></div></div>`;
-    const tb=$('adm-rec'); if(!tb){ hideLoad(); return; }
+    const tb=$('adm-rec');if(!tb){hideLoad();return;}
     const rec=[...allOS].sort((a,b)=>b.at.localeCompare(a.at)).slice(0,10);
-    if(!rec.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Nenhuma OS ainda</td></tr>'; hideLoad(); return; }
-    tb.innerHTML=rec.map(o=>`<tr>
-      <td class="mono">${o.num}</td>
-      <td><span class="mono-p">${o.coCode}</span></td>
-      <td>${o.client}</td>
-      <td style="font-size:12px">${o.tech||'—'}</td>
-      <td style="font-size:11.5px;white-space:nowrap">${fD(o.date)}</td>
-      <td>${bdg(o.status)}</td>
-    </tr>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    if(!rec.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted)">Nenhuma OS ainda</td></tr>';hideLoad();return;}
+    if(!C.servicos)C.servicos=await apiGet('getServicos');
+    tb.innerHTML=rec.map(o=>`<tr><td class="mono">${o.num}</td><td><span class="mono-p">${o.coCode}</span></td><td>${o.client}</td><td style="font-size:12px">${o.tech||'—'}</td><td style="font-size:11.5px;white-space:nowrap">${fD(o.date)}</td><td>${bdg(o.status)}</td></tr>`).join('');
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-
-// ══ EMPRESAS ══
-async function rndrCos() {
+async function rndrCos(){
   showLoad('Carregando empresas...');
   try{
     C.empresas=await apiGet('getEmpresas');
-    const g=$('co-grid'),sub=$('co-sub'); if(!g){ hideLoad(); return; }
-    if(sub) sub.textContent=`${C.empresas.length} empresa${C.empresas.length!==1?'s':''}`;
-    if(!C.empresas.length){ g.innerHTML='<div style="padding:28px;text-align:center;color:var(--muted)">Nenhuma empresa cadastrada.</div>'; hideLoad(); return; }
+    const g=$('co-grid'),sub=$('co-sub');if(!g){hideLoad();return;}
+    if(sub)sub.textContent=`${C.empresas.length} empresa${C.empresas.length!==1?'s':''}`;
+    if(!C.empresas.length){g.innerHTML='<div style="padding:28px;text-align:center;color:var(--muted)">Nenhuma empresa cadastrada.</div>';hideLoad();return;}
     g.innerHTML=C.empresas.map(co=>`<div class="cc">
-      <div>
-        <div class="co-code">${co.code}</div>
-        <div style="font-size:13px;font-weight:600;margin-top:2px">${co.name}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px">${co.cnpj||''}</div>
-      </div>
+      <div><div class="co-code">${co.code}</div><div style="font-size:13px;font-weight:600;margin-top:2px">${co.name}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${co.cnpj||''}</div></div>
       <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0">
         <span class="badge ${co.active?'b-finalizada':'b-cancelada'}">${co.active?'✅ Ativa':'❌ Inativa'}</span>
         <button class="btn btn-s btn-sm" onclick="openCo('${co.code}')">✏️</button>
         <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delCo('${co.code}')">🗑</button>
       </div>
     </div>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function openCo(code=null) {
-  editCo=code; $('mco-ttl').textContent=code?'Editar Empresa':'Nova Empresa';
-  if(code){ const co=(C.empresas||[]).find(c=>c.code===code); if(co){ $('m-code').value=co.code; $('m-code').disabled=true; $('m-name').value=co.name; $('m-cnpj').value=co.cnpj||''; $('m-active').value=co.active?'1':'0'; } }
-  else{ ['m-code','m-name','m-cnpj'].forEach(id=>{ const el=$(id); if(el) el.value=''; }); $('m-code').disabled=false; $('m-active').value='1'; }
+function openCo(code=null){
+  editCo=code;$('mco-ttl').textContent=code?'Editar Empresa':'Nova Empresa';
+  if(code){const co=(C.empresas||[]).find(c=>c.code===code);if(co){$('m-code').value=co.code;$('m-code').disabled=true;$('m-name').value=co.name;$('m-cnpj').value=co.cnpj||'';$('m-active').value=co.active?'1':'0';}}
+  else{['m-code','m-name','m-cnpj'].forEach(id=>{const el=$(id);if(el)el.value='';});$('m-code').disabled=false;$('m-active').value='1';}
   $('modal-co').classList.add('on');
 }
-async function saveCo() {
-  const code=$('m-code').value.trim(), name=$('m-name').value.trim();
-  if(!code||!name){ toast('Preencha Código e Nome','er'); return; }
-  showLoad(editCo?'Atualizando...':'Cadastrando...'); closeMod('modal-co');
+async function saveCo(){
+  const code=$('m-code').value.trim(),name=$('m-name').value.trim();
+  if(!code||!name){toast('Preencha Código e Nome','er');return;}
+  showLoad(editCo?'Atualizando...':'Cadastrando...');closeMod('modal-co');
   try{
     const data={code,name,cnpj:$('m-cnpj').value,active:$('m-active').value==='1'};
-    if(editCo) await api('updateEmpresa',data); else await api('saveEmpresa',data);
-    C.empresas=null; await rndrCos(); toast(`Empresa ${name} salva! ✅`,'ok');
-  }catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+    if(editCo)await apiGet('updateEmpresa',{data:encodeURIComponent(JSON.stringify(data))});
+    else await apiGet('saveEmpresa',{data:encodeURIComponent(JSON.stringify(data))});
+    C.empresas=null;await rndrCos();toast(`Empresa ${name} salva! ✅`,'ok');
+  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-async function delCo(code) {
-  if(!confirm(`Excluir empresa ${code}?\nAs OS dela serão mantidas no histórico.`)) return;
+async function delCo(code){
+  if(!confirm(`Excluir empresa ${code}?\nAs OS dela serão mantidas no histórico.`))return;
   showLoad('Excluindo...');
-  try{ await apiGet('deleteEmpresa',{code}); C.empresas=null; await rndrCos(); toast('Empresa excluída','ok'); }
-  catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+  try{await apiGet('deleteEmpresa',{code});C.empresas=null;await rndrCos();toast('Empresa excluída','ok');}
+  catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-
-// ══ TODAS OS ══
-async function rndrAOS() {
+async function rndrAOS(){
   showLoad('Carregando...');
   try{
-    if(!C.empresas) C.empresas=await apiGet('getEmpresas');
-    if(!C.servicos) C.servicos=await apiGet('getServicos');
+    if(!C.empresas)C.empresas=await apiGet('getEmpresas');
+    if(!C.servicos)C.servicos=await apiGet('getServicos');
     const allOS=await apiGet('getOS');
     const sel=$('af-co');
-    if(sel&&sel.options.length<=1) C.empresas.forEach(co=>{ const o=document.createElement('option'); o.value=co.code; o.textContent=`${co.code} — ${co.name}`; sel.appendChild(o); });
-    const coF=$('af-co')?.value||'', stF=$('af-st')?.value||'', dtF=$('af-dt')?.value||'';
+    if(sel&&sel.options.length<=1)C.empresas.forEach(co=>{const o=document.createElement('option');o.value=co.code;o.textContent=`${co.code} — ${co.name}`;sel.appendChild(o);});
+    const coF=$('af-co')?.value||'',stF=$('af-st')?.value||'',dtF=$('af-dt')?.value||'';
     let data=allOS;
-    if(coF) data=data.filter(o=>o.coCode===coF);
-    if(stF) data=data.filter(o=>o.status===stF);
-    if(dtF) data=data.filter(o=>o.date===dtF);
-    const sub=$('aos-sub'); if(sub) sub.textContent=`${data.length} OS`;
-    const tb=$('aos-body'); if(!tb){ hideLoad(); return; }
-    // Cache para PDF
-    data.forEach(o=>{ if(!C.os[o.coCode]) C.os[o.coCode]=[]; if(!C.os[o.coCode].find(x=>x.id===o.id)) C.os[o.coCode].push(o); });
-    if(!data.length){ tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">Nenhuma OS</td></tr>'; hideLoad(); return; }
+    if(coF)data=data.filter(o=>o.coCode===coF);if(stF)data=data.filter(o=>o.status===stF);if(dtF)data=data.filter(o=>o.date===dtF);
+    const sub=$('aos-sub');if(sub)sub.textContent=`${data.length} OS`;
+    const tb=$('aos-body');if(!tb){hideLoad();return;}
+    data.forEach(o=>{if(!C.os[o.coCode])C.os[o.coCode]=[];if(!C.os[o.coCode].find(x=>x.id===o.id))C.os[o.coCode].push(o);});
+    if(!data.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">Nenhuma OS</td></tr>';hideLoad();return;}
     tb.innerHTML=data.sort((a,b)=>b.at.localeCompare(a.at)).map(o=>`<tr>
-      <td class="mono">${o.num}</td>
-      <td><span class="mono-p">${o.coCode}</span></td>
-      <td>${o.client}</td>
-      <td style="font-size:12px">${o.tech||'—'}</td>
-      <td style="font-size:11.5px;white-space:nowrap">${fD(o.date)}</td>
-      <td>${bdg(o.status)}</td>
+      <td class="mono">${o.num}</td><td><span class="mono-p">${o.coCode}</span></td>
+      <td>${o.client}</td><td style="font-size:12px">${o.tech||'—'}</td>
+      <td style="font-size:11.5px;white-space:nowrap">${fD(o.date)}</td><td>${bdg(o.status)}</td>
       <td><button class="btn btn-g btn-sm" onclick="dlPDFAdm('${o.id}','${o.coCode}')">📄</button></td>
     </tr>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function dlPDFAdm(id,code) {
-  const os=(C.os[code]||[]).find(o=>o.id===id); if(!os){ toast('OS não encontrada','er'); return; }
-  toast('Gerando PDF...','inf');
-  try{ buildPDF(os).save(`${os.num}.pdf`); toast('PDF baixado!','ok'); }catch(e){ toast('Erro: '+e.message,'er'); }
-}
-
-// ══ EXPORTAÇÕES ADMIN ══
-async function rndrAEX() {
+function dlPDFAdm(id,code){const os=(C.os[code]||[]).find(o=>o.id===id);if(!os){toast('OS não encontrada','er');return;}toast('Gerando PDF...','inf');try{buildPDF(os).save(`${os.num}.pdf`);toast('PDF baixado!','ok');}catch(e){toast('Erro: '+e.message,'er');}}
+async function rndrAEX(){
   showLoad('Carregando...');
   try{
-    const all=await apiGet('getExportacoes');
-    const tb=$('aex-body'); if(!tb){ hideLoad(); return; }
-    if(!all.length){ tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--muted)">Nenhuma exportação</td></tr>'; hideLoad(); return; }
-    tb.innerHTML=all.map(h=>`<tr>
-      <td>${h.date}</td>
-      <td><span class="mono-p">${h.coCode}</span> <span style="font-size:11.5px">${(h.coName||'').substring(0,16)}</span></td>
-      <td class="mono">${h.filename}</td>
-      <td style="text-align:center"><strong>${h.count}</strong></td>
-      <td style="font-size:11px;color:var(--muted)">${fDT(h.at)}</td>
-    </tr>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    const all=await apiGet('getExportacoes');const tb=$('aex-body');if(!tb){hideLoad();return;}
+    if(!all.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--muted)">Nenhuma exportação</td></tr>';hideLoad();return;}
+    tb.innerHTML=all.map(h=>`<tr><td>${h.date}</td><td><span class="mono-p">${h.coCode}</span> <span style="font-size:11.5px">${(h.coName||'').substring(0,16)}</span></td><td class="mono">${h.filename}</td><td style="text-align:center"><strong>${h.count}</strong></td><td style="font-size:11px;color:var(--muted)">${fDT(h.at)}</td></tr>`).join('');
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-
-// ══ TIPOS DE SERVIÇO ══
-async function rndrSvcs() {
+async function rndrSvcs(){
   showLoad('Carregando...');
   try{
-    C.servicos=await apiGet('getServicos');
-    const tb=$('svc-body'); if(!tb){ hideLoad(); return; }
-    if(!C.servicos.length){ tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:var(--muted)">Nenhum serviço cadastrado.</td></tr>'; hideLoad(); return; }
-    tb.innerHTML=C.servicos.sort((a,b)=>Number(a.code)-Number(b.code)).map(s=>`<tr>
-      <td class="mono-p">${s.code}</td>
-      <td>${s.name}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-s btn-sm" onclick="openSvc('${s.code}')">✏️</button>
-        <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delSvc('${s.code}')">🗑</button>
-      </td>
-    </tr>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    C.servicos=await apiGet('getServicos');const tb=$('svc-body');if(!tb){hideLoad();return;}
+    if(!C.servicos.length){tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:var(--muted)">Nenhum serviço cadastrado.</td></tr>';hideLoad();return;}
+    tb.innerHTML=C.servicos.sort((a,b)=>Number(a.code)-Number(b.code)).map(s=>`<tr><td class="mono-p">${s.code}</td><td>${s.name}</td><td style="white-space:nowrap"><button class="btn btn-s btn-sm" onclick="openSvc('${s.code}')">✏️</button> <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delSvc('${s.code}')">🗑</button></td></tr>`).join('');
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function openSvc(code=null) {
-  editSvc=code; $('msvc-ttl').textContent=code?'Editar Serviço':'Novo Serviço';
-  if(code){ const s=(C.servicos||[]).find(x=>x.code===code); if(s){ $('ms-code').value=s.code; $('ms-code').disabled=true; $('ms-name').value=s.name; } }
-  else{ $('ms-code').value=''; $('ms-code').disabled=false; $('ms-name').value=''; }
+function openSvc(code=null){
+  editSvc=code;$('msvc-ttl').textContent=code?'Editar Serviço':'Novo Serviço';
+  if(code){const s=(C.servicos||[]).find(x=>x.code===code);if(s){$('ms-code').value=s.code;$('ms-code').disabled=true;$('ms-name').value=s.name;}}
+  else{$('ms-code').value='';$('ms-code').disabled=false;$('ms-name').value='';}
   $('modal-svc').classList.add('on');
 }
-async function saveSvc() {
-  const code=$('ms-code').value.trim(), name=$('ms-name').value.trim();
-  if(!code||!name){ toast('Preencha Código e Nome','er'); return; }
-  showLoad('Salvando...'); closeMod('modal-svc');
+async function saveSvc(){
+  const code=$('ms-code').value.trim(),name=$('ms-name').value.trim();
+  if(!code||!name){toast('Preencha Código e Nome','er');return;}
+  showLoad('Salvando...');closeMod('modal-svc');
   try{
-    if(editSvc) await api('updateServico',{code,name}); else await api('saveServico',{code,name});
-    C.servicos=null; await rndrSvcs(); toast('Serviço salvo! ✅','ok');
-  }catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+    if(editSvc)await apiGet('updateServico',{data:encodeURIComponent(JSON.stringify({code,name}))});
+    else await apiGet('saveServico',{data:encodeURIComponent(JSON.stringify({code,name}))});
+    C.servicos=null;await rndrSvcs();toast('Serviço salvo! ✅','ok');
+  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-async function delSvc(code) {
-  if(!confirm(`Excluir serviço ${code}?`)) return;
-  showLoad('Excluindo...');
-  try{ await apiGet('deleteServico',{code}); C.servicos=null; await rndrSvcs(); toast('Serviço excluído','ok'); }
-  catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+async function delSvc(code){
+  if(!confirm(`Excluir serviço ${code}?`))return;showLoad('Excluindo...');
+  try{await apiGet('deleteServico',{code});C.servicos=null;await rndrSvcs();toast('Serviço excluído','ok');}
+  catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-
-// ══ EPIs ══
-async function rndrEpis() {
+async function rndrEpis(){
   showLoad('Carregando...');
   try{
-    C.epis=await apiGet('getEpis');
-    const tb=$('epi-body'); if(!tb){ hideLoad(); return; }
-    if(!C.epis.length){ tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:var(--muted)">Nenhum EPI cadastrado.</td></tr>'; hideLoad(); return; }
-    tb.innerHTML=C.epis.map(e=>`<tr>
-      <td style="font-size:22px;text-align:center">${e.icon||'🦺'}</td>
-      <td>${e.name}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-s btn-sm" onclick="openEpi('${e.id}')">✏️</button>
-        <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delEpiItem('${e.id}')">🗑</button>
-      </td>
-    </tr>`).join('');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    C.epis=await apiGet('getEpis');const tb=$('epi-body');if(!tb){hideLoad();return;}
+    if(!C.epis.length){tb.innerHTML='<tr><td colspan="3" style="text-align:center;padding:18px;color:var(--muted)">Nenhum EPI cadastrado.</td></tr>';hideLoad();return;}
+    tb.innerHTML=C.epis.map(e=>`<tr><td style="font-size:22px;text-align:center">${e.icon||'🦺'}</td><td>${e.name}</td><td style="white-space:nowrap"><button class="btn btn-s btn-sm" onclick="openEpi('${e.id}')">✏️</button> <button class="btn btn-g btn-sm" style="color:var(--danger)" onclick="delEpiItem('${e.id}')">🗑</button></td></tr>`).join('');
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-function openEpi(id=null) {
-  editEpiId=id; $('mepi-ttl').textContent=id?'Editar EPI':'Novo EPI';
-  if(id){ const e=(C.epis||[]).find(x=>x.id===id); if(e){ $('me-icon').value=e.icon||''; $('me-name').value=e.name; } }
-  else{ $('me-icon').value=''; $('me-name').value=''; }
+function openEpi(id=null){
+  editEpiId=id;$('mepi-ttl').textContent=id?'Editar EPI':'Novo EPI';
+  if(id){const e=(C.epis||[]).find(x=>x.id===id);if(e){$('me-icon').value=e.icon||'';$('me-name').value=e.name;}}
+  else{$('me-icon').value='';$('me-name').value='';}
   $('modal-epi').classList.add('on');
 }
-async function saveEpiItem() {
-  const icon=$('me-icon').value.trim(), name=$('me-name').value.trim();
-  if(!name){ toast('Informe o nome do EPI','er'); return; }
-  showLoad('Salvando...'); closeMod('modal-epi');
+async function saveEpiItem(){
+  const icon=$('me-icon').value.trim(),name=$('me-name').value.trim();
+  if(!name){toast('Informe o nome do EPI','er');return;}
+  showLoad('Salvando...');closeMod('modal-epi');
   try{
-    if(editEpiId) await api('updateEpi',{id:editEpiId,name,icon}); else await api('saveEpi',{name,icon});
-    C.epis=null; await rndrEpis(); toast('EPI salvo! ✅','ok');
-  }catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+    if(editEpiId)await apiGet('updateEpi',{data:encodeURIComponent(JSON.stringify({id:editEpiId,name,icon}))});
+    else await apiGet('saveEpi',{data:encodeURIComponent(JSON.stringify({name,icon}))});
+    C.epis=null;await rndrEpis();toast('EPI salvo! ✅','ok');
+  }catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-async function delEpiItem(id) {
-  if(!confirm('Excluir este EPI?')) return;
-  showLoad('Excluindo...');
-  try{ await apiGet('deleteEpi',{id}); C.epis=null; await rndrEpis(); toast('EPI excluído','ok'); }
-  catch(e){ toast('Erro: '+e.message,'er'); hideLoad(); }
+async function delEpiItem(id){
+  if(!confirm('Excluir este EPI?'))return;showLoad('Excluindo...');
+  try{await apiGet('deleteEpi',{id});C.epis=null;await rndrEpis();toast('EPI excluído','ok');}
+  catch(e){toast('Erro: '+e.message,'er');hideLoad();}
 }
-
-// ══ MATRIZ ══
-async function rndrMtz() {
+async function rndrMtz(){
   showLoad('Carregando matriz...');
   try{
-    if(!C.servicos) C.servicos=await apiGet('getServicos');
-    if(!C.epis)     C.epis    =await apiGet('getEpis');
-    C.matriz = await apiGet('getMatriz');
-    const tbl=$('mtz-table'); if(!tbl){ hideLoad(); return; }
-    const svcs=C.servicos.sort((a,b)=>Number(a.code)-Number(b.code)), epis=C.epis;
-    // Header: serviços como colunas
+    if(!C.servicos)C.servicos=await apiGet('getServicos');
+    if(!C.epis)C.epis=await apiGet('getEpis');
+    C.matriz=await apiGet('getMatriz');
+    const tbl=$('mtz-table');if(!tbl){hideLoad();return;}
+    const svcs=C.servicos.sort((a,b)=>Number(a.code)-Number(b.code)),epis=C.epis;
     let html=`<thead><tr><th>EPI \\ Serviço</th>${svcs.map(s=>`<th title="${s.name}">${s.code}</th>`).join('')}</tr></thead><tbody>`;
     epis.forEach(e=>{
-      html+=`<tr><td style="text-align:left;font-weight:600">${e.icon||'🦺'} ${e.name}</td>`;
-      svcs.forEach(s=>{
-        const checked=(C.matriz[s.code]||[]).includes(e.id);
-        html+=`<td><input type="checkbox" class="m-cb" data-svc="${s.code}" data-epi="${e.id}" ${checked?'checked':''}></td>`;
-      });
+      html+=`<tr><td style="text-align:left;font-weight:600;white-space:nowrap">${e.icon||'🦺'} ${e.name}</td>`;
+      svcs.forEach(s=>{const checked=(C.matriz[s.code]||[]).includes(e.id);html+=`<td><input type="checkbox" class="m-cb" data-svc="${s.code}" data-epi="${e.id}" ${checked?'checked':''}></td>`;});
       html+='</tr>';
     });
-    html+='</tbody>';
-    tbl.innerHTML=html;
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    html+='</tbody>';tbl.innerHTML=html;
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-async function saveMatriz() {
+async function saveMatrizAdm(){
   showLoad('Salvando matriz...');
   try{
     const nova={};
-    document.querySelectorAll('.m-cb:checked').forEach(cb=>{
-      const svc=cb.dataset.svc, epi=cb.dataset.epi;
-      if(!nova[svc]) nova[svc]=[];
-      nova[svc].push(epi);
-    });
-    await api('saveMatriz',nova);
-    C.matriz=nova; toast('Matriz salva! ✅','ok');
-  }catch(e){ toast('Erro: '+e.message,'er'); }
+    document.querySelectorAll('.m-cb:checked').forEach(cb=>{const svc=cb.dataset.svc,epi=cb.dataset.epi;if(!nova[svc])nova[svc]=[];nova[svc].push(epi);});
+    await apiGet('saveMatriz',{data:encodeURIComponent(JSON.stringify(nova))});
+    C.matriz=nova;toast('Matriz salva! ✅','ok');
+  }catch(e){toast('Erro: '+e.message,'er');}
   hideLoad();
 }
-
-// ══ MODAL ══
-function closeMod(id){ $(id)?.classList.remove('on'); }
-
-// ══ TOAST ══
+function closeMod(id){$(id)?.classList.remove('on');}
 function toast(msg,type=''){
-  const c=$('toasts'),t=document.createElement('div');
-  t.className='toast '+type;
+  const c=$('toasts'),t=document.createElement('div');t.className='toast '+type;
   t.innerHTML=(type==='ok'?'✅ ':type==='er'?'❌ ':type==='inf'?'ℹ️ ':'🔔 ')+msg;
-  c.appendChild(t); setTimeout(()=>t.classList.add('on'),10);
-  setTimeout(()=>{ t.classList.remove('on'); setTimeout(()=>t.remove(),400); },3500);
+  c.appendChild(t);setTimeout(()=>t.classList.add('on'),10);setTimeout(()=>{t.classList.remove('on');setTimeout(()=>t.remove(),400);},3500);
 }
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const ed=$('exp-dt'); if(ed) ed.value=new Date().toISOString().split('T')[0];
-});
+document.addEventListener('DOMContentLoaded',()=>{const ed=$('exp-dt');if(ed)ed.value=new Date().toISOString().split('T')[0];});
 </script>
 </body>
 </html>
